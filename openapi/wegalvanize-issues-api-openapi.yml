@@ -1,0 +1,2731 @@
+openapi: 3.0.2
+info:
+  title: HighBond API Reference Actions Issues API
+  version: 1.1.0
+  description: "\nWelcome to the API documentation for HighBond.\n\n## Introduction\nThe HighBond API is the developer interface for the HighBond platform. You can use it to automate interactions with HighBond,\nbuild reporting, and integrate HighBond with other systems in your company. This introduction contains information you should\nknow before you get started.\n\nThe HighBond API is organized around <a href=\"https://en.wikipedia.org/wiki/Representational_state_transfer\" target=\"_blank\">REST</a> and is built on the\n<a href=\"https://jsonapi.org/format/\" target=\"_blank\">JSON API v1.0 specification</a>.\n\n> **Warning —**\nThis API interacts with your company's live data. It gives you the power to delete important data that your\ncompany needs. Carefully consider the consequences of your actions when using this API. If you are not sure, contact the\nperson or group who administers HighBond in your company.\n\n### Permissions\nUsers can generate and manage API tokens in their user profiles in HighBond. Because these tokens are tied to users, not companies, your permissions in the API are the same as your permissions in HighBond.\n\n> **Note —**\nYou must be a System Admin in at least one HighBond instance to access the API.\n\nIf you leave your company and your HighBond user account is deleted, your application will break. Before getting started, consider the long-term requirements of your application. You may wish to create a system account in HighBond and build your application from that, but verify that your company's security policies permit accounts that aren't tied to particular people.\n\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749\" target=\"_blank\">OAuth 2.0 authorization framework</a> to control access to the API.\n\n\n### Apps\nApps are components in HighBond that provide specific functionality. You can use this API to interact with data in the apps you have access to.\n\nThe apps available to you depend on the edition of HighBond (standard or premium) in use, and whether or not your company has purchased any add-on apps.\nFor more information, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-product-editions\" target=\"_blank\">Subscriptions, editions, and capabilities</a>.\n\n### Rate limitations\nThe API safeguards against bursts of usage to help maximize its stability. For most endpoints, you cannot make more than 6 requests per second.\n\nThe following endpoints have a stricter rate limitation of 3 requests per minute:\n\n* Groups\n* Users\n\nTreat these limits as a maximum and avoid making unnecessary requests to the API.\n\nIf you make too many requests, the API responds with a `429` \"Too many requests\" status.\n\n## Getting started\nTo start interacting with your HighBond organization via the API, you need a few things:\n\n* An authentication token from your HighBond instance\n* The correct region URL for your HighBond instance\n* Information about the HighBond instance and resource IDs you want to interact with\n\nIf you need assistance with any of these, contact a HighBond administrator at your company, or email <a href=\"mailto:support@wegalvanize.com\">support@wegalvanize.com</a>.\n\n### Authentication\nAll requests require authentication. To authenticate, use Launchpad to create a HighBond API (bearer) token for your account. The token is a string that authenticates you\nand allows you to securely access the HighBond API.\n\nFor help creating a token, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">Creating and managing access tokens</a>.\n\nOnce you have created your token, you can provide it in the header of your request:\n```\nAuthorization: Bearer <TOKEN>\n```\n > **Important —**\nIf you do not authenticate yourself, the API fails. The API responds to authentication failures with a `401` \"Bad credentials\" status.\n\n<security-definitions />\n\n### Token security\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749#section-1.3.1\" target=\"_blank\">Authorization Code workflow</a> to generate tokens.\n\nTo enable continuous access to the API, and to provide full ownership and accountability to users, Galvanize does not impose an expiration date\non the token. You can <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">delete a token in\nLaunchpad</a> when you no longer need access to the API.\n\n> **Important —**\nYour access token provides many privileges, so keep it secure and private. Galvanize recommends that you encrypt your\nmachine to securely store the token. Avoid sharing your token in publicly accessible areas such GitHub or within client-side code.\n\n### API regions\n\nThe HighBond service is provided from different regions in order to give customers options for where your data is stored, and to enable you to\ncomply with data privacy location requirements.\n\nYour request URL must include one of the following region codes, based on where your HighBond instance resides:\n\n* **United States** — `https://apis-us.diligentoneplatform.com`\n* **Canada** — `https://apis-ca.diligentoneplatform.com`\n* **Europe** — `https://apis-eu.diligentoneplatform.com`\n* **Asia** — `https://apis-ap.diligentoneplatform.com`\n* **Australia** — `https://apis-au.diligentoneplatform.com`\n* **Africa** — `https://apis-af.diligentoneplatform.com`\n* **South America** — `https://apis-sa.diligentoneplatform.com`\n* **Japan** — `https://apis-jp.diligentoneplatform.com`\n\nAdditionally, for government clients, there are two government \"regions\":\n* **Gov** (US federal) — `https://apis.diligentoneplatform-gov.com`\n* **SLED** (state, local, and education; non-federal) — `https://apis.diligentoneplatform-gov2.com`\n\n> **Important —**\nAll API requests must be made over <a href=\"https://en.wikipedia.org/wiki/HTTPS\" target=\"_blank\">HTTPS</a>. Calls over HTTP respond with the `301` \"Moved Permanently\" status.\n\n\n### HighBond instance and resource IDs\nRequests require a HighBond instance ID and the ID of the resource you are interacting with. These IDs are numeric keys that uniquely\nidentify the HighBond instance and every resource in that instance.\n\nThe easiest way to get your HighBond instance ID is to log in to HighBond and take the ID from the URL:\n```\nhttps://accounts.highbond.com/orgs/12345\n```\n\nTo obtain IDs for resources like collections, analyses, tables, and robots, you can navigate to the item you want to reference, and take the IDs from the URL.\nFor example, this URL shows a collection ID:\n```\nhttps://example-company.results.highbond.com/projects/55843\n```\n\n> **Tip —**\nThe `GET` methods in this API also return IDs that you can use to identify resources you can act on.\n\n\n## Making requests\nOnce you have all the information you need, you can start making requests in an API client of your choice.\n\n### HTTP methods\nThe API uses the appropriate HTTP method for each action:\n* `GET` — used for retrieving resources\n* `POST` — used for creating resources\n* `PUT` / `PATCH` — used for updating resources\n* `DELETE` — used for deleting resources\n\n\n### Content type\nAlways specify the `Content-Type` of your request in the header. Supported content types are:\n* JSON API\n* JSON (for backwards compatibility)\n\n```\nContent-Type: application/vnd.api+json\nContent-Type: application/json\n```\n\nA complete **Get a table** request using `curl` would look like this:\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/11594/tables/388930\n```\n\n### Requesting the API to return only specific fields\nFor certain resources, such as control tests, you can request the API to return only specific fields using the `fields` query parameter. Sparse fieldsets are\nhelpful for limiting your responses to only the data you require.\n\n> **Note —**\nThe `type` argument must specify the resource you want to retrieve. The value of the `fields` parameter must be a comma-delimited list that specifies\nthe name of the field(s) to be returned. Avoid whitespace before or after each comma.\n```\nfields[type]=field_name1,field_name2,fieldname3\n```\n\nA complete **Get a control test** request that only returns the `assigned_user`, `control`, and `testing_round_number` fields would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/12345/control_tests/105?fields[control_tests]=assigned_user,control,testing_round_number\n```\n\n### Requesting the API to return related resources\nTo reduce the number of requests, you may use the `include` query parameter to return related resources in the response along with the requested primary resources. Such responses are called \"compound documents\".\n\nAccepted values for the `include` parameter are documented in the `Query Parameters` section of each API method.\n\n> **Note —**\nThe `include` parameter must be a comma-delimited list that specifies\nthe name of the relationship(s) or nested relationship(s) to be returned. Avoid whitespace before or after each comma.\n\nExample - requesting a relationship and a nested relationship\n```\ninclude=control,control.objective\n```\n\nA complete **Get a control test** request that returns the `control` relationship, and `control.objective` nested relationship would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis.highbond.com/v1/orgs/12345/control_tests/105?include=control,control.objective\n```\n\n\n### Blank fields\nBlank fields are included in all response schemas as `\"\"` or `null` instead of being omitted.\n\n\n### Time zones\nAll timestamps are returned in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.\n\nSome requests that create new data, such as creating a robot task's schedule, allow you to provide time zone information.\nFor API requests that allow for a timestamp to be specified, you must explicitly provide an ISO 8601 timestamp with time zone information.\n\n```\n\"starts_at\": \"2019-03-21T16:25:00.478Z\",\n\"starts_at_timezone\": \"America/Los_Angeles\",\n```\n\n\n### Rich text fields\n\nSome requests and responses contain rich text fields that include HTML tags. These are typically description fields. If you need to format text,\nthe best approach is to upload your raw data first and apply formatting later in the user interface.\n\n> **Note —**\nImages that exist in rich text fields are returned in responses, but they are not rendered. You cannot upload new images to rich text fields using the API.\n\n\n### User identifiers\nA unique identifier (UID) is an alphanumeric string that is associated with a user in HighBond. UIDs make it possible to address users,\nso that they can be accessed and interacted with using the API. Some requests that allow you to assign items to users, such as creating an objective,\nrequire you to specify a user's UID.\n\nTo obtain a user's UID:\n\n1. Sign in to <a href=\"https://accounts.highbond.com/login\" target=\"_blank\">HighBond</a>.\n2. If your company uses more than one instance in HighBond, make sure <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-switch-instances\"\ntarget=\"_blank\">the appropriate instance is active</a>.\n3. Select **Options > Users (#)**.\n4. Navigate to the appropriate user and click the user's name.\n5. In the **User Details** side panel, copy the UID to your clipboard.\nOnce you have copied the UID, you can specify it in your request.\n\n\n### Pagination\nWhen a response consists of a large number of items, the API breaks it into separate pages for performance reasons. You can control the way the API paginates your results by specifying how many items you want to have per page, and which page you want the API to return.\n\nFor example, if you request a list of controls, the request could look like this: `{protocol}://{server}/v1/orgs/{org_id}/objectives/{objective_id}/controls?page[size]=25&page[number]=Mg==`\n\nWhere:\n\n* `page[size]=25` specifies that there should be 25 items per page. Different endpoints have different default values and maximum numbers of values you can have per page.\n* `page[number]=Mg==` specifies that the API should return the second page of results (the 26th through 50th items that match the request).\n\n > **Note —**\n In most cases, page numbers must be encoded in Base64. In this example, `Mg==` is the Base64 encoded value for `2`.\n\nAdditionally, responses include the `links` parameter, which provides URLs for the `prev` and `next` attributes (or `null` values if all of the items are on one page). Those URLs include the above parameters, so you can paste them into subsequent requests if needed.\n\n\n\n## Errors\nHighBond uses standard <a href=\"https://en.wikipedia.org/wiki/List_of_HTTP_status_codes\" target=\"_blank\">HTTP response codes</a>\nto indicate the success or failure of a request. The range of a code indicates information about why it succeeded or failed:\n\n* **`2xx` range —** Success\n* **`4xx` range —** Error given the information provided\n* **`5xx` range —** Server failed to fulfil a valid request\n\nSome common errors that occur when making requests include:\n* **`400` Bad request —** When a parameter is missing (such as the `org_id` or resource `id`), when more\nthan one unique resource is specified in the request, or when a specified data type is incompatible with the endpoint\n* **`401` Bad credentials —** When there is an authentication error\n* **`403` Forbidden —** When there is an authorization problem based on your <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-managing-apps\"\ntarget=\"_blank\">role in a HighBond app</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-assigning-subscriptions\" target=\"_blank\">subscription</a>\n* **`404` Not found —** When there is a problem on the client side due to an incorrect URL or resource deletion\n* **`415` Unsupported media type —** When the `Content-Type` specified is unsupported\n* **`422` Unprocessable entity —** When a required attribute is missing (such as the name of a resource), or when a conflict occurs\n(such as a script activation conflict)\n\n\n## Versioning\nAll API endpoints use a version number in the path. As can be seen in the examples, `/v1/` specifies version 1 of the API.\n\nOver time, the API will evolve. New API versions will be introduced and existing versions may be updated.\n\nSome API updates are considered a breaking change, requiring a new version of the API to be introduced. An example of a breaking\nchange is fields being changed or removed. By introducing a new version, API consumers can safely continue to use prior API versions.\n\nThe other type of API update is a non-breaking change. You should expect non-breaking change updates to existing API versions.\nAn example of a non-breaking change is adding a field to a response object. Non-breaking changes are additive. While they do\nchange the response body, they should not impact the API consumer.\n"
+  x-logo:
+    url: ./assets/logo.png
+    altText: HighBond Logo
+servers:
+- url: '{protocol}://{server}/v1'
+  variables:
+    protocol:
+      default: https
+    server:
+      default: apis-us.highbond.com
+      enum:
+      - apis-us.highbond.com
+      - apis-ca.highbond.com
+      - apis-eu.highbond.com
+      - apis-ap.highbond.com
+      - apis-au.highbond.com
+      - apis-af.highbond.com
+      - apis-sa.highbond.com
+      - apis-jp.highbond.com
+security:
+- bearerToken: []
+tags:
+- name: Issues
+  description: 'An issue is a problem, control gap, or exception that has been identified within a project. Adding an issue involves recording basic information about the issue and assigning
+
+    the issue to an owner. Issues may also be known as deficiencies, findings, or another customized term.
+
+
+    > **Note —**
+
+    Only issues in projects that have an `"active"` state can be accessed using the API.
+
+
+    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-identify-and-manage-issues" target="_blank">Learn more about issues</a>.
+
+    '
+paths:
+  /orgs/{org_id}/issues:
+    get:
+      tags:
+      - Issues
+      operationId: getOrgIssues
+      summary: Get an organization's issues
+      description: 'Get a list of all issues in an organization.
+
+
+        > **Note:**
+
+        By default, this endpoint only returns issues from active projects. To fetch objects from archived projects, do one of the following:
+
+        > * Specify the active or archived project ID using `filter[project.id]`
+
+        > * Specify that you want results from archived projects using `filter[project.state]=archive`
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/issueProjectIdFilterParams'
+      - $ref: '#/components/parameters/issueProjectStateFilterParams'
+      - $ref: '#/components/parameters/issueTargetTypeFilterParams'
+      - $ref: '#/components/parameters/issueTargetIdFilterParams'
+      - $ref: '#/components/parameters/issueClosedFilterParams'
+      - $ref: '#/components/parameters/issueSortParams'
+      - $ref: '#/components/parameters/issueSparseFieldsetParams'
+      - $ref: '#/components/parameters/pageSizeParam'
+      - $ref: '#/components/parameters/pageNumberEncodedParam'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetIssuesResponse'
+        '400':
+          $ref: '#/components/responses/MissingProjectId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+  /orgs/{org_id}/projects/{project_id}/issues:
+    get:
+      tags:
+      - Issues
+      operationId: getIssues
+      summary: Get issues
+      description: Get a list of all issues in a project.
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/projectIdParam'
+      - $ref: '#/components/parameters/issueSparseFieldsetParams'
+      - $ref: '#/components/parameters/pageSizeParam'
+      - $ref: '#/components/parameters/pageNumberEncodedParam'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetIssuesResponse'
+        '400':
+          $ref: '#/components/responses/MissingProjectId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+    post:
+      tags:
+      - Issues
+      operationId: createIssue
+      summary: Create an issue
+      description: 'Create a new issue in an existing project.
+
+
+        <strong>Limitations</strong>:
+
+        * There can be a maximum of 8000 issues per project.
+
+        * You cannot create an issue directly under individual objectives, risks, controls, walkthroughs, test plans, or testing rounds. Issues can only be created under a project.
+
+        * Issues created under a project do not display as part of assurance features in HighBond.
+
+        * Specifying a person''s name or email in the following fields does not automatically notify them via email: `owner`, `project_owner`, `executive_owner`.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/projectIdParam'
+      - $ref: '#/components/parameters/issueSparseFieldsetParams'
+      requestBody:
+        description: The data required to create an issue.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateIssueRequest'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetIssueResponse'
+        '400':
+          $ref: '#/components/responses/ResourceTypeMismatch'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/description
+                  code: invalid_resource
+                  detail: can't be blank
+  /orgs/{org_id}/issues/{id}:
+    get:
+      tags:
+      - Issues
+      operationId: getIssue
+      summary: Get an issue
+      description: Get information about an issue.
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      - $ref: '#/components/parameters/issueSparseFieldsetParams'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetIssueResponseWithIncludes'
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+    patch:
+      tags:
+      - Issues
+      operationId: updateIssue
+      summary: Update an issue
+      description: 'Make changes to an issue, like renaming it or specifying an owner.
+
+
+        <strong>Limitations</strong>:
+
+        * If the <strong>Issue Information</strong> subtab of the issue is signed off, you cannot update basic details about the issue.
+
+        * If the <strong>Follow-up & Remediation</strong> subtab of the issue is signed off, you cannot update remediation details.
+
+        * If the <strong>Retest Information</strong> subtab of the issue is signed off, you cannot update retesting details.
+
+        * If the issue belongs to an objective that has been checked out using
+
+        <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client" target="_blank">Offline Projects</a> or the
+
+        <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile" target="_blank">HighBond iPad app</a>, you cannot update the issue.
+
+        * Specifying a person''s name or email in the following fields does not automatically notify them via email: `owner`, `project_owner`, `executive_owner`.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      - $ref: '#/components/parameters/issueSparseFieldsetParams'
+      requestBody:
+        description: The data required to update an issue.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateIssueRequest'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetIssueResponseWithIncludes'
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/description
+                  code: invalid_resource
+                  detail: can't be blank
+                - status: 422
+                  source:
+                    pointer: /data/attributes/entities
+                  code: invalid_resource
+                  detail: 'Missing child or parent entity ids: [1, 2 ,3]'
+                - status: 422
+                  source:
+                    pointer: /data/attributes/entities
+                  code: invalid_resource
+                  detail: 'Missing inherited entity ids: [1, 2, 3]'
+                - status: 422
+                  source:
+                    pointer: /data/attributes/entities
+                  code: invalid_resource
+                  detail: Entities not found
+    delete:
+      tags:
+      - Issues
+      operationId: deleteIssue
+      summary: Delete an issue
+      description: 'Permanently delete an issue from a project.
+
+
+        <strong>Limitation</strong>:
+
+        If the issue belongs to an objective that has been checked out using
+
+        <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client" target="_blank">Offline Projects</a> or the
+
+        <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile" target="_blank">HighBond iPad app</a>, you cannot delete the issue.
+
+
+        > **Caution —**
+
+        Deleting an issue also removes any associated actions. Once deleted, you cannot access or restore the issue or associated actions.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/MissingOrgId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+  /orgs/{org_id}/issues/{issue_id}/entities:
+    post:
+      tags:
+      - Issues
+      operationId: createIssueEntityLink
+      summary: Create issue entity link
+      description: "Link entity to an issue.\n\n> **Note**\n> * Tagging an issue to an entity automatically tags an issue with all ancestor entities and descendant entities.\n> * Request <a href=\"#operation/getIssue\">Get an issue</a> with `entities` query param to get the whole list of entities linked to an issue.\n\n<strong>Limitations</strong>:\n  * You cannot tag the issue with entity if the objective it belongs to has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile\" target=\"_blank\">HighBond iPad app</a>.\n  * Only 1 entity can be sent in the request payload.\n\n<a href=\"https://help.highbond.com/helpdocs/auditbond/en-us/Content/projects/admin/config/Setting_up_entity_tagging.html\" target=\"_blank\">Learn more about tagging items with entities</a>.\n"
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/issueIdParam'
+      requestBody:
+        description: The data required to create a issue entity link.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateIssueEntityRequest'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CreateIssueEntityResponse'
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/base
+                  code: invalid_resource
+                  detail: Entity and Responsibility should reference the same account.
+  /orgs/{org_id}/issues/{issue_id}/entities/{id}:
+    delete:
+      tags:
+      - Issues
+      operationId: deleteIssueEntityLink
+      summary: Delete issue entity link
+      description: "Permanently delete issue entity link.\n\n> **Note -**\nUntagging an issue from an entity automatically untags an issue from all descendant entities.\n\n<strong>Limitations</strong>:\n  * You cannot untag an issue from an entity if the objective it belongs to has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile\" target=\"_blank\">HighBond iPad app</a>.\n  * <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/admin/config/Setting_up_entity_tagging.html?Highlight=Inherited\">Inherited entity tags</a> cannot be removed.\n"
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/issueIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/MissingOrgId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/base
+                  code: invalid_resource
+                  title: Invalid resource
+                  detail: Cannot delete an inherited Entity.
+components:
+  parameters:
+    projectIdParam:
+      in: path
+      name: project_id
+      description: The ID of the project.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    issueTargetTypeFilterParams:
+      in: query
+      name: filter[target.type]
+      description: Requesting the API to filter results by target's type. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        enum:
+        - objectives
+        - projects
+        - project_files
+        - issues
+        - objectives
+        - narratives
+        - walkthroughs
+        - walkthrough_summaries
+        - testing_rounds
+        - controls
+        - risks
+        - risk_control_matrices
+        - control_tests
+        - control_test_plans
+        - project_results
+        - project_plannings
+        - accounts
+        - test_plans
+    issueTargetIdFilterParams:
+      in: query
+      name: filter[target.id]
+      description: Requesting the API to filter results by target's id. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: integer
+        example: 2
+    issueIdParam:
+      in: path
+      name: issue_id
+      description: The ID of the issue.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    issueSparseFieldsetParams:
+      in: query
+      name: fields[issues]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,creator_name,created_at,updated_at,position,owner,recommendation,deficiency_type,severity,published,identified_at,reference,reference_prefix,risk,scope,escalation,cause,effect,cost_impact,executive_summary,executive_owner,project_owner,closed,remediation_status,remediation_plan,remediation_date,actual_remediation_date,retest_deadline_date,actual_retest_date,retesting_results_overview,custom_attributes,project,entities,target,owner_user,executive_owner_user,project_owner_user,creator_user
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    issueProjectIdFilterParams:
+      in: query
+      name: filter[project.id]
+      description: Requesting the API to filter results by project's ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '2'
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    issueClosedFilterParams:
+      in: query
+      name: filter[closed]
+      description: Requesting the API to filter results by closed status. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: boolean
+        example: false
+    issueProjectStateFilterParams:
+      in: query
+      name: filter[project.state]
+      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    issueSortParams:
+      in: query
+      name: sort
+      description: Orders the resulting resources by the given field(s). Sorts ascending by default, prefix with `-` to sort descending. You can provide multiple sort fields separated by comma.
+      required: false
+      schema:
+        type: string
+        example: closed
+  schemas:
+    CreateIssueEntityResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the issue.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"entities"`).
+              example: entities
+    UpdateIssueRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"issues"`).
+              example: issues
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - description
+              - deficiency_type
+              - owner
+              properties:
+                description:
+                  type: string
+                  description: A detailed description of the issue.
+                  maxLength: 524288
+                  example: <h1>Description heading</h1><p>Issue description.</p>
+                owner:
+                  type: string
+                  description: 'The person responsible for the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    This field becomes required if the `owner_user` relationship is not provided.
+
+                    '
+                  example: Payam Moghaddam
+                deficiency_type:
+                  type: string
+                  description: 'A user configurable classification of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Deficiency
+                recommendation:
+                  type: string
+                  description: A detailed description of the recommended actions to be taken based on the issue.
+                  maxLength: 524288
+                  example: <h1>Issue recommendation heading</h1><p>Recommendation description.</p>
+                title:
+                  type: string
+                  description: The title of the issue.
+                  maxLength: 255
+                  example: Title of issue
+                severity:
+                  type: string
+                  description: 'A user configurable label that specifies the intensity of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: High
+                published:
+                  type: boolean
+                  description: 'Specifies whether the issue is visible to all users (`true`), or hidden from users assigned the Contributor Tester, Contributor User, Oversight Executive, and Oversight Reviewer roles (`false`).
+
+                    An issue must be published to display in other related HighBond apps, such as Strategy. The default is `false`.
+
+                    '
+                  example: true
+                identified_at:
+                  type: string
+                  description: The timestamp specifying when the issue was identified. The default is the current date and time.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                reference:
+                  type: string
+                  description: The ID of the issue.
+                  maxLength: 255
+                  example: ISS-01
+                risk:
+                  type: string
+                  description: A detailed description of the risk or the impact the issue will have.
+                  maxLength: 524288
+                  example: <h1>Risk heading</h1><p>Risk or impact description.</p>
+                scope:
+                  type: string
+                  description: 'A user configurable label that specifies the extent to which the issue affects the organization.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  maxLength: 524288
+                  example: Local
+                escalation:
+                  type: string
+                  description: 'A user configurable label that specifies the person, department, or organizational body that the issue should be brought to.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Owner
+                cause:
+                  type: string
+                  description: A detailed description of what caused the issue to occur.
+                  maxLength: 524288
+                  example: <h1>Issue cause heading</h1><p>Issue cause description.</p>
+                effect:
+                  type: string
+                  description: A detailed description of the effect the issue will have on the organization.
+                  maxLength: 524288
+                  example: <h1>Issue effect heading</h1><p>Issue effect description.</p>
+                cost_impact:
+                  type: number
+                  nullable: true
+                  description: The estimated, or actual, monetary cost associated with the issue.
+                  example: 4.2
+                  format: double
+                executive_summary:
+                  type: string
+                  description: A high level overview of the issue that typically summarizes information from other related fields, such as risk/impact, cause, and effect.
+                  maxLength: 524288
+                  example: <h1>Executive summary heading</h1><p>Executive summary description.</p>
+                executive_owner:
+                  type: string
+                  description: 'The executive owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Max Powell
+                project_owner:
+                  type: string
+                  description: 'The project owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Chris Rockwell
+                closed:
+                  type: boolean
+                  description: 'Specifies whether the overall status of the issue is in an open (`false`) or closed state (`true`). The default is `false`.
+
+                    '
+                  example: false
+                remediation_status:
+                  type: string
+                  description: 'A user configurable issue remediation status.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Opened
+                remediation_plan:
+                  type: string
+                  description: A detailed description of the remediation plan.
+                  maxLength: 524288
+                  example: <h1>Remediation plan heading</h1><p>Remediation plan description.</p>
+                remediation_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be remediated by.
+                  example: '2019-02-09'
+                  format: date
+                actual_remediation_date:
+                  type: string
+                  description: Specifies the date the issue was actually remediated.
+                  example: '2019-02-09'
+                  format: date
+                retest_deadline_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be retested by.
+                  example: '2019-02-09'
+                  format: date
+                actual_retest_date:
+                  type: string
+                  description: Specifies the actual date when the issue was retested.
+                  example: '2019-02-09'
+                  format: date
+                retesting_results_overview:
+                  type: string
+                  description: A detailed description that specifies whether or not the issue has truly been remediated.
+                  maxLength: 524288
+                  example: <h1>Retesting results overview heading</h1><p>Retesting results overview description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined by the user that are available on this object.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify the custom attribute. Optional if id is included.
+                        example: Custom Issue Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) to set this custom attribute to.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              nullable: true
+              description: The relationships associated with the resource.
+              properties:
+                entities:
+                  type: object
+                  description: 'The passed entities list should match the following conditions:
+
+                    1. It should be the full exact list of entities you would like to be linked to the resource.
+
+
+                    2. The passed entities should consist of valid sub-trees with all ancestor entities as well as descendent entities.
+
+
+                    3. Inherited entities should be included too.
+
+
+                    Otherwise, the whole request will be rejected with the corresponding error.
+
+                    '
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
+                target:
+                  type: object
+                  description: Specifies the resource that the issue is associated with. If a target field wasn't passed, then an Issue will be linked to a Project by default.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with an issue.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
+
+                            `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
+
+                            `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
+
+                            '
+                          example: objectives
+                owner_user:
+                  type: object
+                  nullable: true
+                  description: 'Specifies the user responsible for the issue.
+
+                    A value in this field will override any values provided in the `owner` attribute.
+
+                    This field becomes required if the `owner` attribute is not provided.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+    GetIssueResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"issues"`).
+              example: issues
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                title:
+                  type: string
+                  description: The title of the issue.
+                  maxLength: 255
+                  example: Title of issue
+                description:
+                  type: string
+                  description: A detailed description of the issue.
+                  maxLength: 524288
+                  example: <h1>Description heading</h1><p>Issue description.</p>
+                creator_name:
+                  type: string
+                  description: The name of the person that created the issue. The default is the name of the current user.
+                  example: Payam Moghaddam
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the issue was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the issue was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                owner:
+                  type: string
+                  description: 'The person responsible for the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    This field becomes required if the `owner_user` relationship is not provided.
+
+                    '
+                  example: Payam Moghaddam
+                recommendation:
+                  type: string
+                  description: A detailed description of the recommended actions to be taken based on the issue.
+                  maxLength: 524288
+                  example: <h1>Issue recommendation heading</h1><p>Recommendation description.</p>
+                deficiency_type:
+                  type: string
+                  description: 'A user configurable classification of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Deficiency
+                severity:
+                  type: string
+                  description: 'A user configurable label that specifies the intensity of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: High
+                published:
+                  type: boolean
+                  description: 'Specifies whether the issue is visible to all users (`true`), or hidden from users assigned the Contributor Tester, Contributor User, Oversight Executive, and Oversight Reviewer roles (`false`).
+
+                    An issue must be published to display in other related HighBond apps, such as Strategy. The default is `false`.
+
+                    '
+                  example: true
+                identified_at:
+                  type: string
+                  description: The timestamp specifying when the issue was identified. The default is the current date and time.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                reference:
+                  type: string
+                  description: The ID of the issue.
+                  maxLength: 255
+                  example: ISS-01
+                reference_prefix:
+                  type: string
+                  description: Specifies the ID if the issue is associated with an objective.
+                  example: '3'
+                risk:
+                  type: string
+                  description: A detailed description of the risk or the impact the issue will have.
+                  maxLength: 524288
+                  example: <h1>Risk heading</h1><p>Risk or impact description.</p>
+                scope:
+                  type: string
+                  description: 'A user configurable label that specifies the extent to which the issue affects the organization.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  maxLength: 524288
+                  example: Local
+                escalation:
+                  type: string
+                  description: 'A user configurable label that specifies the person, department, or organizational body that the issue should be brought to.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Owner
+                cause:
+                  type: string
+                  description: A detailed description of what caused the issue to occur.
+                  maxLength: 524288
+                  example: <h1>Issue cause heading</h1><p>Issue cause description.</p>
+                effect:
+                  type: string
+                  description: A detailed description of the effect the issue will have on the organization.
+                  maxLength: 524288
+                  example: <h1>Issue effect heading</h1><p>Issue effect description.</p>
+                cost_impact:
+                  type: number
+                  nullable: true
+                  description: The estimated, or actual, monetary cost associated with the issue.
+                  example: 4.2
+                  format: double
+                executive_summary:
+                  type: string
+                  description: A high level overview of the issue that typically summarizes information from other related fields, such as risk/impact, cause, and effect.
+                  maxLength: 524288
+                  example: <h1>Executive summary heading</h1><p>Executive summary description.</p>
+                executive_owner:
+                  type: string
+                  description: 'The executive owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Max Powell
+                project_owner:
+                  type: string
+                  description: 'The project owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Chris Rockwell
+                closed:
+                  type: boolean
+                  description: 'Specifies whether the overall status of the issue is in an open (`false`) or closed state (`true`). The default is `false`.
+
+                    '
+                  example: false
+                remediation_status:
+                  type: string
+                  description: 'A user configurable issue remediation status.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Opened
+                remediation_plan:
+                  type: string
+                  description: A detailed description of the remediation plan.
+                  maxLength: 524288
+                  example: <h1>Remediation plan heading</h1><p>Remediation plan description.</p>
+                remediation_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be remediated by.
+                  example: '2019-02-09'
+                  format: date
+                actual_remediation_date:
+                  type: string
+                  description: Specifies the date the issue was actually remediated.
+                  example: '2019-02-09'
+                  format: date
+                retest_deadline_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be retested by.
+                  example: '2019-02-09'
+                  format: date
+                actual_retest_date:
+                  type: string
+                  description: Specifies the actual date when the issue was retested.
+                  example: '2019-02-09'
+                  format: date
+                retesting_results_overview:
+                  type: string
+                  description: A detailed description that specifies whether or not the issue has truly been remediated.
+                  maxLength: 524288
+                  example: <h1>Retesting results overview heading</h1><p>Retesting results overview description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined by the user that are available on this object.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify the custom attribute. Optional if id is included.
+                        example: Custom Issue Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) to set this custom attribute to.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                project:
+                  type: object
+                  description: Specifies the project that the issue is associated with.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"projects"`).
+                          example: projects
+                entities:
+                  type: object
+                  description: Each issue has an associated issue entities.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      description: The data associated with the resource.
+                      example: []
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
+                target:
+                  type: object
+                  description: Specifies the resource that the issue is associated with. If a target field wasn't passed, then an Issue will be linked to a Project by default.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with an issue.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
+
+                            `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
+
+                            `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
+
+                            '
+                          example: objectives
+                owner_user:
+                  type: object
+                  nullable: true
+                  description: 'Specifies the user responsible for the issue.
+
+                    A value in this field will override any values provided in the `owner` attribute.
+
+                    This field becomes required if the `owner` attribute is not provided.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                executive_owner_user:
+                  type: object
+                  description: 'Specifies the executive owner responsible for the issue.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                project_owner_user:
+                  type: object
+                  description: 'Specifies the project owner responsible for the issue.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                creator_user:
+                  type: object
+                  description: 'Specifies the user that created the issue.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                objective:
+                  type: object
+                  description: 'Specifies the objective that the issue is associated with
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"objectives"`).
+                          example: objectives
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    GetIssuesResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      - links
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The classification of the object (`"issues"`).
+                example: issues
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  title:
+                    type: string
+                    description: The title of the issue.
+                    maxLength: 255
+                    example: Title of issue
+                  description:
+                    type: string
+                    description: A detailed description of the issue.
+                    maxLength: 524288
+                    example: <h1>Description heading</h1><p>Issue description.</p>
+                  creator_name:
+                    type: string
+                    description: The name of the person that created the issue. The default is the name of the current user.
+                    example: Payam Moghaddam
+                  created_at:
+                    type: string
+                    description: The timestamp identifying when the issue was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp identifying when the issue was last updated.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  owner:
+                    type: string
+                    description: 'The person responsible for the issue. Specifying a person''s name or email does not automatically send them
+
+                      an email notification about the issue.
+
+                      This field becomes required if the `owner_user` relationship is not provided.
+
+                      '
+                    example: Payam Moghaddam
+                  recommendation:
+                    type: string
+                    description: A detailed description of the recommended actions to be taken based on the issue.
+                    maxLength: 524288
+                    example: <h1>Issue recommendation heading</h1><p>Recommendation description.</p>
+                  deficiency_type:
+                    type: string
+                    description: 'A user configurable classification of the issue.
+
+                      The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                      '
+                    example: Deficiency
+                  severity:
+                    type: string
+                    description: 'A user configurable label that specifies the intensity of the issue.
+
+                      The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                      '
+                    example: High
+                  published:
+                    type: boolean
+                    description: 'Specifies whether the issue is visible to all users (`true`), or hidden from users assigned the Contributor Tester, Contributor User, Oversight Executive, and Oversight Reviewer roles (`false`).
+
+                      An issue must be published to display in other related HighBond apps, such as Strategy. The default is `false`.
+
+                      '
+                    example: true
+                  identified_at:
+                    type: string
+                    description: The timestamp specifying when the issue was identified. The default is the current date and time.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  reference:
+                    type: string
+                    description: The ID of the issue.
+                    maxLength: 255
+                    example: ISS-01
+                  reference_prefix:
+                    type: string
+                    description: Specifies the ID if the issue is associated with an objective.
+                    example: '3'
+                  risk:
+                    type: string
+                    description: A detailed description of the risk or the impact the issue will have.
+                    maxLength: 524288
+                    example: <h1>Risk heading</h1><p>Risk or impact description.</p>
+                  scope:
+                    type: string
+                    description: 'A user configurable label that specifies the extent to which the issue affects the organization.
+
+                      The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                      '
+                    maxLength: 524288
+                    example: Local
+                  escalation:
+                    type: string
+                    description: 'A user configurable label that specifies the person, department, or organizational body that the issue should be brought to.
+
+                      The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                      '
+                    example: Owner
+                  cause:
+                    type: string
+                    description: A detailed description of what caused the issue to occur.
+                    maxLength: 524288
+                    example: <h1>Issue cause heading</h1><p>Issue cause description.</p>
+                  effect:
+                    type: string
+                    description: A detailed description of the effect the issue will have on the organization.
+                    maxLength: 524288
+                    example: <h1>Issue effect heading</h1><p>Issue effect description.</p>
+                  cost_impact:
+                    type: number
+                    nullable: true
+                    description: The estimated, or actual, monetary cost associated with the issue.
+                    example: 4.2
+                    format: double
+                  executive_summary:
+                    type: string
+                    description: A high level overview of the issue that typically summarizes information from other related fields, such as risk/impact, cause, and effect.
+                    maxLength: 524288
+                    example: <h1>Executive summary heading</h1><p>Executive summary description.</p>
+                  executive_owner:
+                    type: string
+                    description: 'The executive owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                      an email notification about the issue.
+
+                      '
+                    example: Max Powell
+                  project_owner:
+                    type: string
+                    description: 'The project owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                      an email notification about the issue.
+
+                      '
+                    example: Chris Rockwell
+                  closed:
+                    type: boolean
+                    description: 'Specifies whether the overall status of the issue is in an open (`false`) or closed state (`true`). The default is `false`.
+
+                      '
+                    example: false
+                  remediation_status:
+                    type: string
+                    description: 'A user configurable issue remediation status.
+
+                      The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                      '
+                    example: Opened
+                  remediation_plan:
+                    type: string
+                    description: A detailed description of the remediation plan.
+                    maxLength: 524288
+                    example: <h1>Remediation plan heading</h1><p>Remediation plan description.</p>
+                  remediation_date:
+                    type: string
+                    description: Specifies a deadline for the issue to be remediated by.
+                    example: '2019-02-09'
+                    format: date
+                  actual_remediation_date:
+                    type: string
+                    description: Specifies the date the issue was actually remediated.
+                    example: '2019-02-09'
+                    format: date
+                  retest_deadline_date:
+                    type: string
+                    description: Specifies a deadline for the issue to be retested by.
+                    example: '2019-02-09'
+                    format: date
+                  actual_retest_date:
+                    type: string
+                    description: Specifies the actual date when the issue was retested.
+                    example: '2019-02-09'
+                    format: date
+                  retesting_results_overview:
+                    type: string
+                    description: A detailed description that specifies whether or not the issue has truly been remediated.
+                    maxLength: 524288
+                    example: <h1>Retesting results overview heading</h1><p>Retesting results overview description.</p>
+                  position:
+                    type: integer
+                    format: int64
+                    description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                      '
+                    example: 1
+                  custom_attributes:
+                    type: array
+                    description: An array of custom attributes defined by the user that are available on this object.
+                    items:
+                      type: object
+                      description: A user defined custom attribute value.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                          example: '42'
+                        term:
+                          type: string
+                          description: The user defined term used to identify the custom attribute. Optional if id is included.
+                          example: Custom Issue Attribute
+                        value:
+                          type: array
+                          description: The value or values (for multiselect) to set this custom attribute to.
+                          example:
+                          - Custom Select Option Text
+                          items:
+                            type: string
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                properties:
+                  project:
+                    type: object
+                    description: Specifies the project that the issue is associated with.
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with a project.
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the project.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"projects"`).
+                            example: projects
+                  entities:
+                    type: object
+                    description: Each issue has an associated issue entities.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: array
+                        description: The data associated with the resource.
+                        items:
+                          type: object
+                          required:
+                          - id
+                          - type
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the entity.
+                              example: '1'
+                            type:
+                              type: string
+                              description: The classification of the object (`"entities"`).
+                              example: entities
+                  target:
+                    type: object
+                    description: Specifies the resource that the issue is associated with. If a target field wasn't passed, then an Issue will be linked to a Project by default.
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with an issue.
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the resource.
+                            example: '1'
+                          type:
+                            type: string
+                            description: 'The classification of the object.
+
+
+                              A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
+
+                              `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
+
+                              `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
+
+                              '
+                            example: objectives
+                  owner_user:
+                    type: object
+                    nullable: true
+                    description: 'Specifies the user responsible for the issue.
+
+                      A value in this field will override any values provided in the `owner` attribute.
+
+                      This field becomes required if the `owner` attribute is not provided.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  executive_owner_user:
+                    type: object
+                    description: 'Specifies the executive owner responsible for the issue.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  project_owner_user:
+                    type: object
+                    description: 'Specifies the project owner responsible for the issue.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  creator_user:
+                    type: object
+                    description: 'Specifies the user that created the issue.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  objective:
+                    type: object
+                    description: 'Specifies the objective that the issue is associated with
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the resource.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"objectives"`).
+                            example: objectives
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type: string
+              description: Next page url
+              nullable: true
+              example: /api/resource?page[number]=Mw==
+            prev:
+              type: string
+              description: Previous page url
+              nullable: true
+              example: null
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    CreateIssueEntityRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the issue.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"entities"`).
+              example: entities
+    GetIssueResponseWithIncludes:
+      type: object
+      description: The data included in the response.
+      required:
+      - data
+      - included
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"issues"`).
+              example: issues
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                title:
+                  type: string
+                  description: The title of the issue.
+                  maxLength: 255
+                  example: Title of issue
+                description:
+                  type: string
+                  description: A detailed description of the issue.
+                  maxLength: 524288
+                  example: <h1>Description heading</h1><p>Issue description.</p>
+                creator_name:
+                  type: string
+                  description: The name of the person that created the issue. The default is the name of the current user.
+                  example: Payam Moghaddam
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the issue was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the issue was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                owner:
+                  type: string
+                  description: 'The person responsible for the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    This field becomes required if the `owner_user` relationship is not provided.
+
+                    '
+                  example: Payam Moghaddam
+                recommendation:
+                  type: string
+                  description: A detailed description of the recommended actions to be taken based on the issue.
+                  maxLength: 524288
+                  example: <h1>Issue recommendation heading</h1><p>Recommendation description.</p>
+                deficiency_type:
+                  type: string
+                  description: 'A user configurable classification of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Deficiency
+                severity:
+                  type: string
+                  description: 'A user configurable label that specifies the intensity of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: High
+                published:
+                  type: boolean
+                  description: 'Specifies whether the issue is visible to all users (`true`), or hidden from users assigned the Contributor Tester, Contributor User, Oversight Executive, and Oversight Reviewer roles (`false`).
+
+                    An issue must be published to display in other related HighBond apps, such as Strategy. The default is `false`.
+
+                    '
+                  example: true
+                identified_at:
+                  type: string
+                  description: The timestamp specifying when the issue was identified. The default is the current date and time.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                reference:
+                  type: string
+                  description: The ID of the issue.
+                  maxLength: 255
+                  example: ISS-01
+                reference_prefix:
+                  type: string
+                  description: Specifies the ID if the issue is associated with an objective.
+                  example: '3'
+                risk:
+                  type: string
+                  description: A detailed description of the risk or the impact the issue will have.
+                  maxLength: 524288
+                  example: <h1>Risk heading</h1><p>Risk or impact description.</p>
+                scope:
+                  type: string
+                  description: 'A user configurable label that specifies the extent to which the issue affects the organization.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  maxLength: 524288
+                  example: Local
+                escalation:
+                  type: string
+                  description: 'A user configurable label that specifies the person, department, or organizational body that the issue should be brought to.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Owner
+                cause:
+                  type: string
+                  description: A detailed description of what caused the issue to occur.
+                  maxLength: 524288
+                  example: <h1>Issue cause heading</h1><p>Issue cause description.</p>
+                effect:
+                  type: string
+                  description: A detailed description of the effect the issue will have on the organization.
+                  maxLength: 524288
+                  example: <h1>Issue effect heading</h1><p>Issue effect description.</p>
+                cost_impact:
+                  type: number
+                  nullable: true
+                  description: The estimated, or actual, monetary cost associated with the issue.
+                  example: 4.2
+                  format: double
+                executive_summary:
+                  type: string
+                  description: A high level overview of the issue that typically summarizes information from other related fields, such as risk/impact, cause, and effect.
+                  maxLength: 524288
+                  example: <h1>Executive summary heading</h1><p>Executive summary description.</p>
+                executive_owner:
+                  type: string
+                  description: 'The executive owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Max Powell
+                project_owner:
+                  type: string
+                  description: 'The project owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Chris Rockwell
+                closed:
+                  type: boolean
+                  description: 'Specifies whether the overall status of the issue is in an open (`false`) or closed state (`true`). The default is `false`.
+
+                    '
+                  example: false
+                remediation_status:
+                  type: string
+                  description: 'A user configurable issue remediation status.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Opened
+                remediation_plan:
+                  type: string
+                  description: A detailed description of the remediation plan.
+                  maxLength: 524288
+                  example: <h1>Remediation plan heading</h1><p>Remediation plan description.</p>
+                remediation_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be remediated by.
+                  example: '2019-02-09'
+                  format: date
+                actual_remediation_date:
+                  type: string
+                  description: Specifies the date the issue was actually remediated.
+                  example: '2019-02-09'
+                  format: date
+                retest_deadline_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be retested by.
+                  example: '2019-02-09'
+                  format: date
+                actual_retest_date:
+                  type: string
+                  description: Specifies the actual date when the issue was retested.
+                  example: '2019-02-09'
+                  format: date
+                retesting_results_overview:
+                  type: string
+                  description: A detailed description that specifies whether or not the issue has truly been remediated.
+                  maxLength: 524288
+                  example: <h1>Retesting results overview heading</h1><p>Retesting results overview description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined by the user that are available on this object.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify the custom attribute. Optional if id is included.
+                        example: Custom Issue Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) to set this custom attribute to.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                project:
+                  type: object
+                  description: Specifies the project that the issue is associated with.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"projects"`).
+                          example: projects
+                entities:
+                  type: object
+                  description: Each issue has an associated issue entities.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      description: The data associated with the resource.
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
+                target:
+                  type: object
+                  description: Specifies the resource that the issue is associated with. If a target field wasn't passed, then an Issue will be linked to a Project by default.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with an issue.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
+
+                            `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
+
+                            `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
+
+                            '
+                          example: objectives
+                owner_user:
+                  type: object
+                  nullable: true
+                  description: 'Specifies the user responsible for the issue.
+
+                    A value in this field will override any values provided in the `owner` attribute.
+
+                    This field becomes required if the `owner` attribute is not provided.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                executive_owner_user:
+                  type: object
+                  description: 'Specifies the executive owner responsible for the issue.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                project_owner_user:
+                  type: object
+                  description: 'Specifies the project owner responsible for the issue.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                creator_user:
+                  type: object
+                  description: 'Specifies the user that created the issue.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                objective:
+                  type: object
+                  description: 'Specifies the objective that the issue is associated with
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"objectives"`).
+                          example: objectives
+    CreateIssueRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"issues"`).
+              example: issues
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - description
+              - deficiency_type
+              - owner
+              properties:
+                description:
+                  type: string
+                  description: A detailed description of the issue.
+                  maxLength: 524288
+                  example: <h1>Description heading</h1><p>Issue description.</p>
+                owner:
+                  type: string
+                  description: 'The person responsible for the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    This field becomes required if the `owner_user` relationship is not provided.
+
+                    '
+                  example: Payam Moghaddam
+                deficiency_type:
+                  type: string
+                  description: 'A user configurable classification of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Deficiency
+                recommendation:
+                  type: string
+                  description: A detailed description of the recommended actions to be taken based on the issue.
+                  maxLength: 524288
+                  example: <h1>Issue recommendation heading</h1><p>Recommendation description.</p>
+                title:
+                  type: string
+                  description: The title of the issue.
+                  maxLength: 255
+                  example: Title of issue
+                severity:
+                  type: string
+                  description: 'A user configurable label that specifies the intensity of the issue.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: High
+                published:
+                  type: boolean
+                  description: 'Specifies whether the issue is visible to all users (`true`), or hidden from users assigned the Contributor Tester, Contributor User, Oversight Executive, and Oversight Reviewer roles (`false`).
+
+                    An issue must be published to display in other related HighBond apps, such as Strategy. The default is `false`.
+
+                    '
+                  example: true
+                identified_at:
+                  type: string
+                  description: The timestamp specifying when the issue was identified. The default is the current date and time.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                reference:
+                  type: string
+                  description: The ID of the issue.
+                  maxLength: 255
+                  example: ISS-01
+                risk:
+                  type: string
+                  description: A detailed description of the risk or the impact the issue will have.
+                  maxLength: 524288
+                  example: <h1>Risk heading</h1><p>Risk or impact description.</p>
+                scope:
+                  type: string
+                  description: 'A user configurable label that specifies the extent to which the issue affects the organization.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  maxLength: 524288
+                  example: Local
+                escalation:
+                  type: string
+                  description: 'A user configurable label that specifies the person, department, or organizational body that the issue should be brought to.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Owner
+                cause:
+                  type: string
+                  description: A detailed description of what caused the issue to occur.
+                  maxLength: 524288
+                  example: <h1>Issue cause heading</h1><p>Issue cause description.</p>
+                effect:
+                  type: string
+                  description: A detailed description of the effect the issue will have on the organization.
+                  maxLength: 524288
+                  example: <h1>Issue effect heading</h1><p>Issue effect description.</p>
+                cost_impact:
+                  type: number
+                  nullable: true
+                  description: The estimated, or actual, monetary cost associated with the issue.
+                  example: 4.2
+                  format: double
+                executive_summary:
+                  type: string
+                  description: A high level overview of the issue that typically summarizes information from other related fields, such as risk/impact, cause, and effect.
+                  maxLength: 524288
+                  example: <h1>Executive summary heading</h1><p>Executive summary description.</p>
+                executive_owner:
+                  type: string
+                  description: 'The executive owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Max Powell
+                project_owner:
+                  type: string
+                  description: 'The project owner of the issue. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the issue.
+
+                    '
+                  example: Chris Rockwell
+                closed:
+                  type: boolean
+                  description: 'Specifies whether the overall status of the issue is in an open (`false`) or closed state (`true`). The default is `false`.
+
+                    '
+                  example: false
+                remediation_status:
+                  type: string
+                  description: 'A user configurable issue remediation status.
+
+                    The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                    '
+                  example: Opened
+                remediation_plan:
+                  type: string
+                  description: A detailed description of the remediation plan.
+                  maxLength: 524288
+                  example: <h1>Remediation plan heading</h1><p>Remediation plan description.</p>
+                remediation_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be remediated by.
+                  example: '2019-02-09'
+                  format: date
+                actual_remediation_date:
+                  type: string
+                  description: Specifies the date the issue was actually remediated.
+                  example: '2019-02-09'
+                  format: date
+                retest_deadline_date:
+                  type: string
+                  description: Specifies a deadline for the issue to be retested by.
+                  example: '2019-02-09'
+                  format: date
+                actual_retest_date:
+                  type: string
+                  description: Specifies the actual date when the issue was retested.
+                  example: '2019-02-09'
+                  format: date
+                retesting_results_overview:
+                  type: string
+                  description: A detailed description that specifies whether or not the issue has truly been remediated.
+                  maxLength: 524288
+                  example: <h1>Retesting results overview heading</h1><p>Retesting results overview description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined by the user that are available on this object.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify the custom attribute. Optional if id is included.
+                        example: Custom Issue Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) to set this custom attribute to.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                target:
+                  type: object
+                  description: Specifies the resource that the issue is associated with. If a target field wasn't passed, then an Issue will be linked to a Project by default.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with an issue.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
+
+                            `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
+
+                            `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
+
+                            '
+                          example: objectives
+                owner_user:
+                  type: object
+                  nullable: true
+                  description: 'Specifies the user responsible for the issue.
+
+                    A value in this field will override any values provided in the `owner` attribute.
+
+                    This field becomes required if the `owner` attribute is not provided.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+  responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    MissingProjectId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, project_id, is missing.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    NoContent:
+      description: No content.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
+  securitySchemes:
+    bearerToken:
+      description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
+
+        safe and secure way to access data, while protecting your account credentials.
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: oauth2
+x-tagGroups:
+- name: Core resources
+  tags:
+  - Robots Agents
+  - Robots
+  - Robot Tasks
+  - Robot Jobs
+  - Robot Apps
+  - Robot Script Versions
+  - Robot Activations
+  - Robot Files
+  - Robot Working Files
+  - Robot Collaborators
+  - Robots Folders Collaborators
+  - Robot Users
+  - Robots Folders
+  - Storyboards
+  - Collections
+  - Questionnaires
+  - Analyses
+  - Surveys
+  - Event Reports
+  - Tables
+  - Table columns
+  - Records
+  - Record columns
+  - Record statuses
+  - Interpretations
+  - Metrics
+  - Workflow Groups
+  - Results Users
+  - Results Triggers
+  - Project types
+  - Custom attributes
+  - Request item statuses
+  - Projects
+  - Projects Admin
+  - Planning files
+  - Results files
+  - Objectives
+  - Narratives
+  - Risks
+  - Controls
+  - Control performance schedules
+  - Mitigations
+  - Control test plans
+  - Control tests
+  - Attachments
+  - Walkthroughs
+  - Issues
+  - Actions
+  - Collaborators
+  - Request Items
+  - To-dos
+  - Sign-offs
+  - Entities
+  - Scheduler Filters
+  - Frameworks
+  - Handlers
+  - Workflows in Asset Inventory/Asset Manager
+  - Asset types
+  - Asset record types
+  - Attribute types
+  - Assets
+  - Asset Relationships
+  - Asset records
+  - Asset Record Relationships
+  - Events
+  - Template Toolkits
+  - Toolkits
+  - Roles
+  - Role Deletion
+  - Compliance Maps
+  - Time entries
+  - Non-project time categories
+  - Timesheets
+  - Importer
+  - System Users
+  - Organizations
+  - Impact Reports
+  - Activities
+  - Users
+  - Groups
+  - Scheduled Users
+  - Scheduled Projects
+  - Scheduled Hours
+  - Extract
+  - Strategy

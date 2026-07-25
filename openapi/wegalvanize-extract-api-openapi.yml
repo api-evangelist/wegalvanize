@@ -1,0 +1,3721 @@
+openapi: 3.0.2
+info:
+  title: HighBond API Reference Actions Extract API
+  version: 1.1.0
+  description: "\nWelcome to the API documentation for HighBond.\n\n## Introduction\nThe HighBond API is the developer interface for the HighBond platform. You can use it to automate interactions with HighBond,\nbuild reporting, and integrate HighBond with other systems in your company. This introduction contains information you should\nknow before you get started.\n\nThe HighBond API is organized around <a href=\"https://en.wikipedia.org/wiki/Representational_state_transfer\" target=\"_blank\">REST</a> and is built on the\n<a href=\"https://jsonapi.org/format/\" target=\"_blank\">JSON API v1.0 specification</a>.\n\n> **Warning —**\nThis API interacts with your company's live data. It gives you the power to delete important data that your\ncompany needs. Carefully consider the consequences of your actions when using this API. If you are not sure, contact the\nperson or group who administers HighBond in your company.\n\n### Permissions\nUsers can generate and manage API tokens in their user profiles in HighBond. Because these tokens are tied to users, not companies, your permissions in the API are the same as your permissions in HighBond.\n\n> **Note —**\nYou must be a System Admin in at least one HighBond instance to access the API.\n\nIf you leave your company and your HighBond user account is deleted, your application will break. Before getting started, consider the long-term requirements of your application. You may wish to create a system account in HighBond and build your application from that, but verify that your company's security policies permit accounts that aren't tied to particular people.\n\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749\" target=\"_blank\">OAuth 2.0 authorization framework</a> to control access to the API.\n\n\n### Apps\nApps are components in HighBond that provide specific functionality. You can use this API to interact with data in the apps you have access to.\n\nThe apps available to you depend on the edition of HighBond (standard or premium) in use, and whether or not your company has purchased any add-on apps.\nFor more information, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-product-editions\" target=\"_blank\">Subscriptions, editions, and capabilities</a>.\n\n### Rate limitations\nThe API safeguards against bursts of usage to help maximize its stability. For most endpoints, you cannot make more than 6 requests per second.\n\nThe following endpoints have a stricter rate limitation of 3 requests per minute:\n\n* Groups\n* Users\n\nTreat these limits as a maximum and avoid making unnecessary requests to the API.\n\nIf you make too many requests, the API responds with a `429` \"Too many requests\" status.\n\n## Getting started\nTo start interacting with your HighBond organization via the API, you need a few things:\n\n* An authentication token from your HighBond instance\n* The correct region URL for your HighBond instance\n* Information about the HighBond instance and resource IDs you want to interact with\n\nIf you need assistance with any of these, contact a HighBond administrator at your company, or email <a href=\"mailto:support@wegalvanize.com\">support@wegalvanize.com</a>.\n\n### Authentication\nAll requests require authentication. To authenticate, use Launchpad to create a HighBond API (bearer) token for your account. The token is a string that authenticates you\nand allows you to securely access the HighBond API.\n\nFor help creating a token, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">Creating and managing access tokens</a>.\n\nOnce you have created your token, you can provide it in the header of your request:\n```\nAuthorization: Bearer <TOKEN>\n```\n > **Important —**\nIf you do not authenticate yourself, the API fails. The API responds to authentication failures with a `401` \"Bad credentials\" status.\n\n<security-definitions />\n\n### Token security\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749#section-1.3.1\" target=\"_blank\">Authorization Code workflow</a> to generate tokens.\n\nTo enable continuous access to the API, and to provide full ownership and accountability to users, Galvanize does not impose an expiration date\non the token. You can <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">delete a token in\nLaunchpad</a> when you no longer need access to the API.\n\n> **Important —**\nYour access token provides many privileges, so keep it secure and private. Galvanize recommends that you encrypt your\nmachine to securely store the token. Avoid sharing your token in publicly accessible areas such GitHub or within client-side code.\n\n### API regions\n\nThe HighBond service is provided from different regions in order to give customers options for where your data is stored, and to enable you to\ncomply with data privacy location requirements.\n\nYour request URL must include one of the following region codes, based on where your HighBond instance resides:\n\n* **United States** — `https://apis-us.diligentoneplatform.com`\n* **Canada** — `https://apis-ca.diligentoneplatform.com`\n* **Europe** — `https://apis-eu.diligentoneplatform.com`\n* **Asia** — `https://apis-ap.diligentoneplatform.com`\n* **Australia** — `https://apis-au.diligentoneplatform.com`\n* **Africa** — `https://apis-af.diligentoneplatform.com`\n* **South America** — `https://apis-sa.diligentoneplatform.com`\n* **Japan** — `https://apis-jp.diligentoneplatform.com`\n\nAdditionally, for government clients, there are two government \"regions\":\n* **Gov** (US federal) — `https://apis.diligentoneplatform-gov.com`\n* **SLED** (state, local, and education; non-federal) — `https://apis.diligentoneplatform-gov2.com`\n\n> **Important —**\nAll API requests must be made over <a href=\"https://en.wikipedia.org/wiki/HTTPS\" target=\"_blank\">HTTPS</a>. Calls over HTTP respond with the `301` \"Moved Permanently\" status.\n\n\n### HighBond instance and resource IDs\nRequests require a HighBond instance ID and the ID of the resource you are interacting with. These IDs are numeric keys that uniquely\nidentify the HighBond instance and every resource in that instance.\n\nThe easiest way to get your HighBond instance ID is to log in to HighBond and take the ID from the URL:\n```\nhttps://accounts.highbond.com/orgs/12345\n```\n\nTo obtain IDs for resources like collections, analyses, tables, and robots, you can navigate to the item you want to reference, and take the IDs from the URL.\nFor example, this URL shows a collection ID:\n```\nhttps://example-company.results.highbond.com/projects/55843\n```\n\n> **Tip —**\nThe `GET` methods in this API also return IDs that you can use to identify resources you can act on.\n\n\n## Making requests\nOnce you have all the information you need, you can start making requests in an API client of your choice.\n\n### HTTP methods\nThe API uses the appropriate HTTP method for each action:\n* `GET` — used for retrieving resources\n* `POST` — used for creating resources\n* `PUT` / `PATCH` — used for updating resources\n* `DELETE` — used for deleting resources\n\n\n### Content type\nAlways specify the `Content-Type` of your request in the header. Supported content types are:\n* JSON API\n* JSON (for backwards compatibility)\n\n```\nContent-Type: application/vnd.api+json\nContent-Type: application/json\n```\n\nA complete **Get a table** request using `curl` would look like this:\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/11594/tables/388930\n```\n\n### Requesting the API to return only specific fields\nFor certain resources, such as control tests, you can request the API to return only specific fields using the `fields` query parameter. Sparse fieldsets are\nhelpful for limiting your responses to only the data you require.\n\n> **Note —**\nThe `type` argument must specify the resource you want to retrieve. The value of the `fields` parameter must be a comma-delimited list that specifies\nthe name of the field(s) to be returned. Avoid whitespace before or after each comma.\n```\nfields[type]=field_name1,field_name2,fieldname3\n```\n\nA complete **Get a control test** request that only returns the `assigned_user`, `control`, and `testing_round_number` fields would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/12345/control_tests/105?fields[control_tests]=assigned_user,control,testing_round_number\n```\n\n### Requesting the API to return related resources\nTo reduce the number of requests, you may use the `include` query parameter to return related resources in the response along with the requested primary resources. Such responses are called \"compound documents\".\n\nAccepted values for the `include` parameter are documented in the `Query Parameters` section of each API method.\n\n> **Note —**\nThe `include` parameter must be a comma-delimited list that specifies\nthe name of the relationship(s) or nested relationship(s) to be returned. Avoid whitespace before or after each comma.\n\nExample - requesting a relationship and a nested relationship\n```\ninclude=control,control.objective\n```\n\nA complete **Get a control test** request that returns the `control` relationship, and `control.objective` nested relationship would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis.highbond.com/v1/orgs/12345/control_tests/105?include=control,control.objective\n```\n\n\n### Blank fields\nBlank fields are included in all response schemas as `\"\"` or `null` instead of being omitted.\n\n\n### Time zones\nAll timestamps are returned in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.\n\nSome requests that create new data, such as creating a robot task's schedule, allow you to provide time zone information.\nFor API requests that allow for a timestamp to be specified, you must explicitly provide an ISO 8601 timestamp with time zone information.\n\n```\n\"starts_at\": \"2019-03-21T16:25:00.478Z\",\n\"starts_at_timezone\": \"America/Los_Angeles\",\n```\n\n\n### Rich text fields\n\nSome requests and responses contain rich text fields that include HTML tags. These are typically description fields. If you need to format text,\nthe best approach is to upload your raw data first and apply formatting later in the user interface.\n\n> **Note —**\nImages that exist in rich text fields are returned in responses, but they are not rendered. You cannot upload new images to rich text fields using the API.\n\n\n### User identifiers\nA unique identifier (UID) is an alphanumeric string that is associated with a user in HighBond. UIDs make it possible to address users,\nso that they can be accessed and interacted with using the API. Some requests that allow you to assign items to users, such as creating an objective,\nrequire you to specify a user's UID.\n\nTo obtain a user's UID:\n\n1. Sign in to <a href=\"https://accounts.highbond.com/login\" target=\"_blank\">HighBond</a>.\n2. If your company uses more than one instance in HighBond, make sure <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-switch-instances\"\ntarget=\"_blank\">the appropriate instance is active</a>.\n3. Select **Options > Users (#)**.\n4. Navigate to the appropriate user and click the user's name.\n5. In the **User Details** side panel, copy the UID to your clipboard.\nOnce you have copied the UID, you can specify it in your request.\n\n\n### Pagination\nWhen a response consists of a large number of items, the API breaks it into separate pages for performance reasons. You can control the way the API paginates your results by specifying how many items you want to have per page, and which page you want the API to return.\n\nFor example, if you request a list of controls, the request could look like this: `{protocol}://{server}/v1/orgs/{org_id}/objectives/{objective_id}/controls?page[size]=25&page[number]=Mg==`\n\nWhere:\n\n* `page[size]=25` specifies that there should be 25 items per page. Different endpoints have different default values and maximum numbers of values you can have per page.\n* `page[number]=Mg==` specifies that the API should return the second page of results (the 26th through 50th items that match the request).\n\n > **Note —**\n In most cases, page numbers must be encoded in Base64. In this example, `Mg==` is the Base64 encoded value for `2`.\n\nAdditionally, responses include the `links` parameter, which provides URLs for the `prev` and `next` attributes (or `null` values if all of the items are on one page). Those URLs include the above parameters, so you can paste them into subsequent requests if needed.\n\n\n\n## Errors\nHighBond uses standard <a href=\"https://en.wikipedia.org/wiki/List_of_HTTP_status_codes\" target=\"_blank\">HTTP response codes</a>\nto indicate the success or failure of a request. The range of a code indicates information about why it succeeded or failed:\n\n* **`2xx` range —** Success\n* **`4xx` range —** Error given the information provided\n* **`5xx` range —** Server failed to fulfil a valid request\n\nSome common errors that occur when making requests include:\n* **`400` Bad request —** When a parameter is missing (such as the `org_id` or resource `id`), when more\nthan one unique resource is specified in the request, or when a specified data type is incompatible with the endpoint\n* **`401` Bad credentials —** When there is an authentication error\n* **`403` Forbidden —** When there is an authorization problem based on your <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-managing-apps\"\ntarget=\"_blank\">role in a HighBond app</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-assigning-subscriptions\" target=\"_blank\">subscription</a>\n* **`404` Not found —** When there is a problem on the client side due to an incorrect URL or resource deletion\n* **`415` Unsupported media type —** When the `Content-Type` specified is unsupported\n* **`422` Unprocessable entity —** When a required attribute is missing (such as the name of a resource), or when a conflict occurs\n(such as a script activation conflict)\n\n\n## Versioning\nAll API endpoints use a version number in the path. As can be seen in the examples, `/v1/` specifies version 1 of the API.\n\nOver time, the API will evolve. New API versions will be introduced and existing versions may be updated.\n\nSome API updates are considered a breaking change, requiring a new version of the API to be introduced. An example of a breaking\nchange is fields being changed or removed. By introducing a new version, API consumers can safely continue to use prior API versions.\n\nThe other type of API update is a non-breaking change. You should expect non-breaking change updates to existing API versions.\nAn example of a non-breaking change is adding a field to a response object. Non-breaking changes are additive. While they do\nchange the response body, they should not impact the API consumer.\n"
+  x-logo:
+    url: ./assets/logo.png
+    altText: HighBond Logo
+servers:
+- url: '{protocol}://{server}/v1'
+  variables:
+    protocol:
+      default: https
+    server:
+      default: apis-us.highbond.com
+      enum:
+      - apis-us.highbond.com
+      - apis-ca.highbond.com
+      - apis-eu.highbond.com
+      - apis-ap.highbond.com
+      - apis-au.highbond.com
+      - apis-af.highbond.com
+      - apis-sa.highbond.com
+      - apis-jp.highbond.com
+security:
+- bearerToken: []
+tags:
+- name: Extract
+  description: 'Service to extract the resources from an organization based on resource ids.
+
+    '
+paths:
+  /orgs/{org_id}/extract:
+    post:
+      tags:
+      - Extract
+      operationId: createExtract
+      summary: Create extraction request
+      description: 'Generate terraform, json or yml scripts for resources existing in an organization.
+
+
+        > **Note —**
+
+        In YML extraction, all associated child resources will be extracted by default. However, there may be some exceptions with few resources where hierarchy flag can be used, please refer the request body schema for more details.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/outputFormatParam'
+      requestBody:
+        description: The data required to create a extract.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateExtractRequest'
+            examples:
+              project:
+                summary: Project
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        projects:
+                          ids:
+                          - 12345
+              control:
+                summary: Control
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        controls:
+                          ids:
+                          - 12345
+              framework:
+                summary: Framework
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        frameworks:
+                          ids:
+                          - 12345
+              projectType:
+                summary: Project type
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        projectType:
+                          ids:
+                          - 12345
+              assetRecordRelationships:
+                summary: Asset Record Relationships
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRecordRelationships:
+                          ids:
+                          - assetRecordTypeId: 4562547
+                            assetRecordId: 1548450981293291
+                            fieldName: adhoc
+              requestItems:
+                summary: Request Items
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        requestItems:
+                          ids:
+                          - 12345
+              robotActivation:
+                summary: Robot activation
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        robotActivation:
+                          robotIds:
+                          - 14952
+              simpleQuestions:
+                summary: Simple Questions
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        simpleQuestions:
+                          ids:
+                          - 12345
+              issues:
+                summary: Issues
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        issues:
+                          ids:
+                          - 12345
+              mitigations:
+                summary: Mitigations
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        mitigations:
+                          ids:
+                          - 12345
+              analyses:
+                summary: Analyses
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        ids:
+                        - 12345
+              tables:
+                summary: Tables
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        tables:
+                          ids:
+                          - 12345
+              storyBoards:
+                summary: StoryBoards
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        storyBoards:
+                          ids:
+                          - 12345
+              assets:
+                summary: Assets
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assets:
+                          assetTypeIds:
+                          - 1894405
+              collections:
+                summary: Collections (TF or JSON extraction only)
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        collections:
+                          ids:
+                          - 12345
+              collectionsYml:
+                summary: Collections (YML extraction only)
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        collections:
+                          hierarchy: false
+                          collectionIds:
+                          - id: '589430'
+                            metricIds:
+                            - 61192
+                            interpretations:
+                            - 34551
+                            surveys:
+                            - 12345
+                            tables:
+                            - 12314
+                            analyses:
+                            - 56670
+                            questionnaires:
+                            - 90800
+              timeEntries:
+                summary: Time Entries
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        timeEntries:
+                          ids:
+                          - 12345
+              collaborators:
+                summary: Collaborators
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        collaborators:
+                          ids:
+                          - 12345
+              robots:
+                summary: Robots
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        robots:
+                          ids:
+                          - 12345
+              handlerTriggers:
+                summary: Handler Triggers
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        handlerTriggers:
+                          handlerIds:
+                          - 20b0b831-e27b-42eb-9a11-af04bb631d86
+              roleAssignments:
+                summary: Role Assignments
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        roleAssignments:
+                          roleIds:
+                          - d1e0797d-d7dd-432c-96b8-8b37cf9be129
+              interpretations:
+                summary: Interpretations
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        interpretations:
+                          ids:
+                          - 346657
+              entityCategories:
+                summary: Entity Categories
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        entityCategories:
+                          ids:
+                          - 346657
+              events:
+                summary: Events
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        ids:
+                        - 65bc569d-4ce9-43d5-bdc4-50570dbfa4f6
+              impactReports:
+                summary: Impact Reports
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        impactReports:
+                          ids:
+                          - 7827e60c-b1f3-4391-a10d-cd27da7b6a95
+              numericScales:
+                summary: Numeric Scales
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        numericScales:
+                          ids:
+                          - 12345
+              robotScriptVersion:
+                summary: Robot Script Version
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        robotScriptVersion:
+                          robotIds:
+                          - 14952
+              narratives:
+                summary: Narratives
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        narratives:
+                          ids:
+                          - 12345
+              collaboratorGroups:
+                summary: Collaborator Groups
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        collaboratorGroups:
+                          ids:
+                          - 12345
+              complianceRegulations:
+                summary: Compliance Regulations
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        complianceRegulations:
+                          ids:
+                          - 12345
+              workflowStatuses:
+                summary: Workflow Statuses
+                value:
+                  data:
+                    type: extract
+                  attributes:
+                    resources:
+                      workflowStatuses:
+                        ids:
+                        - 9c446851-43a5-4220-ad43-70036c2b1e49
+              assetTypeSections:
+                summary: Asset Type Sections
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetTypeSections:
+                          assetTypeIds:
+                          - 43435
+              sections:
+                summary: Sections
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        sections:
+                          ids:
+                          - 12345
+              users:
+                summary: Users
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        users:
+                          ids:
+                          - u1g7nFBHjpAWyEeybw6Z
+              workflowStatusEvents:
+                summary: Workflow Status Events
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        workflowStatusEvents:
+                          ids:
+                          - 65bc569d-4ce9-43d5-bdc4-50570dbfa4f6
+              assetTypes:
+                summary: Asset types
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetTypes:
+                          ids:
+                          - 66757
+              rolePermissionAssignments:
+                summary: Role Permission Assignments
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        rolePermissionAssignments:
+                          roleIds:
+                          - d1e0797d-d7dd-432c-96b8-8b37cf9be129
+              assetRecordTypeSections:
+                summary: Asset Record Type Section
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRecordTypeSections:
+                          assetRecordTypeIds:
+                          - 66757
+              assetRecordTypeAttributes:
+                summary: Asset Record Type Attributes
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRecordTypeAttributes:
+                          assetRecordTypeIds:
+                          - 66757
+              assetRelateRecordTypes:
+                summary: Asset Relate Record Types
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRelateRecordTypes:
+                          assetRecordTypeIds:
+                          - 66757
+              metrics:
+                summary: Metrics
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        metrics:
+                          ids:
+                          - 66757
+              actions:
+                summary: Actions
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        actions:
+                          ids:
+                          - 66757
+              complianceRequirements:
+                summary: Compliance Requirements
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        complianceRequirements:
+                          ids:
+                          - 66757
+              customAttributes:
+                summary: Custom Attributes
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        customAttributes:
+                          ids:
+                          - 34806
+                          - 24877
+                          - 24890
+              attributeTypes:
+                summary: Attribute Types
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        attributeTypes:
+                          ids:
+                          - 2
+                          - 8
+                          - 10
+              assetTypeAttributes:
+                summary: Asset Type Attributes
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetTypeAttributes:
+                          assetTypeIds:
+                          - 2002908
+              columns:
+                summary: Columns
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        columns:
+                          tableIds:
+                          - 143253
+              roles:
+                summary: Roles
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        roles:
+                          ids:
+                          - f0516837-c1a6-4c83-9189-7b529ad10389
+              surveys:
+                summary: Surveys
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        surveys:
+                          ids:
+                          - 43973
+              robotFiles:
+                summary: Robot Files
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        robotFiles:
+                          robotIds:
+                          - 14952
+                          environment: production
+              tableIdentifiers:
+                summary: Table Identifiers
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        tableIdentifiers:
+                          tableIds:
+                          - 143253
+              workflows:
+                summary: Workflows
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        workflows:
+                          ids:
+                          - 9c446851-43a5-4220-ad43-70036c2b1e49
+              resultFiles:
+                summary: Result Files
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        resultFiles:
+                          ids:
+                          - 29557
+                          - 29556
+              pageBreaks:
+                summary: Page Breaks
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        pageBreaks:
+                          ids:
+                          - 1102781
+              robotApps:
+                summary: Robot Apps
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        robotApps:
+                          robotIds:
+                          - 14952
+              assetRelationships:
+                summary: Asset Relationships
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRelationships:
+                          ids:
+                          - assetId: 1548450983213831
+                            assetTypeId: 4419581
+                            fieldName: adhoc
+              planningFiles:
+                summary: Planning Files
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        planningFiles:
+                          ids:
+                          - 29549
+                          - 29548
+              robotTasks:
+                summary: Robot Tasks
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        robotTasks:
+                          ids:
+                          - robotId: 14952
+                            taskId: 5319
+              assetRecords:
+                summary: Asset Records
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRecords:
+                          assetRecordTypeIds:
+                          - 2507362
+              relatedComplianceRequirements:
+                summary: Related Compliance Requirements
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        relatedComplianceRequirements:
+                          ids:
+                          - 498489
+              complianceMaps:
+                summary: Compliance Maps
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        complianceMaps:
+                          ids:
+                          - 3428
+              impactReportTargets:
+                summary: Impact Report Targets
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        impactReportTargets:
+                          ids:
+                          - 7827e60c-b1f3-4391-a10d-cd27da7b6a95
+              assetRecordTypes:
+                summary: Asset Record Types
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetRecordTypes:
+                          ids:
+                          - 2497177
+                          - 3615691
+              nonProjectTimeCategories:
+                summary: Non-Project Time Categories
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        nonProjectTimeCategories:
+                          ids:
+                          - 56357
+              systemUsers:
+                summary: System Users
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        systemUsers:
+                          ids:
+                          - P2tuGWyTWxCAQgTd1XKx
+              assetTypeRecordTypes:
+                summary: Asset Type Record Types
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        assetTypeRecordTypes:
+                          assetTypeIds:
+                          - 2816623
+              questionnaires:
+                summary: Questionnaires
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        questionnaires:
+                          ids:
+                          - 98448
+              risks:
+                summary: Risks
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        risks:
+                          ids:
+                          - 311352
+              entities:
+                summary: Entities
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        entities:
+                          ids:
+                          - 35499
+                          - 35154
+                          - 48744
+              handlers:
+                summary: Handlers
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        handlers:
+                          ids:
+                          - 20b0b831-e27b-42eb-9a11-af04bb631d86
+                          - c19570c9-13b1-43ef-9d54-109a2c3d1a8d
+              objectives:
+                summary: Objectives
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        objectives:
+                          ids:
+                          - 86465
+              todos:
+                summary: Todos
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        todos:
+                          ids:
+                          - 11934
+              govMapOrganizationUnitTypes:
+                summary: GovMap Organization Unit Types
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        govMapOrganizationUnitTypes:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              govMapOrganizationUnits:
+                summary: GovMap Organization Units
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        govMapOrganizationUnits:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              requestItemStatus:
+                summary: Request Item Statuses
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        requestItemStatus:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategyRisks:
+                summary: Strategy Risks
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyRisks:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategyTags:
+                summary: Strategy Tags
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyTags:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategySegments:
+                summary: Strategy Segments
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategySegments:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategyFactors:
+                summary: Strategy Factors
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyFactors:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategyObjectives:
+                summary: Strategy Objectives
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyObjectives:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategyCustomAttributes:
+                summary: Strategy Custom Attributes
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyCustomAttributes:
+                          ids:
+                          - 1
+                          - 2
+                          - 3
+              strategyRiskAssurances:
+                summary: Strategy Risk Assurances
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyRiskAssurances:
+                          strategyRiskIds:
+                          - 1
+                          - 2
+                          - 3
+              strategyRiskObjectives:
+                summary: Strategy Risk Objectives
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyRiskObjectives:
+                          strategyRiskIds:
+                          - 1
+                          - 2
+                          - 3
+              strategyRiskMetrics:
+                summary: Strategy Risk Metrics
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyRiskMetrics:
+                          strategyRiskIds:
+                          - 1
+                          - 2
+                          - 3
+              strategyRiskComments:
+                summary: Strategy Risk Comments
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyRiskComments:
+                          strategyRiskIds:
+                          - 1
+                          - 2
+                          - 3
+              strategyRiskTags:
+                summary: Strategy Risk Tags
+                value:
+                  data:
+                    type: extract
+                    attributes:
+                      resources:
+                        strategyRiskTags:
+                          strategyRiskIds:
+                          - 1
+                          - 2
+                          - 3
+      responses:
+        '202':
+          description: Extract Started.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CreateExtractResponse'
+        '400':
+          $ref: '#/components/responses/MissingOrgId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /orgs/{org_id}/extract/{session_id}:
+    get:
+      tags:
+      - Extract
+      operationId: getExtract
+      summary: Get extract information
+      description: Get signed URL for generated terraform, json or yml scripts.
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/sessionIdPathParam'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetExtractResponse'
+        '400':
+          $ref: '#/components/responses/MissingOrgId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    CreateExtractRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - resources
+              properties:
+                resources:
+                  type: object
+                  description: The resources associated to extract.
+                  $ref: '#/components/schemas/ExtractionType'
+    ExtractionType:
+      anyOf:
+      - type: object
+        title: TF or JSON
+        properties:
+          projects:
+            type: object
+            description: Projects to be extracted. Organization Ids or Project Ids are required.
+            properties:
+              extractEntity:
+                type: boolean
+                description: Flag to extract entity ids. Default value is false. Can be used only with hierarchy true
+              organizationIds:
+                minItems: 1
+                type: array
+                description: OrganizationIds as array to get all Projects under Organization
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Projects. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              extractFrameworkOriginId:
+                type: boolean
+                description: Flag to extract Framework Origin ids. Default value is false. Can be used only with hierarchy true
+          controls:
+            type: object
+            description: Controls to be extracted. Project Ids or Framework Ids or Objective Ids or Control ids are required.
+            properties:
+              objectiveIds:
+                minItems: 1
+                type: array
+                description: Array of Objective Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of control Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+          frameworks:
+            type: object
+            description: Frameworks to be extracted. Organization Ids or Framework Ids are required.
+            properties:
+              extractEntity:
+                type: boolean
+                description: Flag to extract entity ids. Default value is false. Can be used only with hierarchy true
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having frameworks.
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Frameworks. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+              extractFrameworkOriginId:
+                type: boolean
+                description: Flag to extract Framework Origin ids. Default value is false. Can be used only with hierarchy true
+          projectType:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Project Type. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of projectType Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Project Type to be extracted. Organization Ids or Project Ids or Framework Ids or Project Type Ids are required.
+          assetRecordRelationships:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of asset record id and asset record type Id and fieldName.
+                items:
+                  type: object
+                  properties:
+                    fieldName:
+                      minLength: 1
+                      type: string
+                    assetRecordTypeId:
+                      minLength: 1
+                      type: string
+                    assetRecordId:
+                      minLength: 1
+                      type: string
+            description: Asset Records Relationships to be extracted.
+          requestItems:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Request Item Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Request items to be extracted. Project Ids or request items ids are required
+          simpleQuestions:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of simple question Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Simple Questions to be extracted.
+          issues:
+            type: object
+            properties:
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Issues. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Issue Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Issues to be extracted. Either Project Ids or Ids are required.
+          mitigations:
+            type: object
+            properties:
+              objectiveIds:
+                minItems: 1
+                type: array
+                description: Array of Objective Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of mitigation Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Mitigations to be extracted. Project Ids or Framework Ids or Objective Ids or Mitigations Ids are required.
+          analyses:
+            type: object
+            properties:
+              collectionIds:
+                minItems: 1
+                type: array
+                description: Array of Collection ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Analyses Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Analyses to be extracted. Collection Ids or Analses Ids are required.
+          tables:
+            type: object
+            properties:
+              analysisIds:
+                minItems: 1
+                type: array
+                description: Array of Analysis Ids.
+                items:
+                  minLength: 1
+                  type: string
+              collectionIds:
+                minItems: 1
+                type: array
+                description: Array of Collection Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of table Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Tables to be extracted. Analysis Ids or Collection Ids or Table Ids are required.
+          storyBoards:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of storyboard Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Story boards to be extracted.
+          assets:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of asset id and asset type Id.
+                items:
+                  type: object
+                  properties:
+                    assetTypeId:
+                      minLength: 1
+                      type: string
+                    assetId:
+                      minLength: 1
+                      type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of Asset Type Ids having assets.
+                items:
+                  type: string
+            description: Assets to be extracted. Asset type Ids or Asset Ids are required.
+          collections:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of collection Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Collections to be extracted.
+          timeEntries:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: OrganizationId passed as an array
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of time entry Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Time Entries to be extracted. Organization Ids or Time Entries Ids are required.
+          collaborators:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of collaborator Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids having collaborators.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids having collaborators.
+                items:
+                  minLength: 1
+                  type: string
+            description: Collaborators to be extracted. Project Ids or Framework Ids or Collaborators ids are required.
+          robots:
+            required:
+            - ids
+            type: object
+            properties:
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Robots. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of robot  Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Robots to be extracted.
+          handlerTriggers:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of workflow ids having handler triggers.
+                items:
+                  minLength: 1
+                  type: string
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having handler triggers.
+                items:
+                  minLength: 1
+                  type: string
+              handlerIds:
+                minItems: 1
+                type: array
+                description: Array of handler ids containing handler triggers.
+                items:
+                  minLength: 1
+                  type: string
+            description: Handler Triggers to be extracted. Organization Ids or Workflow Ids or Handler Ids are required.
+          roleAssignments:
+            type: object
+            properties:
+              roleIds:
+                minItems: 1
+                type: array
+                description: Array of role ids containing roleAssignments.
+                items:
+                  minLength: 1
+                  type: string
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having roleAssignments.
+                items:
+                  minLength: 1
+                  type: string
+            description: Role Assignments to be extracted. Organization Ids or Role Ids are required.
+          interpretations:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of interpretation Ids.
+                items:
+                  minLength: 1
+                  type: string
+              tableIds:
+                minItems: 1
+                type: array
+                description: Array of Table Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Interpretations to be extracted. Table Ids or Interpretation Ids are required.
+          entityCategories:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of entity category Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Entity categories to be extracted.
+          events:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of workflow Ids having workflow status.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of workflow status Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Events to be extracted. Workflow Ids or Event Ids are required.
+          impactReports:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having impact reports.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of impact report Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Impact Reports to be extracted. Organization Ids or Impact Reports Ids are required.
+          numericScales:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of numeric scales Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Numeric Scales to be extracted.
+          robotScriptVersion:
+            type: object
+            properties:
+              robotIds:
+                minItems: 1
+                type: array
+                description: Array of Robot Ids.
+                items:
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of robot and task id.
+                items:
+                  type: object
+                  properties:
+                    versionId:
+                      minLength: 1
+                      type: string
+                    robotId:
+                      minLength: 1
+                      type: string
+            description: Robot Script Version to be extracted. Robot Ids or ids are required
+          narratives:
+            type: object
+            properties:
+              objectiveIds:
+                minItems: 1
+                type: array
+                description: Array of Objective Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Narrative Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Narratives to be extracted. Objective Ids or Project Ids or Framework Ids or Narrative Ids are required.
+          collaboratorGroups:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of collaboratorGroups Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids containing Collaborator Groups.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids containing Collaborator Groups.
+                items:
+                  minLength: 1
+                  type: string
+            description: collaboratorGroups to be extracted. Project Ids or Framework Ids or Collaborator Group Ids are required.
+          complianceRegulations:
+            required:
+            - ids
+            type: object
+            properties:
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Compliance Regulations. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of compliance regulation ids
+                items:
+                  minLength: 1
+                  type: string
+            description: Compliance Regulations to be extracted.
+          workflowStatuses:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of workflow Ids having workflow status.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of workflow status Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Workflow statuses to be extracted. Workflow Ids or Status Ids are required.
+          assetTypeSections:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having assetTypeSections.
+                items:
+                  minLength: 1
+                  type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset Type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset type Sections to be extracted. Organization Ids or Asset Type Ids are required.
+          sections:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of section Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Sections to be extracted.
+          users:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of user Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Users to be extracted. Organization Ids or User Ids are required.
+          workflowStatusEvents:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of Workflow Ids having Wrokflow Status events.
+                items:
+                  minLength: 1
+                  type: string
+              workflowStatusIds:
+                minItems: 1
+                type: array
+                description: Array of Workflow Status Ids having Wrokflow Status events.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Workflow Status Event having Wrokflow Status events.
+                items:
+                  minLength: 1
+                  type: string
+            description: Workflow Status Events to be extracted. Workflow Ids or Wrokflow Status Ids or Workflow Status event Ids are required.
+          assetTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Asset Types. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of asset type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Types to be extracted. Organization Ids or Asset Types Ids are required.
+          rolePermissionAssignments:
+            type: object
+            properties:
+              roleIds:
+                minItems: 1
+                type: array
+                description: Array of role ids containing rolePermissionAssignments.
+                items:
+                  minLength: 1
+                  type: string
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having rolePermissionAssignments.
+                items:
+                  minLength: 1
+                  type: string
+            description: Role Permission Assignments to be extracted. Organization Ids or Role Ids are required.
+          assetRecordTypeSections:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having assetRecordTypeSections.
+                items:
+                  minLength: 1
+                  type: string
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset Record Type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Record type Sections to be extracted. Organization Ids or Asset Record Type Ids are required.
+          assetRecordTypeAttributes:
+            required:
+            - assetRecordTypeIds
+            type: object
+            properties:
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Record Type Attributes to be extracted.
+          assetRelateRecordTypes:
+            required:
+            - assetRecordTypeIds
+            type: object
+            properties:
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Record Type Attributes to be extracted.
+          metrics:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of metric Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Metrics to be extracted.
+          actions:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Action Ids.
+                items:
+                  minLength: 1
+                  type: string
+              issueIds:
+                minItems: 1
+                type: array
+                description: Array of Issue Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Actions to be extracted. Project Ids or Issue Ids or Action Ids are required.
+          complianceRequirements:
+            type: object
+            properties:
+              complianceRegulationIds:
+                minItems: 1
+                type: array
+                description: Array containing complianceRegulationIds having compliance Requirements.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of compliance Requirement Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Compliance Requirements to be extracted. Compliance Regulation Ids or Compliance requirement Ids are required.
+          customAttributes:
+            type: object
+            properties:
+              projectTypeIds:
+                minItems: 1
+                type: array
+                description: Array of ProjectTypeIds.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of customAttribute Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Custom Attributes to be extracted. Project Type Ids or Project Ids or Framework Ids or Ids are required.
+          attributeTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having attributeTypes.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of asset Type Ids.
+                items:
+                  minLength: 1
+                  type: string
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids having assetRecordType Ids.
+                items:
+                  minLength: 1
+                  type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset type ids containing attribute types.
+                items:
+                  minLength: 1
+                  type: string
+            description: Attribute Types to be extracted. Organization Ids or Asset Type Ids or Asset Record Type Ids or Ids are required.
+          assetTypeAttributes:
+            required:
+            - assetTypeIds
+            type: object
+            properties:
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset type ids having assetTypeAttributes.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Type Attributes to be extracted.
+          columns:
+            required:
+            - tableIds
+            type: object
+            properties:
+              tableIds:
+                minItems: 1
+                type: array
+                description: Array of column Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Columns to be extracted.
+          roles:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Roles. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of role Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Roles to be extracted. Organization Ids or Role Ids are required.
+          surveys:
+            type: object
+            properties:
+              analysisIds:
+                minItems: 1
+                type: array
+                description: Array of Analysis Ids.
+                items:
+                  minLength: 1
+                  type: string
+              collectionIds:
+                minItems: 1
+                type: array
+                description: Array of Collection Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Survey Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Surveys to be extracted. Analysis Ids or Collection Ids or Survey Ids are required.
+          robotFiles:
+            required:
+            - robotIds
+            type: object
+            properties:
+              environment:
+                type: string
+                description: Either 'production' or 'development'. Default value is 'production'
+                enum:
+                - production
+                - development
+              robotIds:
+                minItems: 1
+                type: array
+                description: Array of robot file Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Robot files to be extracted.
+          tableIdentifiers:
+            required:
+            - tableIds
+            type: object
+            properties:
+              tableIds:
+                minItems: 1
+                type: array
+                description: Array of table Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Table Identifiers to be extracted.
+          workflows:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having workflows.
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Workflows. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of workflow Ids.
+                items:
+                  minLength: 1
+                  type: string
+              apiNames:
+                minItems: 1
+                type: array
+                description: Array of apiNames.
+                items:
+                  minLength: 1
+                  type: string
+            description: Workflows to be extracted. Organization Ids or Api Names or Workflow Ids are required.
+          resultFiles:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Result file Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Result files to be extracted. Project Ids or Result Files Ids are required.
+          pageBreaks:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of pagebreak Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Pagebreaks to be extracted.
+          assetRelationships:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of asset id and asset type Id and fieldName.
+                items:
+                  type: object
+                  properties:
+                    fieldName:
+                      minLength: 1
+                      type: string
+                    assetTypeId:
+                      minLength: 1
+                      type: string
+                    assetId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - assetId
+                    type: object
+                  - required:
+                    - assetTypeId
+                    type: object
+                  - required:
+                    - fieldName
+                    type: object
+            description: Asset Relationships to be extracted.
+          planningFiles:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of planning file Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Planning files to be extracted. Project Ids or Framework Ids or Planning files Ids are required.
+          robotTasks:
+            type: object
+            properties:
+              robotIds:
+                minItems: 1
+                type: array
+                description: Array of Robot Ids having robot tasks.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of robot and task id.
+                items:
+                  type: object
+                  properties:
+                    robotId:
+                      minLength: 1
+                      type: string
+                    taskId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - robotId
+                    type: object
+                  - required:
+                    - taskId
+                    type: object
+            description: Robot tasks to be extracted. Robot Ids or Robot Task Ids are required
+          assetRecords:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of asset record id and asset record type Id.
+                items:
+                  type: object
+                  properties:
+                    assetRecordTypeId:
+                      minLength: 1
+                      type: string
+                    assetRecordId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - assetRecordId
+                    type: object
+                  - required:
+                    - assetRecordTypeId
+                    type: object
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of Asset Record Type Ids.
+                items:
+                  type: string
+            description: Asset Records to be extracted. Asset Record Type Ids or Asset record ids are required.
+          relatedComplianceRequirements:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of relatedComplianceRequirements Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: RelatedComplianceRequirements to be extracted.
+          complianceMaps:
+            type: object
+            properties:
+              complianceRegulationIds:
+                minItems: 1
+                type: array
+                description: Array containing compliance regulation ids having compliance maps.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of compliance maps Ids.
+                items:
+                  minLength: 1
+                  type: string
+              complianceRequirementIds:
+                minItems: 1
+                type: array
+                description: Array containing compliance requirement ids having compliance maps.
+                items:
+                  minLength: 1
+                  type: string
+            description: Compliance Maps to be extracted. Compliance Requirement IDs or Compliance Requlation Ids or Compliance Maps Ids are required.
+          assetRecordTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Asset Record Types. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of asset record type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Record Types to be extracted. Organization Ids or Asset Record Type Ids are required.
+          nonProjectTimeCategories:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing Organization Id having nonProjectTimeCategory.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array containing Ids of nonProjectTimeCategory.
+                items:
+                  minLength: 1
+                  type: string
+            description: Non Project Time Category to be extracted. Organization Ids or Non Project Time Categories Ids are required.
+          systemUsers:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of system user Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: System Users to be extracted. Organization Ids or User Ids are required.
+          assetTypeRecordTypes:
+            type: object
+            properties:
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids having assettypeRecordType Relationship.
+                items:
+                  minLength: 1
+                  type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset type ids having assettypeRecordType Relationship.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Type Record Type to be extracted. Asset type Ids or Asset record type ids are required.
+          choiceQuestions:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of choice question Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Choice Questions to be extracted.
+          questionnaires:
+            type: object
+            properties:
+              collectionIds:
+                minItems: 1
+                type: array
+                description: Array of Collection Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Questionnaire Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Questionnaires to be extracted. Collection Ids or Questionnaire Id are required.
+          risks:
+            type: object
+            properties:
+              objectiveIds:
+                minItems: 1
+                type: array
+                description: Array of Objective Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Risk Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Risks to be extracted. Project Ids or Framework Ids or Objective Ids or Risk Ids are required.
+          entities:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of entity Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Entities to be extracted.
+          handlers:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of workflow ids having handlers.
+                items:
+                  minLength: 1
+                  type: string
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having handlers.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of handler Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Handlers to be extracted. Organization Ids or Workflow Ids or Handler Ids are required.
+          objectives:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Objective Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Objectives to be extracted. Project Ids or Framework Ids or Objective Ids are represented
+          todos:
+            type: object
+            description: Todos to be extracted
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: OrganizationId passed as an array
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Todo Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+          robotActivation:
+            type: object
+            properties:
+              robotIds:
+                minItems: 1
+                type: array
+                description: Array of Robot Ids having robot activations.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                type: array
+                description: Array of combinational ids of robot or robot and task id or robot and version id.
+                items:
+                  $ref: '#/components/schemas/RobotIdConfiguration'
+            description: Robot Activation to be extracted. Either Robot Ids or Ids are required
+          robotApps:
+            type: object
+            properties:
+              robotIds:
+                minItems: 1
+                type: array
+                description: Array of Robot Ids having robot apps.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                type: array
+                description: Array of combinational ids of robot or robot and task id or robot and version id.
+                items:
+                  $ref: '#/components/schemas/RobotAppConfiguration'
+            description: Robot Apps to be extracted. Robot Ids or Robot App Ids are required.
+          impactReportTargets:
+            type: object
+            properties:
+              reportTargetTypes:
+                minItems: 1
+                type: array
+                description: Array containing combination of targetType and targetTypeId or targetType, targetTypeId, targetResource & targetResourceId
+                items:
+                  $ref: '#/components/schemas/ImpactReportTargetConfiguration'
+              ids:
+                minItems: 1
+                type: array
+                description: Array of impact Report Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Impact Report Targets to be extracted. Report Target type or Report Target Ids are required.
+          govMapOrganizationUnitTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of GovMap Organization Unit Type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: GovMap Organization Unit Types to be extracted. Organization Ids or GovMap Organization Unit Type Ids are required.
+          govMapOrganizationUnits:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of GovMap Organization Unit Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: GovMap Organization Unit to be extracted. Organization Ids or GovMap Organization Unit Ids are required.
+          requestItemStatus:
+            type: object
+            properties:
+              projectTypeIds:
+                minItems: 1
+                type: array
+                description: Array of Project Type Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Request Item Status Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Request Item Statuses to be extracted. Project Type Ids or Request Item Status Ids are required.
+          strategyRisks:
+            type: object
+            description: Strategy Risks to be extracted. Organization Ids or Strategy Risk Ids are required.
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: OrganizationIds as array to get all Strategy Risks under Organization
+                items:
+                  minLength: 1
+                  type: string
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Strategy Risks. Default value is true
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Strategy Risk Ids.
+                items:
+                  minLength: 1
+                  type: string
+          strategyTags:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Strategy Tag Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Strategy Tags to be extracted. Organization Ids or Strategy Tag Ids are required.
+          strategySegments:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Strategy Segment Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Strategy Segments to be extracted. Organization Ids or Strategy Segment Ids are required.
+          strategyFactors:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Strategy Factor Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Strategy Factors to be extracted. Organization Ids or Strategy Factor Ids are required.
+          strategyObjectives:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Strategy Objective Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Strategy Objectives to be extracted. Organization Ids or Objective Ids are required.
+          strategyCustomAttributes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array of Organization Ids.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Strategy Custom Attribute Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Strategy Custom Attributes to be extracted. Organization Ids or Strategy Custom Attribute Ids are required.
+          strategyRiskAssurances:
+            type: object
+            properties:
+              strategyRiskIds:
+                minItems: 1
+                type: array
+                description: Array of Strategy Risk Ids.
+                items:
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of strategy risk assurance Id and strategy risk Id.
+                items:
+                  type: object
+                  properties:
+                    strategyRiskAssuranceId:
+                      minLength: 1
+                      type: string
+                    strategyRiskId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - strategyRiskAssuranceId
+                    type: object
+                  - required:
+                    - strategyRiskId
+                    type: object
+            description: Strategy Risk Assurances to be extracted. Strategy Risk Ids or ids are required
+          strategyRiskObjectives:
+            type: object
+            properties:
+              strategyRiskIds:
+                minItems: 1
+                type: array
+                description: Array of Strategy Risk Ids.
+                items:
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of Strategy Risk Id and Strategy Objective Id.
+                items:
+                  type: object
+                  properties:
+                    strategyRiskId:
+                      minLength: 1
+                      type: string
+                    strategyObjectiveId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - strategyRiskId
+                    type: object
+                  - required:
+                    - strategyObjectiveId
+                    type: object
+            description: Strategy Risk Objectives to be extracted. Strategy Risk Ids or ids are required
+          strategyRiskMetrics:
+            type: object
+            properties:
+              strategyRiskIds:
+                minItems: 1
+                type: array
+                description: Array of Strategy Risk Ids.
+                items:
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of strategy risk Id and strategy risk metric Id.
+                items:
+                  type: object
+                  properties:
+                    strategyRiskMetricId:
+                      minLength: 1
+                      type: string
+                    strategyRiskId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - strategyRiskMetricId
+                    type: object
+                  - required:
+                    - strategyRiskId
+                    type: object
+            description: Strategy Risk Metrics to be extracted. Strategy Risk Ids or ids are required
+          strategyRiskComments:
+            type: object
+            properties:
+              strategyRiskIds:
+                minItems: 1
+                type: array
+                description: Array of Strategy Risk Ids.
+                items:
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of strategy risk Id and strategy risk comment Id.
+                items:
+                  type: object
+                  properties:
+                    strategyRiskCommentId:
+                      minLength: 1
+                      type: string
+                    strategyRiskId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - strategyRiskCommentId
+                    type: object
+                  - required:
+                    - strategyRiskId
+                    type: object
+            description: Strategy Risk Comments to be extracted. Strategy Risk Ids or ids are required
+          strategyRiskTags:
+            required:
+            - strategyRiskIds
+            type: object
+            properties:
+              strategyRiskIds:
+                minItems: 1
+                type: array
+                description: Array of Strategy Risk Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Strategy Risk Tags to be extracted. Strategy Risk Ids are required
+      - type: object
+        title: YML
+        properties:
+          projects:
+            type: object
+            description: Projects to be extracted. Organization Ids or Project Ids are required.
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: OrganizationIds as array to get all Projects under Organization
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              extractFrameworkOriginId:
+                type: boolean
+                description: Flag to extract Framework Origin ids. Default value is false.
+          frameworks:
+            type: object
+            description: Frameworks to be extracted. Organization Ids or Framework Ids are required.
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having frameworks.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+              extractFrameworkOriginId:
+                type: boolean
+                description: Flag to extract Framework Origin ids. Default value is false.
+          projectType:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of projectType Ids.
+                items:
+                  minLength: 1
+                  type: string
+              projectIds:
+                minItems: 1
+                type: array
+                description: Array of Project Ids.
+                items:
+                  minLength: 1
+                  type: string
+              frameworkIds:
+                minItems: 1
+                type: array
+                description: Array of Framework Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Project Type to be extracted. Organization Ids or Project Ids or Framework Ids or Project Type Ids are required.
+          storyBoards:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of storyboard Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Story boards to be extracted.
+          assets:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of asset id and asset type Id.
+                items:
+                  type: object
+                  properties:
+                    assetTypeId:
+                      minLength: 1
+                      type: string
+                    assetId:
+                      minLength: 1
+                      type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of Asset Type Ids having assets.
+                items:
+                  type: string
+            description: Assets to be extracted. Asset type Ids or Asset Ids are required.
+          collections:
+            type: object
+            description: Collections to be extracted with their associated resources.
+            properties:
+              hierarchy:
+                type: boolean
+                description: Flag to extract Hierarchy of all resources under Collections. Default value is true
+              collectionIds:
+                type: array
+                minItems: 1
+                description: Array of collection configurations.
+                items:
+                  type: object
+                  required:
+                  - id
+                  properties:
+                    id:
+                      type: string
+                      minLength: 1
+                      description: Collection Id
+                    metricIds:
+                      type: array
+                      description: Array of metric Ids associated with the collection
+                      items:
+                        type: string
+                        minLength: 1
+                    interpretations:
+                      type: array
+                      description: Array of interpretation Ids associated with the collection
+                      items:
+                        type: string
+                        minLength: 1
+                    surveys:
+                      type: array
+                      description: Array of survey Ids associated with the collection
+                      items:
+                        type: string
+                        minLength: 1
+                    tables:
+                      type: array
+                      description: Array of table Ids associated with the collection
+                      items:
+                        type: string
+                        minLength: 1
+                    analyses:
+                      type: array
+                      description: Array of analysis Ids associated with the collection
+                      items:
+                        type: string
+                        minLength: 1
+                    questionnaires:
+                      type: array
+                      description: Array of questionnaire Ids associated with the collection
+                      items:
+                        type: string
+                        minLength: 1
+          robots:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of robot  Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Robots to be extracted.
+          events:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of workflow Ids having workflow status.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of workflow status Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Events to be extracted. Workflow Ids or Event Ids are required.
+          impactReports:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having impact reports.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of impact report Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Impact Reports to be extracted. Organization Ids or Impact Reports Ids are required.
+          complianceRegulations:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of compliance regulation ids
+                items:
+                  minLength: 1
+                  type: string
+            description: Compliance Regulations to be extracted.
+          users:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of user Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Users to be extracted. Organization Ids or User Ids are required.
+          workflowStatusEvents:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of Workflow Ids having Wrokflow Status events.
+                items:
+                  minLength: 1
+                  type: string
+              workflowStatusIds:
+                minItems: 1
+                type: array
+                description: Array of Workflow Status Ids having Wrokflow Status events.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of Workflow Status Event having Wrokflow Status events.
+                items:
+                  minLength: 1
+                  type: string
+            description: Workflow Status Events to be extracted. Workflow Ids or Wrokflow Status Ids or Workflow Status event Ids are required.
+          assetTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of asset type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Types to be extracted. Organization Ids or Asset Types Ids are required.
+          attributeTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having attributeTypes.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of asset Type Ids.
+                items:
+                  minLength: 1
+                  type: string
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids having assetRecordType Ids.
+                items:
+                  minLength: 1
+                  type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset type ids containing attribute types.
+                items:
+                  minLength: 1
+                  type: string
+            description: Attribute Types to be extracted. Organization Ids or Asset Type Ids or Asset Record Type Ids or Ids are required.
+          roles:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of role Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Roles to be extracted. Organization Ids or Role Ids are required.
+          workflows:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having workflows.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of workflow Ids.
+                items:
+                  minLength: 1
+                  type: string
+              apiNames:
+                minItems: 1
+                type: array
+                description: Array of apiNames.
+                items:
+                  minLength: 1
+                  type: string
+            description: Workflows to be extracted. Organization Ids or Api Names or Workflow Ids are required.
+          relatedComplianceRequirements:
+            required:
+            - ids
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of relatedComplianceRequirements Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: RelatedComplianceRequirements to be extracted.
+          complianceMaps:
+            type: object
+            properties:
+              complianceRegulationIds:
+                minItems: 1
+                type: array
+                description: Array containing compliance regulation ids having compliance maps.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of compliance maps Ids.
+                items:
+                  minLength: 1
+                  type: string
+              complianceRequirementIds:
+                minItems: 1
+                type: array
+                description: Array containing compliance requirement ids having compliance maps.
+                items:
+                  minLength: 1
+                  type: string
+            description: Compliance Maps to be extracted. Compliance Requirement IDs or Compliance Requlation Ids or Compliance Maps Ids are required.
+          assetRecordTypes:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of asset record type Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Record Types to be extracted. Organization Ids or Asset Record Type Ids are required.
+          systemUsers:
+            type: object
+            properties:
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of system user Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: System Users to be extracted. Organization Ids or User Ids are required.
+          assetTypeRecordTypes:
+            type: object
+            properties:
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids having assettypeRecordType Relationship.
+                items:
+                  minLength: 1
+                  type: string
+              assetTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset type ids having assettypeRecordType Relationship.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Type Record Type to be extracted. Asset type Ids or Asset record type ids are required.
+          handlers:
+            type: object
+            properties:
+              workflowIds:
+                minItems: 1
+                type: array
+                description: Array of workflow ids having handlers.
+                items:
+                  minLength: 1
+                  type: string
+              organizationIds:
+                minItems: 1
+                type: array
+                description: Array containing organization Id having handlers.
+                items:
+                  minLength: 1
+                  type: string
+              ids:
+                minItems: 1
+                type: array
+                description: Array of handler Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Handlers to be extracted. Organization Ids or Workflow Ids or Handler Ids are required.
+          assetRecords:
+            type: object
+            properties:
+              ids:
+                minItems: 1
+                type: array
+                description: Array of combinational ids of asset record id and asset record type Id.
+                items:
+                  type: object
+                  properties:
+                    assetRecordTypeId:
+                      minLength: 1
+                      type: string
+                    assetRecordId:
+                      minLength: 1
+                      type: string
+                  allOf:
+                  - required:
+                    - assetRecordId
+                    type: object
+                  - required:
+                    - assetRecordTypeId
+                    type: object
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of Asset Record Type Ids.
+                items:
+                  type: string
+            description: Asset Records to be extracted. Asset Record Type Ids or Asset record ids are required.
+          assetRelateRecordTypes:
+            required:
+            - assetRecordTypeIds
+            type: object
+            properties:
+              assetRecordTypeIds:
+                minItems: 1
+                type: array
+                description: Array of asset record type ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Asset Record Type Attributes to be extracted.
+          impactReportTargets:
+            type: object
+            properties:
+              reportTargetTypes:
+                minItems: 1
+                type: array
+                description: Array containing combination of targetType and targetTypeId or targetType, targetTypeId, targetResource & targetResourceId
+                items:
+                  $ref: '#/components/schemas/ImpactReportTargetConfiguration'
+              ids:
+                minItems: 1
+                type: array
+                description: Array of impact Report Ids.
+                items:
+                  minLength: 1
+                  type: string
+            description: Impact Report Targets to be extracted. Report Target type or Report Target Ids are required.
+    RobotAppConfiguration:
+      oneOf:
+      - title: Robot Id
+        type: object
+        properties:
+          robotId:
+            minLength: 1
+            type: string
+      - title: Robot Id & Task Id
+        type: object
+        properties:
+          robotId:
+            minLength: 1
+            type: string
+          taskId:
+            minLength: 1
+            type: string
+      - title: Robot Id & Version
+        type: object
+        properties:
+          robotId:
+            minLength: 1
+            type: string
+          version:
+            minLength: 1
+            type: string
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    CreateExtractResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The session ID of the extraction.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - created_at
+              - status
+              properties:
+                created_at:
+                  type: string
+                  description: The timestamp specifying when the extract was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                status:
+                  type: string
+                  description: The status of the extract.
+                  example: processing
+    RobotIdConfiguration:
+      oneOf:
+      - title: robotId
+        type: object
+        required:
+        - robotId
+        properties:
+          robotId:
+            type: string
+      - title: robotIdTaskId
+        type: object
+        required:
+        - robotId
+        - taskId
+        properties:
+          robotId:
+            type: string
+          taskId:
+            type: string
+      - title: robotIdVersion
+        type: object
+        required:
+        - robotId
+        - taskId
+        properties:
+          robotId:
+            type: string
+          version:
+            type: string
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    GetExtractResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The session ID of the extraction.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - created_at
+              - status
+              properties:
+                created_at:
+                  type: string
+                  description: The timestamp specifying when the extract was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                status:
+                  type: string
+                  description: The status of the extraction. Can have one of the following values - success, inprogress, error
+                  example: success
+                signed_url:
+                  type: string
+                  description: The signed URL of the generated Terraform / JSON / YML scripts.
+                  example: https://sdk-services-us-west-2-bucket.s3.us-west-2.amazonaws.com/17d16331-4c31-4068-a306-92d6802cf53c/output.zip?AWSAccessKeyId=XXXXXXXXXXXX&Expires=604800&Signature=XXXXXXXXXXXXX
+    ImpactReportTargetConfiguration:
+      oneOf:
+      - title: Target type & id
+        type: object
+        properties:
+          targetTypeId:
+            minLength: 1
+            type: string
+          targetType:
+            minLength: 1
+            type: string
+      - title: Target type, id, resource and resource id
+        type: object
+        properties:
+          targetResourceId:
+            minLength: 1
+            type: string
+          targetTypeId:
+            minLength: 1
+            type: string
+          targetResource:
+            minLength: 1
+            type: string
+          targetType:
+            minLength: 1
+            type: string
+  responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+  parameters:
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    sessionIdPathParam:
+      name: session_id
+      description: The session_id of the extract.
+      schema:
+        type: string
+        example: 183dabb4-cf04-480e-94d7-8bc94f957ef6
+      in: path
+      required: true
+    outputFormatParam:
+      name: output_format
+      description: The output_format to extract.
+      schema:
+        type: string
+        enum:
+        - tf
+        - json
+        - yml
+        default: tf
+      in: query
+      required: false
+  securitySchemes:
+    bearerToken:
+      description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
+
+        safe and secure way to access data, while protecting your account credentials.
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: oauth2
+x-tagGroups:
+- name: Core resources
+  tags:
+  - Robots Agents
+  - Robots
+  - Robot Tasks
+  - Robot Jobs
+  - Robot Apps
+  - Robot Script Versions
+  - Robot Activations
+  - Robot Files
+  - Robot Working Files
+  - Robot Collaborators
+  - Robots Folders Collaborators
+  - Robot Users
+  - Robots Folders
+  - Storyboards
+  - Collections
+  - Questionnaires
+  - Analyses
+  - Surveys
+  - Event Reports
+  - Tables
+  - Table columns
+  - Records
+  - Record columns
+  - Record statuses
+  - Interpretations
+  - Metrics
+  - Workflow Groups
+  - Results Users
+  - Results Triggers
+  - Project types
+  - Custom attributes
+  - Request item statuses
+  - Projects
+  - Projects Admin
+  - Planning files
+  - Results files
+  - Objectives
+  - Narratives
+  - Risks
+  - Controls
+  - Control performance schedules
+  - Mitigations
+  - Control test plans
+  - Control tests
+  - Attachments
+  - Walkthroughs
+  - Issues
+  - Actions
+  - Collaborators
+  - Request Items
+  - To-dos
+  - Sign-offs
+  - Entities
+  - Scheduler Filters
+  - Frameworks
+  - Handlers
+  - Workflows in Asset Inventory/Asset Manager
+  - Asset types
+  - Asset record types
+  - Attribute types
+  - Assets
+  - Asset Relationships
+  - Asset records
+  - Asset Record Relationships
+  - Events
+  - Template Toolkits
+  - Toolkits
+  - Roles
+  - Role Deletion
+  - Compliance Maps
+  - Time entries
+  - Non-project time categories
+  - Timesheets
+  - Importer
+  - System Users
+  - Organizations
+  - Impact Reports
+  - Activities
+  - Users
+  - Groups
+  - Scheduled Users
+  - Scheduled Projects
+  - Scheduled Hours
+  - Extract
+  - Strategy

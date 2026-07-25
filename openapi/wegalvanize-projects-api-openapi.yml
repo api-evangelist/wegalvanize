@@ -1,0 +1,2374 @@
+openapi: 3.0.2
+info:
+  title: HighBond API Reference Actions Projects API
+  version: 1.1.0
+  description: "\nWelcome to the API documentation for HighBond.\n\n## Introduction\nThe HighBond API is the developer interface for the HighBond platform. You can use it to automate interactions with HighBond,\nbuild reporting, and integrate HighBond with other systems in your company. This introduction contains information you should\nknow before you get started.\n\nThe HighBond API is organized around <a href=\"https://en.wikipedia.org/wiki/Representational_state_transfer\" target=\"_blank\">REST</a> and is built on the\n<a href=\"https://jsonapi.org/format/\" target=\"_blank\">JSON API v1.0 specification</a>.\n\n> **Warning —**\nThis API interacts with your company's live data. It gives you the power to delete important data that your\ncompany needs. Carefully consider the consequences of your actions when using this API. If you are not sure, contact the\nperson or group who administers HighBond in your company.\n\n### Permissions\nUsers can generate and manage API tokens in their user profiles in HighBond. Because these tokens are tied to users, not companies, your permissions in the API are the same as your permissions in HighBond.\n\n> **Note —**\nYou must be a System Admin in at least one HighBond instance to access the API.\n\nIf you leave your company and your HighBond user account is deleted, your application will break. Before getting started, consider the long-term requirements of your application. You may wish to create a system account in HighBond and build your application from that, but verify that your company's security policies permit accounts that aren't tied to particular people.\n\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749\" target=\"_blank\">OAuth 2.0 authorization framework</a> to control access to the API.\n\n\n### Apps\nApps are components in HighBond that provide specific functionality. You can use this API to interact with data in the apps you have access to.\n\nThe apps available to you depend on the edition of HighBond (standard or premium) in use, and whether or not your company has purchased any add-on apps.\nFor more information, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-product-editions\" target=\"_blank\">Subscriptions, editions, and capabilities</a>.\n\n### Rate limitations\nThe API safeguards against bursts of usage to help maximize its stability. For most endpoints, you cannot make more than 6 requests per second.\n\nThe following endpoints have a stricter rate limitation of 3 requests per minute:\n\n* Groups\n* Users\n\nTreat these limits as a maximum and avoid making unnecessary requests to the API.\n\nIf you make too many requests, the API responds with a `429` \"Too many requests\" status.\n\n## Getting started\nTo start interacting with your HighBond organization via the API, you need a few things:\n\n* An authentication token from your HighBond instance\n* The correct region URL for your HighBond instance\n* Information about the HighBond instance and resource IDs you want to interact with\n\nIf you need assistance with any of these, contact a HighBond administrator at your company, or email <a href=\"mailto:support@wegalvanize.com\">support@wegalvanize.com</a>.\n\n### Authentication\nAll requests require authentication. To authenticate, use Launchpad to create a HighBond API (bearer) token for your account. The token is a string that authenticates you\nand allows you to securely access the HighBond API.\n\nFor help creating a token, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">Creating and managing access tokens</a>.\n\nOnce you have created your token, you can provide it in the header of your request:\n```\nAuthorization: Bearer <TOKEN>\n```\n > **Important —**\nIf you do not authenticate yourself, the API fails. The API responds to authentication failures with a `401` \"Bad credentials\" status.\n\n<security-definitions />\n\n### Token security\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749#section-1.3.1\" target=\"_blank\">Authorization Code workflow</a> to generate tokens.\n\nTo enable continuous access to the API, and to provide full ownership and accountability to users, Galvanize does not impose an expiration date\non the token. You can <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">delete a token in\nLaunchpad</a> when you no longer need access to the API.\n\n> **Important —**\nYour access token provides many privileges, so keep it secure and private. Galvanize recommends that you encrypt your\nmachine to securely store the token. Avoid sharing your token in publicly accessible areas such GitHub or within client-side code.\n\n### API regions\n\nThe HighBond service is provided from different regions in order to give customers options for where your data is stored, and to enable you to\ncomply with data privacy location requirements.\n\nYour request URL must include one of the following region codes, based on where your HighBond instance resides:\n\n* **United States** — `https://apis-us.diligentoneplatform.com`\n* **Canada** — `https://apis-ca.diligentoneplatform.com`\n* **Europe** — `https://apis-eu.diligentoneplatform.com`\n* **Asia** — `https://apis-ap.diligentoneplatform.com`\n* **Australia** — `https://apis-au.diligentoneplatform.com`\n* **Africa** — `https://apis-af.diligentoneplatform.com`\n* **South America** — `https://apis-sa.diligentoneplatform.com`\n* **Japan** — `https://apis-jp.diligentoneplatform.com`\n\nAdditionally, for government clients, there are two government \"regions\":\n* **Gov** (US federal) — `https://apis.diligentoneplatform-gov.com`\n* **SLED** (state, local, and education; non-federal) — `https://apis.diligentoneplatform-gov2.com`\n\n> **Important —**\nAll API requests must be made over <a href=\"https://en.wikipedia.org/wiki/HTTPS\" target=\"_blank\">HTTPS</a>. Calls over HTTP respond with the `301` \"Moved Permanently\" status.\n\n\n### HighBond instance and resource IDs\nRequests require a HighBond instance ID and the ID of the resource you are interacting with. These IDs are numeric keys that uniquely\nidentify the HighBond instance and every resource in that instance.\n\nThe easiest way to get your HighBond instance ID is to log in to HighBond and take the ID from the URL:\n```\nhttps://accounts.highbond.com/orgs/12345\n```\n\nTo obtain IDs for resources like collections, analyses, tables, and robots, you can navigate to the item you want to reference, and take the IDs from the URL.\nFor example, this URL shows a collection ID:\n```\nhttps://example-company.results.highbond.com/projects/55843\n```\n\n> **Tip —**\nThe `GET` methods in this API also return IDs that you can use to identify resources you can act on.\n\n\n## Making requests\nOnce you have all the information you need, you can start making requests in an API client of your choice.\n\n### HTTP methods\nThe API uses the appropriate HTTP method for each action:\n* `GET` — used for retrieving resources\n* `POST` — used for creating resources\n* `PUT` / `PATCH` — used for updating resources\n* `DELETE` — used for deleting resources\n\n\n### Content type\nAlways specify the `Content-Type` of your request in the header. Supported content types are:\n* JSON API\n* JSON (for backwards compatibility)\n\n```\nContent-Type: application/vnd.api+json\nContent-Type: application/json\n```\n\nA complete **Get a table** request using `curl` would look like this:\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/11594/tables/388930\n```\n\n### Requesting the API to return only specific fields\nFor certain resources, such as control tests, you can request the API to return only specific fields using the `fields` query parameter. Sparse fieldsets are\nhelpful for limiting your responses to only the data you require.\n\n> **Note —**\nThe `type` argument must specify the resource you want to retrieve. The value of the `fields` parameter must be a comma-delimited list that specifies\nthe name of the field(s) to be returned. Avoid whitespace before or after each comma.\n```\nfields[type]=field_name1,field_name2,fieldname3\n```\n\nA complete **Get a control test** request that only returns the `assigned_user`, `control`, and `testing_round_number` fields would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/12345/control_tests/105?fields[control_tests]=assigned_user,control,testing_round_number\n```\n\n### Requesting the API to return related resources\nTo reduce the number of requests, you may use the `include` query parameter to return related resources in the response along with the requested primary resources. Such responses are called \"compound documents\".\n\nAccepted values for the `include` parameter are documented in the `Query Parameters` section of each API method.\n\n> **Note —**\nThe `include` parameter must be a comma-delimited list that specifies\nthe name of the relationship(s) or nested relationship(s) to be returned. Avoid whitespace before or after each comma.\n\nExample - requesting a relationship and a nested relationship\n```\ninclude=control,control.objective\n```\n\nA complete **Get a control test** request that returns the `control` relationship, and `control.objective` nested relationship would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis.highbond.com/v1/orgs/12345/control_tests/105?include=control,control.objective\n```\n\n\n### Blank fields\nBlank fields are included in all response schemas as `\"\"` or `null` instead of being omitted.\n\n\n### Time zones\nAll timestamps are returned in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.\n\nSome requests that create new data, such as creating a robot task's schedule, allow you to provide time zone information.\nFor API requests that allow for a timestamp to be specified, you must explicitly provide an ISO 8601 timestamp with time zone information.\n\n```\n\"starts_at\": \"2019-03-21T16:25:00.478Z\",\n\"starts_at_timezone\": \"America/Los_Angeles\",\n```\n\n\n### Rich text fields\n\nSome requests and responses contain rich text fields that include HTML tags. These are typically description fields. If you need to format text,\nthe best approach is to upload your raw data first and apply formatting later in the user interface.\n\n> **Note —**\nImages that exist in rich text fields are returned in responses, but they are not rendered. You cannot upload new images to rich text fields using the API.\n\n\n### User identifiers\nA unique identifier (UID) is an alphanumeric string that is associated with a user in HighBond. UIDs make it possible to address users,\nso that they can be accessed and interacted with using the API. Some requests that allow you to assign items to users, such as creating an objective,\nrequire you to specify a user's UID.\n\nTo obtain a user's UID:\n\n1. Sign in to <a href=\"https://accounts.highbond.com/login\" target=\"_blank\">HighBond</a>.\n2. If your company uses more than one instance in HighBond, make sure <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-switch-instances\"\ntarget=\"_blank\">the appropriate instance is active</a>.\n3. Select **Options > Users (#)**.\n4. Navigate to the appropriate user and click the user's name.\n5. In the **User Details** side panel, copy the UID to your clipboard.\nOnce you have copied the UID, you can specify it in your request.\n\n\n### Pagination\nWhen a response consists of a large number of items, the API breaks it into separate pages for performance reasons. You can control the way the API paginates your results by specifying how many items you want to have per page, and which page you want the API to return.\n\nFor example, if you request a list of controls, the request could look like this: `{protocol}://{server}/v1/orgs/{org_id}/objectives/{objective_id}/controls?page[size]=25&page[number]=Mg==`\n\nWhere:\n\n* `page[size]=25` specifies that there should be 25 items per page. Different endpoints have different default values and maximum numbers of values you can have per page.\n* `page[number]=Mg==` specifies that the API should return the second page of results (the 26th through 50th items that match the request).\n\n > **Note —**\n In most cases, page numbers must be encoded in Base64. In this example, `Mg==` is the Base64 encoded value for `2`.\n\nAdditionally, responses include the `links` parameter, which provides URLs for the `prev` and `next` attributes (or `null` values if all of the items are on one page). Those URLs include the above parameters, so you can paste them into subsequent requests if needed.\n\n\n\n## Errors\nHighBond uses standard <a href=\"https://en.wikipedia.org/wiki/List_of_HTTP_status_codes\" target=\"_blank\">HTTP response codes</a>\nto indicate the success or failure of a request. The range of a code indicates information about why it succeeded or failed:\n\n* **`2xx` range —** Success\n* **`4xx` range —** Error given the information provided\n* **`5xx` range —** Server failed to fulfil a valid request\n\nSome common errors that occur when making requests include:\n* **`400` Bad request —** When a parameter is missing (such as the `org_id` or resource `id`), when more\nthan one unique resource is specified in the request, or when a specified data type is incompatible with the endpoint\n* **`401` Bad credentials —** When there is an authentication error\n* **`403` Forbidden —** When there is an authorization problem based on your <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-managing-apps\"\ntarget=\"_blank\">role in a HighBond app</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-assigning-subscriptions\" target=\"_blank\">subscription</a>\n* **`404` Not found —** When there is a problem on the client side due to an incorrect URL or resource deletion\n* **`415` Unsupported media type —** When the `Content-Type` specified is unsupported\n* **`422` Unprocessable entity —** When a required attribute is missing (such as the name of a resource), or when a conflict occurs\n(such as a script activation conflict)\n\n\n## Versioning\nAll API endpoints use a version number in the path. As can be seen in the examples, `/v1/` specifies version 1 of the API.\n\nOver time, the API will evolve. New API versions will be introduced and existing versions may be updated.\n\nSome API updates are considered a breaking change, requiring a new version of the API to be introduced. An example of a breaking\nchange is fields being changed or removed. By introducing a new version, API consumers can safely continue to use prior API versions.\n\nThe other type of API update is a non-breaking change. You should expect non-breaking change updates to existing API versions.\nAn example of a non-breaking change is adding a field to a response object. Non-breaking changes are additive. While they do\nchange the response body, they should not impact the API consumer.\n"
+  x-logo:
+    url: ./assets/logo.png
+    altText: HighBond Logo
+servers:
+- url: '{protocol}://{server}/v1'
+  variables:
+    protocol:
+      default: https
+    server:
+      default: apis-us.highbond.com
+      enum:
+      - apis-us.highbond.com
+      - apis-ca.highbond.com
+      - apis-eu.highbond.com
+      - apis-ap.highbond.com
+      - apis-au.highbond.com
+      - apis-af.highbond.com
+      - apis-sa.highbond.com
+      - apis-jp.highbond.com
+security:
+- bearerToken: []
+tags:
+- name: Projects
+  description: 'A project is a management system that allows you to define objectives, risks, and controls, perform tests, and compile information for reporting purposes. Projects may also
+
+    be known as audits, compliance assessments, risk assessments, or another customized term.
+
+
+    Each project has a default system classification, called a "state". A project can have one of the following states:
+
+    * `"active"`— projects that are currently in progress
+
+    * `"archive"`— projects that are inactive and have been moved to the Project Library
+
+    * `"delete"`— previously deleted projects that are stored in the Project Library for 30 days, and then permanently deleted automatically after 30 days
+
+
+    Projects in a `"framework"` state cannot be accessed using the API.
+
+
+    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-create-project" target="_blank">Learn more about projects</a>.
+
+    '
+paths:
+  /orgs/{org_id}/projects:
+    get:
+      tags:
+      - Projects
+      operationId: getProjects
+      summary: Get projects
+      description: Get a list of all projects in an account.
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/projectSparseFieldsetParams'
+      - $ref: '#/components/parameters/pageSizeParam'
+      - $ref: '#/components/parameters/pageNumberEncodedParam'
+      - $ref: '#/components/parameters/filterName'
+      - $ref: '#/components/parameters/projectStatusFilterParams'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetProjectsResponse'
+        '400':
+          $ref: '#/components/responses/MissingOrgId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+    post:
+      tags:
+      - Projects
+      operationId: createProject
+      summary: Create a project
+      description: "Create a new project from scratch. New projects can be created in `\"active\"` (by default) or `\"archive\"` states.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 20,000 projects per HighBond instance.\n* When you first create a project, you cannot enable the following. However, you can enable them when you update the project later:\n  * <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications\" target=\"_blank\">Certifications</a> (`certification: true`)\n  * <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-control-performance\" target=\"_blank\">Control performance</a> (`control_performance: true`)\n  * <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-risk-assurance\" target=\"_blank\">Risk assurance</a> (`risk_assurance: true`)\n"
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/projectSparseFieldsetParams'
+      requestBody:
+        description: The data required to create a project.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectRequest'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetProjectResponse'
+        '400':
+          $ref: '#/components/responses/ResourceTypeMismatch'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/name
+                  code: invalid_resource
+                  detail: can't be blank
+  /orgs/{org_id}/projects/{id}:
+    get:
+      tags:
+      - Projects
+      operationId: getProject
+      summary: Get a project
+      description: Get information about a project. You can retrieve projects in the state `"active"`, `"archive"`, or `"delete"`.
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      - $ref: '#/components/parameters/projectSparseFieldsetParams'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetProjectResponseWithIncludes'
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+    patch:
+      tags:
+      - Projects
+      operationId: updateProject
+      summary: Update a project
+      description: 'Make changes to a project. Only projects in the state `"active"` or `"delete"` can be updated. Projects in the state `"archive"` cannot be updated.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      - $ref: '#/components/parameters/projectSparseFieldsetParams'
+      requestBody:
+        description: The data required to update a project.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectRequest'
+      responses:
+        '200':
+          description: OK.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetProjectResponseWithIncludes'
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/name
+                  code: invalid_resource
+                  detail: can't be blank
+                - status: 422
+                  source:
+                    pointer: /data/attributes/entities
+                  code: invalid_resource
+                  detail: 'Missing child or parent entity ids: [1, 2 ,3]'
+                - status: 422
+                  source:
+                    pointer: /data/attributes/entities
+                  code: invalid_resource
+                  detail: Entities not found
+    delete:
+      tags:
+      - Projects
+      operationId: deleteProject
+      summary: Delete a project
+      description: 'Delete a project that you no longer require. Projects in the state `"active"`, `"archived"` or `"delete"` can be deleted.
+
+
+        You can temporarily or permanently delete a project:
+
+        * By default, projects are temporarily deleted. The project is moved to a `"delete"` state and stored in the Project Library for 30 days. Project
+
+        Admins receive an email notification when a project has been temporarily deleted. After 30 days, the project is permanently deleted automatically.
+
+        * To request a permanent deletion of a project, you must specify `"delete"` using the `permanent` parameter. Project Admins do not receive
+
+        an email notification when a project is permanently deleted.
+
+
+        > **Caution —**
+
+        Once a project is permanently deleted, you cannot access or restore the project.
+
+
+        For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-delete-project" target="_blank">Deleting
+
+        and restoring projects</a>.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      - $ref: '#/components/parameters/projectPermanentDeleteParam'
+      responses:
+        '200':
+          description: OK. [The project is temporarily deleted.]
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/GetProjectResponse'
+        '202':
+          description: Accepted. [The project is queued for permanent deletion.]
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/state
+                  code: invalid_resource
+                  detail: Invalid project state for the requested action.
+  /orgs/{org_id}/projects/{project_id}/entities:
+    post:
+      tags:
+      - Projects
+      operationId: createProjectEntityLink
+      summary: Create project entity link
+      description: "Link entity to a project.\n\n> **Note**\n> * Tagging a project to an entity automatically tags a project with all ancestor entities and descendant entities.\n> * Request <a href=\"#operation/getProject\">Get a project</a> with `entities` query param to get the whole list of entities linked to a project.\n\n<strong>Limitations</strong>:\n  * Only 1 entity can be sent in the request payload.\n\n<a href=\"https://help.highbond.com/helpdocs/auditbond/en-us/Content/projects/admin/config/Setting_up_entity_tagging.html\" target=\"_blank\">Learn more about tagging items with entities</a>.\n"
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/projectIdParam'
+      requestBody:
+        description: The data required to create a project entity link.
+        required: true
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectEntityRequest'
+      responses:
+        '201':
+          description: Created.
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CreateProjectEntityResponse'
+        '400':
+          $ref: '#/components/responses/MissingResourceId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+        '422':
+          description: 'Unprocessable entity.
+
+            '
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+              example:
+                errors:
+                - status: 422
+                  source:
+                    pointer: /data/attributes/base
+                  code: invalid_resource
+                  detail: Entity and Responsibility should reference the same account.
+  /orgs/{org_id}/projects/{project_id}/entities/{id}:
+    delete:
+      tags:
+      - Projects
+      operationId: deleteProjectEntityLink
+      summary: Delete project entity link
+      description: 'Permanently delete project entity link.
+
+
+        > **Note -**
+
+        Untagging a project from an entity automatically untags a project from all descendant entities.
+
+        '
+      parameters:
+      - $ref: '#/components/parameters/orgIdParam'
+      - $ref: '#/components/parameters/projectIdParam'
+      - $ref: '#/components/parameters/resourceIdParam'
+      responses:
+        '204':
+          $ref: '#/components/responses/NoContent'
+        '400':
+          $ref: '#/components/responses/MissingOrgId'
+        '401':
+          $ref: '#/components/responses/BadCredentials'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '415':
+          $ref: '#/components/responses/NotJsonapiMediaType'
+components:
+  parameters:
+    projectIdParam:
+      in: path
+      name: project_id
+      description: The ID of the project.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    projectPermanentDeleteParam:
+      in: query
+      name: permanent
+      description: Specifies that the project and all associated data should be permanently deleted.
+      required: false
+      schema:
+        type: string
+        enum:
+        - delete
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    projectStatusFilterParams:
+      in: query
+      name: filter[status]
+      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    filterName:
+      in: query
+      name: filter[name]
+      description: Filter by name.  Response will include partial matches and ignore case.
+      required: false
+      schema:
+        type: string
+        example: LoremIpsum
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    projectSparseFieldsetParams:
+      in: query
+      name: fields[projects]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,state,status,created_at,updated_at,description,background,budget,position,header_alert_enabled,header_alert_text,certification,control_performance,risk_assurance,management_response,max_sample_size,number_of_testing_rounds,opinion,opinion_description,purpose,scope,start_date,target_date,tag_list,project_type,entities,collaborators,risk_assurance_data,collaborator_groups,time_spent,progress,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+  schemas:
+    GetProjectResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"projects"`).
+              example: projects
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the project.
+                  maxLength: 120
+                  example: Example Application
+                state:
+                  type: string
+                  description: 'A default system classification. A project can have one of the following states: `"active"`, `"archive"`, `"delete"`. When you create a project,
+
+                    the project is created in an `"active"` state. Projects with the state `"active"` or `"delete"` can be updated. Projects in the state `"active"`,
+
+                    `"archive"`, or `"delete"` can be deleted. Projects in the state `"framework"` cannot be accessed using the API. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                    '
+                  example: active
+                status:
+                  type: string
+                  description: 'A user configurable classification. Each project can have one status. Default statuses are: "draft", "proposed", "active", "completed".
+
+                    The default status is "active", if not specified. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                    '
+                  example: active
+                created_at:
+                  type: string
+                  description: The timestamp specifying when the project was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp specifying when the project's settings were updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
+                description:
+                  type: string
+                  description: A detailed description of the project.
+                  maxLength: 524288
+                  example: Project description.
+                background:
+                  type: string
+                  description: The contextual circumstances of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project background description.</p>
+                budget:
+                  type: integer
+                  nullable: true
+                  description: The budgeted hours that have been allocated for the project. `budget` must be a value between `0` and `2147483647`.
+                  example: 1
+                certification:
+                  type: boolean
+                  description: 'Specifies if the Certifications feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications"
+
+                    target="_blank">Creating certification programs</a>.
+
+                    '
+                  example: false
+                control_performance:
+                  type: boolean
+                  description: 'Specifies if the Control Performance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/control_performance/scheduling_control_performance.htm"
+
+                    target="_blank">Scheduling Control Performance</a>.
+
+                    '
+                  example: false
+                risk_assurance:
+                  type: boolean
+                  description: 'Specifies if the Risk Assurance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/risk_assurance/getting_started_with_assurance_for_risk.html"
+
+                    target="_blank">Getting started with assurance for risk</a>.
+
+                    '
+                  example: false
+                management_response:
+                  type: string
+                  description: A description of management's response to the overall rating of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Management response description.</p>
+                max_sample_size:
+                  type: integer
+                  description: 'The total sample size, split among testing rounds, defined in the project. The default is `0`. This field depends on `project_type`,
+
+                    which is dependent on workflow. For Workplan workflow projects, `max_sample_size` must be `0`. For Internal Control workflow
+
+                    projects, `max_sample_size` must be a value between `0` and `2147483647`. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a> and
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and
+
+                    testing controls</a>.
+
+                    '
+                  example: 25
+                number_of_testing_rounds:
+                  type: integer
+                  description: 'The number of testing rounds performed in the project. The default is `0`. This field depends on `project_type`, which is dependent on workflow.
+
+                    For Workplan workflow projects, `number_of_testing_rounds` must be `0`. For Internal Control workflow projects,
+
+                    `number_of_testing_rounds` must be one of the following values: `0`,`1`,`2`, or `4`. The number of testing rounds can only be set on create. This field cannot be updated. For more information,
+
+                    see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project
+
+                    types</a> and <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing
+
+                    procedures and testing controls</a>.
+
+                    '
+                  example: 4
+                opinion:
+                  type: string
+                  description: 'A user configurable final rating of the project outcome.
+
+                    '
+                  example: Excellent
+                opinion_description:
+                  type: string
+                  description: A formal statement about the project outcome, including remarks or recommendations.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project opinion description.</p>
+                purpose:
+                  type: string
+                  description: The intended results, aims, or goals of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project purpose description.</p>
+                scope:
+                  type: string
+                  description: What is, and is not, covered by this project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project scope description.</p>
+                start_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to begin.
+                  example: '2019-02-01'
+                  format: date
+                target_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to be completed.
+                  example: '2019-04-01'
+                  format: date
+                tag_list:
+                  type: array
+                  description: 'A comma separated list of tags associated with the project. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-organize-projects" target="_blank">Tagging projects</a>.
+
+                    '
+                  example:
+                  - tag 1
+                  - tag 2
+                  - tag 3
+                  items:
+                    type: string
+                position:
+                  type: integer
+                  format: int64
+                  description: 'Legacy field that was used to determine the order in which it is displayed in the index action. This field is no longer supported and will always return 0.
+
+                    '
+                  example: 0
+                header_alert_enabled:
+                  type: boolean
+                  description: 'Specifies if the Header Alert feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    Some of the projects have highly sensitive information. That data has restricted access and more controls apply to it.
+
+                    '
+                  example: false
+                header_alert_text:
+                  type: string
+                  description: Custom message displayed at the top (header) of each project with sensitive data.
+                  maxLength: 255
+                  example: This Project is not authorized for sensitive data
+                custom_attributes:
+                  type: array
+                  description: 'An array of custom attributes defined on the project type used by this project. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>.
+
+                    Make a PATCH request to modify the value of a custom attribute. Custom attributes can''t be updated at the same time as the project type because the project type determines which custom attributes apply to the project and its resources.
+
+                    Custom attributes are not available on creation during a POST request, because the custom attributes are defined by the project type that is set when the project is created.
+
+                    '
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Project Planning Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+                risk_assurance_data:
+                  type: object
+                  description: 'Fields that determines assurance values. Assurance is an expression of confidence that risk is effectively mitigated. Returns `null` if Risk Assurance feature is disabled.
+
+                    '
+                  properties:
+                    inherent_risk:
+                      type: number
+                      format: float
+                      description: 'The risk that an activity would pose if no controls or other mitigating factors were in place. Can also be referred to as the gross risk, or risks before controls, and can act as the baseline for your organization''s risk tolerance or appetite.
+
+                        '
+                      example: 1.1
+                    residual_risk:
+                      type: number
+                      format: float
+                      description: 'The risk that remains after controls are taken into account. Can also be referred to as the net risk or risk after controls.
+
+                        '
+                      example: 1.1
+                    assurance:
+                      type: number
+                      description: 'The level of assurance that the controls in place effectively mitigate risk to the business.
+
+                        '
+                      example: 0
+                time_spent:
+                  type: number
+                  format: float
+                  description: The total time spent on the project.
+                  example: 3.5
+                progress:
+                  type: number
+                  format: float
+                  description: 'Project progress is calculated using the following formula: Sum of scores received per phase / Maximum score across all phases and objectives x 100.
+
+                    '
+                  example: 6.5
+                planned_start_date:
+                  type: string
+                  nullable: true
+                  description: Planned start date
+                  example: '2019-02-09'
+                  format: date
+                planned_end_date:
+                  type: string
+                  nullable: true
+                  description: Planned end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_start_date:
+                  type: string
+                  nullable: true
+                  description: Actual start date.
+                  example: '2019-02-09'
+                  format: date
+                actual_end_date:
+                  type: string
+                  nullable: true
+                  description: Actual end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_milestone_date:
+                  type: string
+                  nullable: true
+                  description: Actual milestone date.
+                  example: '2019-02-10'
+                  format: date
+                planned_milestone_date:
+                  type: string
+                  nullable: true
+                  description: Planned milestone date.
+                  example: '2019-02-09'
+                  format: date
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - project_type
+              properties:
+                project_type:
+                  type: object
+                  nullable: true
+                  description: 'Each project has an associated project type. Project types define the structure of a project, including the terminology used in the project.
+
+                    The project type defines which workflow the project uses and which custom attributes are available on the project. Because of this dependency
+
+                    the project type can''t be updated at the same time as the custom attributes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project type.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"project_types"`).
+                          example: project_types
+                entities:
+                  type: object
+                  description: Each project has an associated project entities.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      example: []
+                      description: The data associated with the resource.
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
+        meta:
+          type: object
+          required:
+          - status_translations
+          properties:
+            status_translations:
+              type: object
+              description: Translations, or customized values for the project status states.
+              properties:
+                draft:
+                  type: string
+                  description: Term to use when a project is in a draft state.
+                  example: Draft
+                proposed:
+                  type: string
+                  description: Term to use when a project is in a proposed state.
+                  example: Proposed
+                active:
+                  type: string
+                  description: Term to use when a project is in an active state.
+                  example: Active
+                completed:
+                  type: string
+                  description: Term to use when a project has been completed.
+                  example: Completed
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    GetProjectsResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      - links
+      properties:
+        data:
+          type: array
+          description: Array of projects
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The classification of the object (`"projects"`).
+                example: projects
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the project.
+                    maxLength: 120
+                    example: Example Application
+                  state:
+                    type: string
+                    description: 'A default system classification. A project can have one of the following states: `"active"`, `"archive"`, `"delete"`. When you create a project,
+
+                      the project is created in an `"active"` state. Projects with the state `"active"` or `"delete"` can be updated. Projects in the state `"active"`,
+
+                      `"archive"`, or `"delete"` can be deleted. Projects in the state `"framework"` cannot be accessed using the API. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                      '
+                    example: active
+                  status:
+                    type: string
+                    description: 'A user configurable classification. Each project can have one status. Default statuses are: "draft", "proposed", "active", "completed".
+
+                      The default status is "active", if not specified. For more information, see <a href=
+
+                      "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                      '
+                    example: active
+                  created_at:
+                    type: string
+                    description: The timestamp specifying when the project was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp specifying when the project's settings were updated.
+                    example: '2019-03-18T22:02:05Z'
+                    format: date-time
+                  description:
+                    type: string
+                    description: A detailed description of the project.
+                    maxLength: 524288
+                    example: Project description.
+                  background:
+                    type: string
+                    description: The contextual circumstances of the project.
+                    maxLength: 524288
+                    example: <h1>Heading</h1><p>Project background description.</p>
+                  budget:
+                    type: integer
+                    nullable: true
+                    description: The budgeted hours that have been allocated for the project. `budget` must be a value between `0` and `2147483647`.
+                    example: 1
+                  certification:
+                    type: boolean
+                    description: 'Specifies if the Certifications feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                      You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications"
+
+                      target="_blank">Creating certification programs</a>.
+
+                      '
+                    example: false
+                  control_performance:
+                    type: boolean
+                    description: 'Specifies if the Control Performance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                      You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/control_performance/scheduling_control_performance.htm"
+
+                      target="_blank">Scheduling Control Performance</a>.
+
+                      '
+                    example: false
+                  risk_assurance:
+                    type: boolean
+                    description: 'Specifies if the Risk Assurance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                      You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/risk_assurance/getting_started_with_assurance_for_risk.html"
+
+                      target="_blank">Getting started with assurance for risk</a>.
+
+                      '
+                    example: false
+                  management_response:
+                    type: string
+                    description: A description of management's response to the overall rating of the project.
+                    maxLength: 524288
+                    example: <h1>Heading</h1><p>Management response description.</p>
+                  max_sample_size:
+                    type: integer
+                    description: 'The total sample size, split among testing rounds, defined in the project. The default is `0`. This field depends on `project_type`,
+
+                      which is dependent on workflow. For Workplan workflow projects, `max_sample_size` must be `0`. For Internal Control workflow
+
+                      projects, `max_sample_size` must be a value between `0` and `2147483647`. For more information, see <a href=
+
+                      "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a> and
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and
+
+                      testing controls</a>.
+
+                      '
+                    example: 25
+                  number_of_testing_rounds:
+                    type: integer
+                    description: 'The number of testing rounds performed in the project. The default is `0`. This field depends on `project_type`, which is dependent on workflow.
+
+                      For Workplan workflow projects, `number_of_testing_rounds` must be `0`. For Internal Control workflow projects,
+
+                      `number_of_testing_rounds` must be one of the following values: `0`,`1`,`2`, or `4`. The number of testing rounds can only be set on create. This field cannot be updated. For more information,
+
+                      see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project
+
+                      types</a> and <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing
+
+                      procedures and testing controls</a>.
+
+                      '
+                    example: 4
+                  opinion:
+                    type: string
+                    description: 'A user configurable final rating of the project outcome.
+
+                      '
+                    example: Excellent
+                  opinion_description:
+                    type: string
+                    description: A formal statement about the project outcome, including remarks or recommendations.
+                    maxLength: 524288
+                    example: <h1>Heading</h1><p>Project opinion description.</p>
+                  purpose:
+                    type: string
+                    description: The intended results, aims, or goals of the project.
+                    maxLength: 524288
+                    example: <h1>Heading</h1><p>Project purpose description.</p>
+                  scope:
+                    type: string
+                    description: What is, and is not, covered by this project.
+                    maxLength: 524288
+                    example: <h1>Heading</h1><p>Project scope description.</p>
+                  start_date:
+                    type: string
+                    description: The date specifying when the project is scheduled to begin.
+                    example: '2019-02-01'
+                    format: date
+                  target_date:
+                    type: string
+                    description: The date specifying when the project is scheduled to be completed.
+                    example: '2019-04-01'
+                    format: date
+                  tag_list:
+                    type: array
+                    description: 'A comma separated list of tags associated with the project. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-organize-projects" target="_blank">Tagging projects</a>.
+
+                      '
+                    example:
+                    - tag 1
+                    - tag 2
+                    - tag 3
+                    items:
+                      type: string
+                  position:
+                    type: integer
+                    format: int64
+                    description: 'Legacy field that was used to determine the order in which it is displayed in the index action. This field is no longer supported and will always return 0.
+
+                      '
+                    example: 0
+                  header_alert_enabled:
+                    type: boolean
+                    description: 'Specifies if the Header Alert feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                      Some of the projects have highly sensitive information. That data has restricted access and more controls apply to it.
+
+                      '
+                    example: false
+                  header_alert_text:
+                    type: string
+                    description: Custom message displayed at the top (header) of each project with sensitive data.
+                    maxLength: 255
+                    example: This Project is not authorized for sensitive data
+                  custom_attributes:
+                    type: array
+                    description: 'An array of custom attributes defined on the project type used by this project. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>.
+
+                      Make a PATCH request to modify the value of a custom attribute. Custom attributes can''t be updated at the same time as the project type because the project type determines which custom attributes apply to the project and its resources.
+
+                      Custom attributes are not available on creation during a POST request, because the custom attributes are defined by the project type that is set when the project is created.
+
+                      '
+                    items:
+                      type: object
+                      description: A user defined custom attribute value.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of this custom attribute. Optional if term is included.
+                          example: '42'
+                        term:
+                          type: string
+                          description: The user defined term used to identify this custom attribute. Optional if id is included.
+                          example: Custom Project Planning Attribute
+                        value:
+                          type: array
+                          description: The value or values (for multiselect) for this custom attribute.
+                          example:
+                          - Custom Select Option Text
+                          items:
+                            type: string
+                  risk_assurance_data:
+                    type: object
+                    description: 'Fields that determines assurance values. Assurance is an expression of confidence that risk is effectively mitigated. Returns `null` if Risk Assurance feature is disabled.
+
+                      '
+                    properties:
+                      inherent_risk:
+                        type: number
+                        format: float
+                        description: 'The risk that an activity would pose if no controls or other mitigating factors were in place. Can also be referred to as the gross risk, or risks before controls, and can act as the baseline for your organization''s risk tolerance or appetite.
+
+                          '
+                        example: 1.1
+                      residual_risk:
+                        type: number
+                        format: float
+                        description: 'The risk that remains after controls are taken into account. Can also be referred to as the net risk or risk after controls.
+
+                          '
+                        example: 1.1
+                      assurance:
+                        type: number
+                        description: 'The level of assurance that the controls in place effectively mitigate risk to the business.
+
+                          '
+                        example: 0
+                  time_spent:
+                    type: number
+                    format: float
+                    description: The total time spent on the project.
+                    example: 3.5
+                  progress:
+                    type: number
+                    format: float
+                    description: 'Project progress is calculated using the following formula: Sum of scores received per phase / Maximum score across all phases and objectives x 100.
+
+                      '
+                    example: 6.5
+                  planned_start_date:
+                    type: string
+                    nullable: true
+                    description: Planned start date
+                    example: '2019-02-09'
+                    format: date
+                  planned_end_date:
+                    type: string
+                    nullable: true
+                    description: Planned end date.
+                    example: '2019-02-10'
+                    format: date
+                  actual_start_date:
+                    type: string
+                    nullable: true
+                    description: Actual start date.
+                    example: '2019-02-09'
+                    format: date
+                  actual_end_date:
+                    type: string
+                    nullable: true
+                    description: Actual end date.
+                    example: '2019-02-10'
+                    format: date
+                  actual_milestone_date:
+                    type: string
+                    nullable: true
+                    description: Actual milestone date.
+                    example: '2019-02-10'
+                    format: date
+                  planned_milestone_date:
+                    type: string
+                    nullable: true
+                    description: Planned milestone date.
+                    example: '2019-02-09'
+                    format: date
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                required:
+                - project_type
+                properties:
+                  project_type:
+                    type: object
+                    nullable: true
+                    description: 'Each project has an associated project type. Project types define the structure of a project, including the terminology used in the project.
+
+                      The project type defines which workflow the project uses and which custom attributes are available on the project. Because of this dependency
+
+                      the project type can''t be updated at the same time as the custom attributes.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the project type.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"project_types"`).
+                            example: project_types
+                  entities:
+                    type: object
+                    description: Each project has an associated project entities.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: array
+                        description: The data associated with the resource.
+                        items:
+                          type: object
+                          required:
+                          - id
+                          - type
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the entity.
+                              example: '1'
+                            type:
+                              type: string
+                              description: The classification of the object (`"entities"`).
+                              example: entities
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type: string
+              description: Next page url
+              nullable: true
+              example: /api/resource?page[number]=Mg==
+            prev:
+              type: string
+              description: Previous page url
+              nullable: true
+              example: null
+        meta:
+          type: object
+          required:
+          - status_translations
+          properties:
+            status_translations:
+              type: object
+              description: Translations, or customized values for the project status states.
+              properties:
+                draft:
+                  type: string
+                  description: Term to use when a project is in a draft state.
+                  example: Draft
+                proposed:
+                  type: string
+                  description: Term to use when a project is in a proposed state.
+                  example: Proposed
+                active:
+                  type: string
+                  description: Term to use when a project is in an active state.
+                  example: Active
+                completed:
+                  type: string
+                  description: Term to use when a project has been completed.
+                  example: Completed
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    UpdateProjectRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"projects"`).
+              example: projects
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              - start_date
+              - target_date
+              properties:
+                name:
+                  type: string
+                  description: The name of the project.
+                  maxLength: 120
+                  example: Example Application
+                start_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to begin.
+                  example: '2019-02-01'
+                  format: date
+                target_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to be completed.
+                  example: '2019-04-01'
+                  format: date
+                planned_start_date:
+                  type: string
+                  nullable: true
+                  description: Planned start date
+                  example: '2019-02-09'
+                  format: date
+                planned_end_date:
+                  type: string
+                  nullable: true
+                  description: Planned end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_start_date:
+                  type: string
+                  nullable: true
+                  description: Actual start date.
+                  example: '2019-02-09'
+                  format: date
+                actual_end_date:
+                  type: string
+                  nullable: true
+                  description: Actual end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_milestone_date:
+                  type: string
+                  nullable: true
+                  description: Actual milestone date.
+                  example: '2019-02-10'
+                  format: date
+                planned_milestone_date:
+                  type: string
+                  nullable: true
+                  description: Planned milestone date.
+                  example: '2019-02-09'
+                  format: date
+                status:
+                  type: string
+                  description: 'A user configurable classification. Each project can have one status. Default statuses are: "draft", "proposed", "active", "completed".
+
+                    The default status is "active", if not specified. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                    '
+                  example: active
+                description:
+                  type: string
+                  description: A detailed description of the project.
+                  maxLength: 524288
+                  example: Project description.
+                background:
+                  type: string
+                  description: The contextual circumstances of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project background description.</p>
+                budget:
+                  type: integer
+                  nullable: true
+                  description: The budgeted hours that have been allocated for the project. `budget` must be a value between `0` and `2147483647`.
+                  example: 1
+                certification:
+                  type: boolean
+                  description: 'Specifies if the Certifications feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications"
+
+                    target="_blank">Creating certification programs</a>.
+
+                    '
+                  example: false
+                control_performance:
+                  type: boolean
+                  description: 'Specifies if the Control Performance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/control_performance/scheduling_control_performance.htm"
+
+                    target="_blank">Scheduling Control Performance</a>.
+
+                    '
+                  example: false
+                risk_assurance:
+                  type: boolean
+                  description: 'Specifies if the Risk Assurance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/risk_assurance/getting_started_with_assurance_for_risk.html"
+
+                    target="_blank">Getting started with assurance for risk</a>.
+
+                    '
+                  example: false
+                management_response:
+                  type: string
+                  description: A description of management's response to the overall rating of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Management response description.</p>
+                max_sample_size:
+                  type: integer
+                  description: 'The total sample size, split among testing rounds, defined in the project. The default is `0`. This field depends on `project_type`,
+
+                    which is dependent on workflow. For Workplan workflow projects, `max_sample_size` must be `0`. For Internal Control workflow
+
+                    projects, `max_sample_size` must be a value between `0` and `2147483647`. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a> and
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and
+
+                    testing controls</a>.
+
+                    '
+                  example: 25
+                opinion:
+                  type: string
+                  description: 'A user configurable final rating of the project outcome.
+
+                    '
+                  example: Excellent
+                opinion_description:
+                  type: string
+                  description: A formal statement about the project outcome, including remarks or recommendations.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project opinion description.</p>
+                purpose:
+                  type: string
+                  description: The intended results, aims, or goals of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project purpose description.</p>
+                scope:
+                  type: string
+                  description: What is, and is not, covered by this project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project scope description.</p>
+                tag_list:
+                  type: array
+                  description: 'A comma separated list of tags associated with the project. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-organize-projects" target="_blank">Tagging projects</a>.
+
+                    '
+                  example:
+                  - tag 1
+                  - tag 2
+                  - tag 3
+                  items:
+                    type: string
+                custom_attributes:
+                  type: array
+                  description: 'An array of custom attributes defined on the project type used by this project. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>.
+
+                    Make a PATCH request to modify the value of a custom attribute. Custom attributes can''t be updated at the same time as the project type because the project type determines which custom attributes apply to the project and its resources.
+
+                    Custom attributes are not available on creation during a POST request, because the custom attributes are defined by the project type that is set when the project is created.
+
+                    '
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Project Planning Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              nullable: true
+              description: The relationships associated with the resource.
+              properties:
+                project_type:
+                  type: object
+                  nullable: true
+                  description: 'Each project has an associated project type. Project types define the structure of a project, including the terminology used in the project.
+
+                    The project type defines which workflow the project uses and which custom attributes are available on the project. Because of this dependency
+
+                    the project type can''t be updated at the same time as the custom attributes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project type.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"project_types"`).
+                          example: project_types
+                entities:
+                  type: object
+                  description: 'The passed entities list should match the following conditions:
+
+                    1. It should be the full exact list of entities you would like to be linked to the resource.
+
+
+                    2. The passed entities should consist of valid sub-trees with all ancestor entities as well as descendent entities.
+
+
+                    3. Inherited entities should be included too.
+
+
+                    Otherwise, the whole request will be rejected with the corresponding error.
+
+                    '
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
+    CreateProjectEntityRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the project.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"entities"`).
+              example: entities
+    CreateProjectRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          - relationships
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"projects"`).
+              example: projects
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              - start_date
+              - target_date
+              properties:
+                name:
+                  type: string
+                  description: The name of the project.
+                  maxLength: 120
+                  example: Example Application
+                start_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to begin.
+                  example: '2019-02-01'
+                  format: date
+                target_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to be completed.
+                  example: '2019-04-01'
+                  format: date
+                status:
+                  type: string
+                  description: 'A user configurable classification. Each project can have one status. Default statuses are: "draft", "proposed", "active", "completed".
+
+                    The default status is "active", if not specified. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                    '
+                  example: active
+                state:
+                  type: string
+                  description: 'When a project is created, it can have state `"active"` or `"archive"`. By default
+
+                    the project is created in the `"active"` state.
+
+                    '
+                  example: active
+                description:
+                  type: string
+                  description: A detailed description of the project.
+                  maxLength: 524288
+                  example: Project description.
+                background:
+                  type: string
+                  description: The contextual circumstances of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project background description.</p>
+                budget:
+                  type: integer
+                  nullable: true
+                  description: The budgeted hours that have been allocated for the project. `budget` must be a value between `0` and `2147483647`.
+                  example: 1
+                management_response:
+                  type: string
+                  description: A description of management's response to the overall rating of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Management response description.</p>
+                max_sample_size:
+                  type: integer
+                  description: 'The total sample size, split among testing rounds, defined in the project. The default is `0`. This field depends on `project_type`,
+
+                    which is dependent on workflow. For Workplan workflow projects, `max_sample_size` must be `0`. For Internal Control workflow
+
+                    projects, `max_sample_size` must be a value between `0` and `2147483647`. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a> and
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and
+
+                    testing controls</a>.
+
+                    '
+                  example: 25
+                number_of_testing_rounds:
+                  type: integer
+                  description: 'The number of testing rounds performed in the project. The default is `0`. This field depends on `project_type`, which is dependent on workflow.
+
+                    For Workplan workflow projects, `number_of_testing_rounds` must be `0`. For Internal Control workflow projects,
+
+                    `number_of_testing_rounds` must be one of the following values: `0`,`1`,`2`, or `4`. The number of testing rounds can only be set on create. This field cannot be updated. For more information,
+
+                    see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project
+
+                    types</a> and <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing
+
+                    procedures and testing controls</a>.
+
+                    '
+                  example: 4
+                opinion:
+                  type: string
+                  description: 'A user configurable final rating of the project outcome.
+
+                    '
+                  example: Excellent
+                opinion_description:
+                  type: string
+                  description: A formal statement about the project outcome, including remarks or recommendations.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project opinion description.</p>
+                purpose:
+                  type: string
+                  description: The intended results, aims, or goals of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project purpose description.</p>
+                scope:
+                  type: string
+                  description: What is, and is not, covered by this project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project scope description.</p>
+                tag_list:
+                  type: array
+                  description: 'A comma separated list of tags associated with the project. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-organize-projects" target="_blank">Tagging projects</a>.
+
+                    '
+                  example:
+                  - tag 1
+                  - tag 2
+                  - tag 3
+                  items:
+                    type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - project_type
+              properties:
+                project_type:
+                  type: object
+                  nullable: true
+                  description: 'Each project has an associated project type. Project types define the structure of a project, including the terminology used in the project.
+
+                    The project type defines which workflow the project uses and which custom attributes are available on the project. Because of this dependency
+
+                    the project type can''t be updated at the same time as the custom attributes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project type.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"project_types"`).
+                          example: project_types
+    GetProjectResponseWithIncludes:
+      type: object
+      description: The data included in the response.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"projects"`).
+              example: projects
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the project.
+                  maxLength: 120
+                  example: Example Application
+                state:
+                  type: string
+                  description: 'A default system classification. A project can have one of the following states: `"active"`, `"archive"`, `"delete"`. When you create a project,
+
+                    the project is created in an `"active"` state. Projects with the state `"active"` or `"delete"` can be updated. Projects in the state `"active"`,
+
+                    `"archive"`, or `"delete"` can be deleted. Projects in the state `"framework"` cannot be accessed using the API. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                    '
+                  example: active
+                status:
+                  type: string
+                  description: 'A user configurable classification. Each project can have one status. Default statuses are: "draft", "proposed", "active", "completed".
+
+                    The default status is "active", if not specified. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-statuses" target="_blank">Configuring project statuses</a>.
+
+                    '
+                  example: active
+                created_at:
+                  type: string
+                  description: The timestamp specifying when the project was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp specifying when the project's settings were updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
+                description:
+                  type: string
+                  description: A detailed description of the project.
+                  maxLength: 524288
+                  example: Project description.
+                background:
+                  type: string
+                  description: The contextual circumstances of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project background description.</p>
+                budget:
+                  type: integer
+                  nullable: true
+                  description: The budgeted hours that have been allocated for the project. `budget` must be a value between `0` and `2147483647`.
+                  example: 1
+                certification:
+                  type: boolean
+                  description: 'Specifies if the Certifications feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications"
+
+                    target="_blank">Creating certification programs</a>.
+
+                    '
+                  example: false
+                control_performance:
+                  type: boolean
+                  description: 'Specifies if the Control Performance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/control_performance/scheduling_control_performance.htm"
+
+                    target="_blank">Scheduling Control Performance</a>.
+
+                    '
+                  example: false
+                risk_assurance:
+                  type: boolean
+                  description: 'Specifies if the Risk Assurance feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    You must be a System Admin with a Professional subscription to configure this field. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/risk_assurance/getting_started_with_assurance_for_risk.html"
+
+                    target="_blank">Getting started with assurance for risk</a>.
+
+                    '
+                  example: false
+                management_response:
+                  type: string
+                  description: A description of management's response to the overall rating of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Management response description.</p>
+                max_sample_size:
+                  type: integer
+                  description: 'The total sample size, split among testing rounds, defined in the project. The default is `0`. This field depends on `project_type`,
+
+                    which is dependent on workflow. For Workplan workflow projects, `max_sample_size` must be `0`. For Internal Control workflow
+
+                    projects, `max_sample_size` must be a value between `0` and `2147483647`. For more information, see <a href=
+
+                    "https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a> and
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and
+
+                    testing controls</a>.
+
+                    '
+                  example: 25
+                number_of_testing_rounds:
+                  type: integer
+                  description: 'The number of testing rounds performed in the project. The default is `0`. This field depends on `project_type`, which is dependent on workflow.
+
+                    For Workplan workflow projects, `number_of_testing_rounds` must be `0`. For Internal Control workflow projects,
+
+                    `number_of_testing_rounds` must be one of the following values: `0`,`1`,`2`, or `4`. The number of testing rounds can only be set on create. This field cannot be updated. For more information,
+
+                    see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project
+
+                    types</a> and <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing
+
+                    procedures and testing controls</a>.
+
+                    '
+                  example: 4
+                opinion:
+                  type: string
+                  description: 'A user configurable final rating of the project outcome.
+
+                    '
+                  example: Excellent
+                opinion_description:
+                  type: string
+                  description: A formal statement about the project outcome, including remarks or recommendations.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project opinion description.</p>
+                purpose:
+                  type: string
+                  description: The intended results, aims, or goals of the project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project purpose description.</p>
+                scope:
+                  type: string
+                  description: What is, and is not, covered by this project.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Project scope description.</p>
+                start_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to begin.
+                  example: '2019-02-01'
+                  format: date
+                target_date:
+                  type: string
+                  description: The date specifying when the project is scheduled to be completed.
+                  example: '2019-04-01'
+                  format: date
+                tag_list:
+                  type: array
+                  description: 'A comma separated list of tags associated with the project. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-organize-projects" target="_blank">Tagging projects</a>.
+
+                    '
+                  example:
+                  - tag 1
+                  - tag 2
+                  - tag 3
+                  items:
+                    type: string
+                position:
+                  type: integer
+                  format: int64
+                  description: 'Legacy field that was used to determine the order in which it is displayed in the index action. This field is no longer supported and will always return 0.
+
+                    '
+                  example: 0
+                header_alert_enabled:
+                  type: boolean
+                  description: 'Specifies if the Header Alert feature has been enabled (`true`) or disabled (`false`) for the project. The default is `false`.
+
+                    Some of the projects have highly sensitive information. That data has restricted access and more controls apply to it.
+
+                    '
+                  example: false
+                header_alert_text:
+                  type: string
+                  description: Custom message displayed at the top (header) of each project with sensitive data.
+                  maxLength: 255
+                  example: This Project is not authorized for sensitive data
+                custom_attributes:
+                  type: array
+                  description: 'An array of custom attributes defined on the project type used by this project. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>.
+
+                    Make a PATCH request to modify the value of a custom attribute. Custom attributes can''t be updated at the same time as the project type because the project type determines which custom attributes apply to the project and its resources.
+
+                    Custom attributes are not available on creation during a POST request, because the custom attributes are defined by the project type that is set when the project is created.
+
+                    '
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Project Planning Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+                risk_assurance_data:
+                  type: object
+                  description: 'Fields that determines assurance values. Assurance is an expression of confidence that risk is effectively mitigated. Returns `null` if Risk Assurance feature is disabled.
+
+                    '
+                  properties:
+                    inherent_risk:
+                      type: number
+                      format: float
+                      description: 'The risk that an activity would pose if no controls or other mitigating factors were in place. Can also be referred to as the gross risk, or risks before controls, and can act as the baseline for your organization''s risk tolerance or appetite.
+
+                        '
+                      example: 1.1
+                    residual_risk:
+                      type: number
+                      format: float
+                      description: 'The risk that remains after controls are taken into account. Can also be referred to as the net risk or risk after controls.
+
+                        '
+                      example: 1.1
+                    assurance:
+                      type: number
+                      description: 'The level of assurance that the controls in place effectively mitigate risk to the business.
+
+                        '
+                      example: 0
+                time_spent:
+                  type: number
+                  format: float
+                  description: The total time spent on the project.
+                  example: 3.5
+                progress:
+                  type: number
+                  format: float
+                  description: 'Project progress is calculated using the following formula: Sum of scores received per phase / Maximum score across all phases and objectives x 100.
+
+                    '
+                  example: 6.5
+                planned_start_date:
+                  type: string
+                  nullable: true
+                  description: Planned start date
+                  example: '2019-02-09'
+                  format: date
+                planned_end_date:
+                  type: string
+                  nullable: true
+                  description: Planned end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_start_date:
+                  type: string
+                  nullable: true
+                  description: Actual start date.
+                  example: '2019-02-09'
+                  format: date
+                actual_end_date:
+                  type: string
+                  nullable: true
+                  description: Actual end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_milestone_date:
+                  type: string
+                  nullable: true
+                  description: Actual milestone date.
+                  example: '2019-02-10'
+                  format: date
+                planned_milestone_date:
+                  type: string
+                  nullable: true
+                  description: Planned milestone date.
+                  example: '2019-02-09'
+                  format: date
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - project_type
+              properties:
+                project_type:
+                  type: object
+                  nullable: true
+                  description: 'Each project has an associated project type. Project types define the structure of a project, including the terminology used in the project.
+
+                    The project type defines which workflow the project uses and which custom attributes are available on the project. Because of this dependency
+
+                    the project type can''t be updated at the same time as the custom attributes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project type.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"project_types"`).
+                          example: project_types
+                entities:
+                  type: object
+                  description: Each project has an associated project entities.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      description: The data associated with the resource.
+                      items:
+                        type: object
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
+        meta:
+          type: object
+          required:
+          - status_translations
+          properties:
+            status_translations:
+              type: object
+              description: Translations, or customized values for the project status states.
+              properties:
+                draft:
+                  type: string
+                  description: Term to use when a project is in a draft state.
+                  example: Draft
+                proposed:
+                  type: string
+                  description: Term to use when a project is in a proposed state.
+                  example: Proposed
+                active:
+                  type: string
+                  description: Term to use when a project is in an active state.
+                  example: Active
+                completed:
+                  type: string
+                  description: Term to use when a project has been completed.
+                  example: Completed
+    CreateProjectEntityResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the project.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"entities"`).
+              example: entities
+  responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    NoContent:
+      description: No content.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
+  securitySchemes:
+    bearerToken:
+      description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
+
+        safe and secure way to access data, while protecting your account credentials.
+
+        '
+      type: http
+      scheme: bearer
+      bearerFormat: oauth2
+x-tagGroups:
+- name: Core resources
+  tags:
+  - Robots Agents
+  - Robots
+  - Robot Tasks
+  - Robot Jobs
+  - Robot Apps
+  - Robot Script Versions
+  - Robot Activations
+  - Robot Files
+  - Robot Working Files
+  - Robot Collaborators
+  - Robots Folders Collaborators
+  - Robot Users
+  - Robots Folders
+  - Storyboards
+  - Collections
+  - Questionnaires
+  - Analyses
+  - Surveys
+  - Event Reports
+  - Tables
+  - Table columns
+  - Records
+  - Record columns
+  - Record statuses
+  - Interpretations
+  - Metrics
+  - Workflow Groups
+  - Results Users
+  - Results Triggers
+  - Project types
+  - Custom attributes
+  - Request item statuses
+  - Projects
+  - Projects Admin
+  - Planning files
+  - Results files
+  - Objectives
+  - Narratives
+  - Risks
+  - Controls
+  - Control performance schedules
+  - Mitigations
+  - Control test plans
+  - Control tests
+  - Attachments
+  - Walkthroughs
+  - Issues
+  - Actions
+  - Collaborators
+  - Request Items
+  - To-dos
+  - Sign-offs
+  - Entities
+  - Scheduler Filters
+  - Frameworks
+  - Handlers
+  - Workflows in Asset Inventory/Asset Manager
+  - Asset types
+  - Asset record types
+  - Attribute types
+  - Assets
+  - Asset Relationships
+  - Asset records
+  - Asset Record Relationships
+  - Events
+  - Template Toolkits
+  - Toolkits
+  - Roles
+  - Role Deletion
+  - Compliance Maps
+  - Time entries
+  - Non-project time categories
+  - Timesheets
+  - Importer
+  - System Users
+  - Organizations
+  - Impact Reports
+  - Activities
+  - Users
+  - Groups
+  - Scheduled Users
+  - Scheduled Projects
+  - Scheduled Hours
+  - Extract
+  - Strategy
