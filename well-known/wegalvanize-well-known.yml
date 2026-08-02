@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: searched
+source: https://oidc.highbond.com/.well-known/openid-configuration
+notes: >
+  HighBond (Diligent, formerly Galvanize) exposes an OpenID Connect discovery
+  document on its identity host oidc.highbond.com. The API hosts
+  (apis-*.highbond.com) require authentication and return 401 on their
+  /.well-known/ paths; the marketing domain diligent.com serves no well-known
+  documents.
+hosts:
+  - host: https://oidc.highbond.com
+    documents:
+      - path: /.well-known/openid-configuration   # OIDC discovery (RFC 8414-style)
+        status: 200
+        file: wegalvanize-openid-configuration.json
+      - path: /.well-known/oauth-authorization-server
+        status: 404
+  - host: https://apis-us.highbond.com
+    documents:
+      - path: /.well-known/api-catalog
+        status: 401
+      - path: /.well-known/openid-configuration
+        status: 401
+      - path: /.well-known/oauth-authorization-server
+        status: 401
+      - path: /.well-known/security.txt
+        status: 401
+  - host: https://www.diligent.com
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/api-catalog
+        status: 404

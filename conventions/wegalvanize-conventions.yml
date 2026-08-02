@@ -1,0 +1,62 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/wegalvanize-highbond-openapi-original.yml
+docs: https://docs-apis.highbond.com/
+summary: >
+  The HighBond API is a REST API built on the JSON:API v1.0 specification.
+  Resources live under a region host and an instance (org) path, are addressed
+  by numeric IDs, and are represented with the JSON:API document envelope
+  (data/attributes/relationships, and errors[]).
+media_type:
+  request: application/vnd.api+json
+  response: application/vnd.api+json
+  standard: JSON:API v1.0
+  reference: https://jsonapi.org/format/
+base_path:
+  scheme: uri-path
+  version: v1
+  pattern: "https://apis-{region}.highbond.com/v1/orgs/{org_id}/..."
+authentication:
+  style: bearer-token
+  header: "Authorization: Bearer <TOKEN>"
+  detail: authentication/wegalvanize-authentication.yml
+idempotency:
+  supported: false
+  note: >
+    No Idempotency-Key header or idempotency contract is documented in the spec
+    or docs; writes are not advertised as idempotent.
+pagination:
+  style: page-number
+  detail: >
+    List endpoints return JSON:API pages; responses expose a next_page_url
+    pointer (e.g. /api/v1/users?page=2) for forward navigation.
+  response_fields: [next_page_url]
+error_envelope:
+  standard: JSON:API errors
+  shape: >
+    Errors are returned as a top-level `errors` array of JSON:API error
+    objects (status, title/detail), NOT as RFC 9457 application/problem+json.
+  detail: errors/wegalvanize-problem-types.yml
+rate_limiting:
+  detail: lifecycle/wegalvanize-lifecycle.yml
+  default: 6 requests per second (most endpoints)
+  stricter: 3 requests per minute (Users, Groups)
+  exceeded_status: 429
+regions:
+  note: >
+    Requests must target the region host matching where the HighBond instance
+    is provisioned; all requests must be over HTTPS (HTTP returns 301).
+  hosts:
+    - apis-us.highbond.com
+    - apis-ca.highbond.com
+    - apis-eu.highbond.com
+    - apis-ap.highbond.com
+    - apis-au.highbond.com
+    - apis-af.highbond.com
+    - apis-sa.highbond.com
+    - apis-jp.highbond.com
+resource_ids:
+  style: numeric
+  note: >
+    Requests require a HighBond instance (org) ID plus the numeric ID of the
+    resource being addressed; IDs are taken from the HighBond web URLs.

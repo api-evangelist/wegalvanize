@@ -1,0 +1,94 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/wegalvanize-highbond-openapi-original.yml
+note: >
+  No official hosted/remote MCP server was found for HighBond (Diligent /
+  Galvanize). This is a CANDIDATE tool surface derived from the 390 operations
+  in the published OpenAPI (a representative subset across the platform's
+  apps). Each tool maps to a real operationId; auth is the HighBond OAuth 2.0
+  bearer token.
+server:
+  name: highbond
+  transport: http
+  auth: bearer (HighBond OAuth 2.0 token via Launchpad)
+tools:
+  # Projects (audit / assurance workflow)
+  - name: list_projects
+    description: List projects in a HighBond instance.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getProjects
+  - name: create_project
+    description: Create a project.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createProject
+  - name: get_project
+    description: Get a single project.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getProject
+  - name: create_objective
+    description: Create an objective within a project.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createObjective
+  - name: create_risk
+    description: Create a risk.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createRisk
+  - name: create_control
+    description: Create a control.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createControl
+  - name: list_controls
+    description: List controls in a project.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getControls
+  - name: list_control_tests
+    description: List tests for a control.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getControlTests
+  - name: update_control_test
+    description: Update a control test.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#updateControlTest
+  - name: create_issue
+    description: Create an issue.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createIssue
+  - name: list_issues
+    description: List issues in a project.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getIssues
+  - name: create_action
+    description: Create a remediation action for an issue.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createAction
+  # Results (data collection)
+  - name: list_collections
+    description: List Results collections.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getCollections
+  - name: create_analysis
+    description: Create an analysis within a collection.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createAnalysis
+  - name: create_table
+    description: Create a results table.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createTable
+  - name: upload_records
+    description: Upload records into a table.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#uploadRecords
+  - name: list_records
+    description: List records in a table.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getRecords
+  - name: update_record_status
+    description: Update the status of a record (triage workflow).
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#updateRecordStatus
+  # Robots (automation)
+  - name: list_robots
+    description: List robots.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getRobots
+  - name: create_robot_task
+    description: Create a robot task.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createRobotTask
+  - name: run_robot_task
+    description: Run a robot task on demand.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#runRobotTask
+  - name: list_robot_jobs
+    description: List runs (jobs) of robot tasks.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getRobotJobs
+  # Administration
+  - name: list_users
+    description: List users in the instance.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getUsers
+  - name: create_user
+    description: Provision a user.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#createUser
+  - name: list_groups
+    description: List groups.
+    source_operation: openapi/wegalvanize-highbond-openapi-original.yml#getGroups

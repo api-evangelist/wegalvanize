@@ -1,0 +1,13 @@
+generated: '2026-07-21'
+method: searched
+probe: true
+url: https://trust.diligent.com/
+certifications: [SOC 1, SOC 2, ISO 27001, ISO 27017, ISO 27018, HIPAA, FedRAMP, GDPR]
+evidence:
+  - source: https://trust.diligent.com/
+    keywords: [soc 1, soc 2, iso 27001, iso 27017, iso 27018, hipaa, fedramp, gdpr]
+note: >
+  Diligent (parent of HighBond / Galvanize) publishes a trust center at
+  trust.diligent.com naming the certifications above. HighBond additionally
+  serves government regions (FedRAMP; US Gov and SLED region hosts) per the
+  API documentation.

@@ -1,0 +1,32 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wegalvanize-highbond-openapi-original.yml
+docs: https://docs-apis.highbond.com/
+standards:
+  - id: rest
+    conforms: true
+    evidence: "info.description states the API is organized around REST"
+  - id: json-api-1.0
+    conforms: true
+    evidence: "Built on JSON:API v1.0; application/vnd.api+json media type used across operations"
+  - id: oauth2
+    conforms: true
+    evidence: "securityScheme bearerToken (http/bearer, bearerFormat oauth2); OAuth 2.0 Authorization Code workflow"
+  - id: oidc
+    conforms: true
+    evidence: "OpenID Connect discovery published at oidc.highbond.com/.well-known/openid-configuration"
+  - id: openapi-3.0
+    conforms: true
+    evidence: "openapi: 3.0.2 document published at docs-apis.highbond.com/customer.yml"
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: "Errors use JSON:API errors[] envelope, not application/problem+json"
+  - id: pagination
+    conforms: true
+    evidence: "Page-number pagination with next_page_url in list responses"
+  - id: idempotency
+    conforms: false
+    evidence: "No Idempotency-Key header or idempotency contract documented"
+  - id: tls-required
+    conforms: true
+    evidence: "All requests must be over HTTPS; HTTP returns 301"

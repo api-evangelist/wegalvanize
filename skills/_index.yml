@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/wegalvanize-highbond-openapi-original.yml
+note: >
+  Agent Skills generated from the published HighBond OpenAPI. Every operationId
+  referenced is verified to exist verbatim in the spec. Auth is the HighBond
+  OAuth 2.0 bearer token; the API is JSON:API v1.0 and NOT idempotent, so steps
+  must not blindly retry writes.
+skills:
+  - file: wegalvanize-build-audit-project.md
+    name: Build and test an audit/assurance project
+    api: openapi/wegalvanize-highbond-openapi-original.yml
+    operations: [createProject, createObjective, createRisk, createControl, getControlTests, updateControlTest, createIssue, createAction]
+  - file: wegalvanize-ingest-results-data.md
+    name: Ingest data into HighBond Results
+    api: openapi/wegalvanize-highbond-openapi-original.yml
+    operations: [getCollections, createCollection, createAnalysis, createTable, uploadRecords, getRecords, updateRecordStatus]
+  - file: wegalvanize-run-robot-automation.md
+    name: Automate work with HighBond Robots
+    api: openapi/wegalvanize-highbond-openapi-original.yml
+    operations: [getRobots, createRobot, createRobotTask, runRobotTask, getRobotJobs]

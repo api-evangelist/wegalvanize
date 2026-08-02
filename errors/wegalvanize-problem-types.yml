@@ -1,0 +1,58 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wegalvanize-highbond-openapi-original.yml
+docs: https://docs-apis.highbond.com/
+format: json-api-errors
+note: >
+  Derived from the status codes used across the 390 HighBond operations. The
+  API returns JSON:API-style error documents (a top-level `errors` array), not
+  RFC 9457 application/problem+json. Counts are the number of operations that
+  declare each response.
+envelope:
+  standard: JSON:API errors
+  field: errors
+problems:
+  - status: 400
+    title: Bad request
+    meaning: Malformed request or invalid JSON:API document.
+    operations_declaring: 356
+  - status: 401
+    title: Bad credentials
+    meaning: Missing or invalid bearer token; authentication failed.
+    operations_declaring: 389
+  - status: 403
+    title: Forbidden
+    meaning: Authenticated user lacks permission for the resource/action.
+    operations_declaring: 371
+  - status: 404
+    title: Not found
+    meaning: The org, resource, or nested resource ID does not exist.
+    operations_declaring: 368
+  - status: 409
+    title: Conflict
+    meaning: Request conflicts with the current state of the resource.
+    operations_declaring: 1
+  - status: 412
+    title: Precondition failed
+    meaning: A required precondition on the request was not met.
+    operations_declaring: 1
+  - status: 413
+    title: Payload too large
+    meaning: Request body / upload exceeds the allowed size.
+    operations_declaring: 5
+  - status: 415
+    title: Unsupported media type
+    meaning: Content-Type is not application/vnd.api+json (or otherwise unsupported).
+    operations_declaring: 252
+  - status: 422
+    title: Unprocessable entity
+    meaning: Semantically invalid attributes/relationships in the JSON:API body.
+    operations_declaring: 158
+  - status: 429
+    title: Too many requests
+    meaning: Rate limit exceeded (see lifecycle/ rate limits).
+    operations_declaring: 4
+  - status: 500
+    title: Internal server error
+    meaning: Unexpected server-side error.
+    operations_declaring: 1

@@ -1,0 +1,30 @@
+generated: '2026-07-21'
+method: searched
+source: https://oidc.highbond.com/.well-known/openid-configuration
+docs: https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens
+note: >
+  The published OpenAPI declares a single http-bearer scheme (bearerFormat:
+  oauth2) with no per-operation scope map, so scopes are not derivable from the
+  spec. These scopes are taken verbatim from the HighBond OpenID Connect
+  discovery document (scopes_supported). HighBond API tokens are user-bound and
+  inherit that user's HighBond permissions rather than being scoped per token.
+schemes:
+  - name: HighBond OIDC (oidc.highbond.com)
+    authorization_endpoint: https://oidc.highbond.com/auth
+    token_endpoint: https://oidc.highbond.com/token
+    flows: [authorizationCode, clientCredentials, implicit, refreshToken, tokenExchange]
+scopes:
+  - scope: openid
+    description: OpenID Connect authentication; issues an ID token.
+  - scope: profile
+    description: Access to the user's profile claims (name, locale, timezone, org info).
+  - scope: email
+    description: Access to the user's email claim.
+  - scope: membership
+    description: Organization membership / instance association for the user.
+  - scope: config
+    description: Access to configuration-level claims for the HighBond instance.
+  - scope: offline_access
+    description: Issue a refresh token for continued (offline) access.
+  - scope: none
+    description: Explicit no-scope value supported by the authorization server.

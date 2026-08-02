@@ -1,0 +1,98 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/wegalvanize-highbond-openapi-original.yml
+note: >
+  Entity graph derived from the HighBond OpenAPI path hierarchy and JSON:API
+  relationships. HighBond spans several apps: Projects (audit/assurance
+  workflow), Results (data collection/collections/analyses/tables/records),
+  Frameworks/Strategy (risk & control library), Robots (automation), and
+  platform administration (orgs/users/groups). All resources are namespaced
+  under an organization (HighBond instance).
+root: organization
+entities:
+  - name: organization
+    path: /orgs/{org_id}
+    relationships:
+      - { type: has_many, target: project, via: org_id }
+      - { type: has_many, target: collection, via: org_id }
+      - { type: has_many, target: framework, via: org_id }
+      - { type: has_many, target: robot, via: org_id }
+      - { type: has_many, target: user, via: org_id }
+      - { type: has_many, target: group, via: org_id }
+      - { type: has_many, target: entity, via: org_id }
+  - name: project
+    relationships:
+      - { type: belongs_to, target: project_type, via: project_type_id }
+      - { type: has_many, target: objective, via: project_id }
+      - { type: has_many, target: control, via: project_id }
+      - { type: has_many, target: risk, via: project_id }
+      - { type: has_many, target: walkthrough, via: project_id }
+      - { type: has_many, target: request_item, via: project_id }
+      - { type: has_many, target: issue, via: project_id }
+  - name: objective
+    relationships:
+      - { type: belongs_to, target: project, via: project_id }
+      - { type: has_many, target: risk, via: objective_id }
+      - { type: has_many, target: control, via: objective_id }
+  - name: risk
+    relationships:
+      - { type: belongs_to, target: objective, via: objective_id }
+      - { type: has_many, target: mitigation, via: risk_id }
+  - name: control
+    relationships:
+      - { type: belongs_to, target: objective, via: objective_id }
+      - { type: has_many, target: control_test_plan, via: control_id }
+      - { type: has_many, target: control_test, via: control_id }
+      - { type: has_many, target: control_performance_schedule, via: control_id }
+      - { type: has_many, target: walkthrough, via: control_id }
+  - name: control_test
+    relationships:
+      - { type: belongs_to, target: control, via: control_id }
+      - { type: belongs_to, target: control_test_plan, via: control_test_plan_id }
+      - { type: has_many, target: attachment, via: control_test_id }
+  - name: issue
+    relationships:
+      - { type: belongs_to, target: project, via: project_id }
+      - { type: has_many, target: action, via: issue_id }
+  - name: collection
+    relationships:
+      - { type: belongs_to, target: organization, via: org_id }
+      - { type: has_many, target: analysis, via: collection_id }
+  - name: analysis
+    relationships:
+      - { type: belongs_to, target: collection, via: collection_id }
+      - { type: has_many, target: table, via: analysis_id }
+  - name: table
+    relationships:
+      - { type: belongs_to, target: analysis, via: analysis_id }
+      - { type: has_many, target: record, via: table_id }
+      - { type: has_many, target: record_status, via: table_id }
+      - { type: has_many, target: results_trigger, via: table_id }
+  - name: record
+    relationships:
+      - { type: belongs_to, target: table, via: table_id }
+      - { type: has_one, target: record_status, via: record_id }
+  - name: framework
+    relationships:
+      - { type: belongs_to, target: organization, via: org_id }
+      - { type: has_many, target: objective, via: framework_id }
+  - name: robot
+    relationships:
+      - { type: belongs_to, target: organization, via: org_id }
+      - { type: belongs_to, target: folder, via: folder_id }
+      - { type: has_many, target: robot_app, via: robot_id }
+      - { type: has_many, target: robot_task, via: robot_id }
+  - name: robot_task
+    relationships:
+      - { type: belongs_to, target: robot, via: robot_id }
+      - { type: has_many, target: robot_job, via: robot_task_id }
+  - name: entity
+    relationships:
+      - { type: belongs_to, target: organization, via: org_id }
+      - { type: belongs_to, target: entity_category, via: entity_category_id }
+  - name: user
+    relationships:
+      - { type: belongs_to, target: organization, via: org_id }
+  - name: group
+    relationships:
+      - { type: belongs_to, target: organization, via: org_id }
