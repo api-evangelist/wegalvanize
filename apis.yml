@@ -1470,6 +1470,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/wegalvanize-highbond-overlay.yaml
 - type: DomainSecurity
   url: security/wegalvanize-domain-security.yml
 - type: Website
