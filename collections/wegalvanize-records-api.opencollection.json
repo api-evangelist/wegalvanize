@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Records API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Records",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Upload records data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/upload",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "When uploading records, you need to specify column names, data types, and records data.\n\nValid data types are `character`, `numeric`, `logical`, `date`, `time`, and `datetime`. For more information, see\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rm-data-types\" target=\"_blank\">Supported data types</a>.\n\n> **Caution —**\nChanging a column's data type can break workflows in HighBond that depend on the affected column, such as visualizations, metrics, triggers, and R"
+        },
+        {
+          "info": {
+            "name": "Get records",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/records",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              },
+              {
+                "name": "filter[metadata.status][]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return records with the specified statuses only. To filter the records for multiple values, add the filter string multiple times. For example, if you need to get records that have either \"New\" or \"Open\" status, pass the filters as follows `?filter[metadata.status][]=New&filter[metadata.status][]=Open`. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[metadata.assignee]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return records with the specified assignees only. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get all the records in a table.\n\n> **Note:**\n> * By default, this endpoint returns a maximum of 100,000 records. Records above this limit are truncated.\n> * Use query parameters to filter and get the records you need.\n>   * Parameters can be applied to any field in the table with the following data type: Character, Numeric, Date, and Datetime.\n>   * You can have a maximum of 2 unique fields in a single query.\n>   * You can filter records by a single value or multiple values. For multiple values,"
+        },
+        {
+          "info": {
+            "name": "Get a table record",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/records/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a table record."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

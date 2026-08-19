@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Custom attributes API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Custom attributes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get custom attributes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types/:project_type_id/custom_attributes",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "project_type_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project type."
+              },
+              {
+                "name": "fields[custom_attributes]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all custom attributes associated with a project type."
+        },
+        {
+          "info": {
+            "name": "Create a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types/:project_type_id/custom_attributes",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "project_type_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project type."
+              },
+              {
+                "name": "fields[custom_attributes]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new custom attribute in an existing project type.\n"
+        },
+        {
+          "info": {
+            "name": "Get a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/custom_attributes/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[custom_attributes]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a custom attribute.\n"
+        },
+        {
+          "info": {
+            "name": "Update a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/custom_attributes/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[custom_attributes]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a custom attribute in a project type, like modifying the term or field_type.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/custom_attributes/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a custom attribute from a project type.\n> **Caution —**\nDeleting a custom attribute permanently removes the field and all associated data from all relevant projects and frameworks.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

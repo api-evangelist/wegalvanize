@@ -1,0 +1,338 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Entities API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Entities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[entities]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get all entities.\n"
+        },
+        {
+          "info": {
+            "name": "Create an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[entities]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an new entity.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 5000 entities per HighBond instance.\n* Entity titles can be a maximum of 120 characters long.\n* If you provide a parent relationship, none of the children can refer to any of their ancestors (parent, parent of parent, etc.).\n"
+        },
+        {
+          "info": {
+            "name": "Get an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[entities]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about an entity.\n"
+        },
+        {
+          "info": {
+            "name": "Update an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[entities]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to an entity in account, like renaming the entity title or updating the entity description.\n\n<strong>Limitations</strong>:\n* Entity titles can be a maximum of 120 characters long.\n* If you provide a parent relationship, none of the children can refer to any of their ancestors (parent, parent of parent, etc.).\n"
+        },
+        {
+          "info": {
+            "name": "Delete an entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete an entity from a project.\n\n> **Caution —**\nDeleting an entity is permanent. Once deleted, you cannot access or restore the entity.\n"
+        },
+        {
+          "info": {
+            "name": "Get a list of entity categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entity_categories",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[entity_categories]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get information about entity categories.\n"
+        },
+        {
+          "info": {
+            "name": "Create an entity category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entity_categories",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[entity_categories]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new entity category.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 500 entity categories per HighBond instance.\n"
+        },
+        {
+          "info": {
+            "name": "Get an entity category",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entity_categories/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[entity_categories]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about an entity category.\n"
+        },
+        {
+          "info": {
+            "name": "Update an entity category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entity_categories/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[entity_categories]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to entity category.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an entity category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/entity_categories/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete an entity category.\n\nOnce an Entity Category is deleted via API, its relationship to all Entities is removed as well. No Entities are deleted as a result of this action.\n\n> **Caution —**\nDeleting an Entity Category is permanent. Once deleted, you cannot access or restore the Entity Category.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

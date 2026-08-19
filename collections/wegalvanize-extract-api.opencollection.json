@@ -1,0 +1,78 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Extract API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Extract",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create extraction request",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/extract",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "output_format",
+                "value": "",
+                "type": "query",
+                "description": "The output_format to extract."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate terraform, json or yml scripts for resources existing in an organization.\n\n> **Note —**\nIn YML extraction, all associated child resources will be extracted by default. However, there may be some exceptions with few resources where hierarchy flag can be used, please refer the request body schema for more details.\n"
+        },
+        {
+          "info": {
+            "name": "Get extract information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/extract/:session_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "session_id",
+                "value": "",
+                "type": "path",
+                "description": "The session_id of the extract."
+              }
+            ]
+          },
+          "docs": "Get signed URL for generated terraform, json or yml scripts."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

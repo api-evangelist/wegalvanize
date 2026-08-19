@@ -1,0 +1,165 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Files API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List an ACL robot related files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              }
+            ]
+          },
+          "docs": "Get a list of related files for an ACL robot."
+        },
+        {
+          "info": {
+            "name": "Upload an ACL robot related file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Upload a related file to an ACL robot."
+        },
+        {
+          "info": {
+            "name": "Get an ACL robot related file metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_files/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get the metadata for a related file by ACL robot ID."
+        },
+        {
+          "info": {
+            "name": "Delete an ACL robot related file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_files/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a related file by ACL robot ID."
+        },
+        {
+          "info": {
+            "name": "Download an ACL robot related file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_files/:id/download",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Download a related file by ACL robot ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

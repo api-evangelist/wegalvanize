@@ -1,0 +1,145 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Non-project time categories API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Non-project time categories",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get non-project time categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/time_entry_categories",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ]
+          },
+          "docs": "Get a list of all non-project time categories in your organization."
+        },
+        {
+          "info": {
+            "name": "Create a non-project time category",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/time_entry_categories",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new non-project time category.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 50 time categories per HighBond instance.\n"
+        },
+        {
+          "info": {
+            "name": "Get information about a non-project time category.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/time_entry_categories/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a non-project time category.\n"
+        },
+        {
+          "info": {
+            "name": "Update a non-project time category",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/time_entry_categories/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a non-project time category.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a non-project time category",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/time_entry_categories/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a non-project time category.\n\n> **Caution —**\nDeleting a non-project time category also permanently deletes any associated time entries.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

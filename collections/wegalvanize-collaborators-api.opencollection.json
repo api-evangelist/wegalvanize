@@ -1,0 +1,410 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Collaborators API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Collaborators",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get collaborators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/collaborators",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[collaborators]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get all collaborators in a project or framework.\n\n<strong>Note</strong>:\n* Only users that have an assigned `project_role` are returned in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Create a collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/collaborators",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[collaborators]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user with a specific project role to an existing project or framework.\n\n<strong>Limitations</strong>:\n* You cannot add a user as a collaborator if they already have an assigned `project_role`.\n"
+        },
+        {
+          "info": {
+            "name": "Get a collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/collaborators/:encoded_uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "encoded_uid",
+                "value": "",
+                "type": "path",
+                "description": "The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.\n\nFor example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which you would use as the `encoded_uid`.\n"
+              },
+              {
+                "name": "fields[collaborators]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a specific collaborator.\n\n<strong>Note</strong>:\n* Only users that have an assigned `project_role` are returned in the response..\n"
+        },
+        {
+          "info": {
+            "name": "Update a collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/collaborators/:encoded_uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "encoded_uid",
+                "value": "",
+                "type": "path",
+                "description": "The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.\n\nFor example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which you would use as the `encoded_uid`.\n"
+              },
+              {
+                "name": "fields[collaborators]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a collaborator in a project or framework, like changing their project role.\n\n<strong>Limitations</strong>:\n* You can't update users who are System Admins.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a collaborator",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/collaborators/:encoded_uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "encoded_uid",
+                "value": "",
+                "type": "path",
+                "description": "The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.\n\nFor example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which you would use as the `encoded_uid`.\n"
+              }
+            ]
+          },
+          "docs": "Remove a collaborator from a project or framework."
+        },
+        {
+          "info": {
+            "name": "Get collaborator groups",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/collaborator_groups",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[collaborators_groups]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get all collaborator groups in a project or framework.\n\n<strong>Note</strong>:\n* Only groups with assigned `project_role` are returned in the response.\n* The `updated_at` field represents the date of the last direct collaborator group update.\n"
+        },
+        {
+          "info": {
+            "name": "Create a collaborator group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/collaborator_groups",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[collaborators_groups]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign a role for a group to an existing project or framework.\n\n<strong>Limitations</strong>:\n* You can only assign a role to an existing group if it has a value of `none` assigned in the `project_role` attribute.\n"
+        },
+        {
+          "info": {
+            "name": "Get a collaborator group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/collaborator_groups/:encoded_uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "encoded_uid",
+                "value": "",
+                "type": "path",
+                "description": "The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.\n\nFor example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `1337`, you would encode `11955:1337` into Base64. The result is `MTE5NTU6MTMzNw==`, which is the `id`.\n"
+              },
+              {
+                "name": "fields[collaborators_groups]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a specific collaborator group.\n\n<strong>Note</strong>:\n* You can only view a collaborator group if it has a value assigned to the `project_role` attribute.\n* The `updated_at` field represents the date of the last direct collaborator group update. Changes to the `effective_role` may occur as a result of assigning the group a `group_role`, but doing so won't update the `updated_at` field.\n"
+        },
+        {
+          "info": {
+            "name": "Update a collaborator group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/collaborator_groups/:encoded_uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "encoded_uid",
+                "value": "",
+                "type": "path",
+                "description": "The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.\n\nFor example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `1337`, you would encode `11955:1337` into Base64. The result is `MTE5NTU6MTMzNw==`, which is the `id`.\n"
+              },
+              {
+                "name": "fields[collaborators_groups]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a collaborator group in a project or framework, like changing its `project_role` attribute.\n\n<strong>Limitations</strong>:\n* You can't update a group that has a value of `none` assigned to the `project_role` attribute.\n* You can't update the `Default System Admins` group.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a collaborator group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/collaborator_groups/:encoded_uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "encoded_uid",
+                "value": "",
+                "type": "path",
+                "description": "The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.\n\nFor example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `1337`, you would encode `11955:1337` into Base64. The result is `MTE5NTU6MTMzNw==`, which is the `id`.\n"
+              }
+            ]
+          },
+          "docs": "Remove a collaborator group from a project or framework.\n\n<strong>Limitations</strong>:\n* You can't unassign the `Default System Admins` group from a project.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

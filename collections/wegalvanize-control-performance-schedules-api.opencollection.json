@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Control performance schedules API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Control performance schedules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get control performance schedules",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:control_id/control_performance_schedules",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "control_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the control."
+              }
+            ]
+          },
+          "docs": "Get a list of all control performance schedules for a control."
+        },
+        {
+          "info": {
+            "name": "Create control performance schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:control_id/control_performance_schedules",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "control_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the control."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new control performance schedule for a control."
+        },
+        {
+          "info": {
+            "name": "Get a control performance schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_performance_schedules/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a control performance schedule."
+        },
+        {
+          "info": {
+            "name": "Update a control performance schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_performance_schedules/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a control performance schedule in a project or framework, like renaming the control performance schedule or updating the control performance schedule description.\n\n<strong>Limitations</strong>:\n* You cannot update the control performance schedule if the objective it belongs to has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/help"
+        },
+        {
+          "info": {
+            "name": "Delete a Control Performance Schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_performance_schedules/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a control performance schedule from a project or framework."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

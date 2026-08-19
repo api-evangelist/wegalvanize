@@ -1,0 +1,135 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Attachments API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Attachments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List control test attachments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_tests/:id/attachments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[attachments]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of file attachments linked to the specified control test.\n\nResults are returned in [JSON:API](https://jsonapi.org/) format. Use the `links.prev` and `links.next` URLs in the response to navigate between pages.\n"
+        },
+        {
+          "info": {
+            "name": "List control attachments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:id/attachments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[attachments]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of file attachments linked to the specified control.\n\nResults are returned in [JSON:API](https://jsonapi.org/) format. Use the `links.prev` and `links.next` URLs in the response to navigate between pages.\n"
+        },
+        {
+          "info": {
+            "name": "Download an attachment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/attachments/:id/download",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Download an attachment file by attachment ID.\n\nReturns `200 OK` with the file content when the attachment is stored locally, or `302 Found` with a `Location` header pointing to a pre-signed S3 URL when the file is stored remotely.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

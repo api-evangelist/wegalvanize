@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Record columns API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Record columns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get record attachments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/records/:record_id/columns/:field_name",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              },
+              {
+                "name": "record_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the \"metadata.record_id\"."
+              },
+              {
+                "name": "field_name",
+                "value": "",
+                "type": "path",
+                "description": "Field name."
+              }
+            ]
+          },
+          "docs": "Get file attachments from a record attachment field\n\n> **Note —**\n  You must be a system admin with a Professional subscription to access this API endpoint.\n\n**Make a note of the following:**\n* If there are multiple attachments in a single record field, all the attachments are retrieved in the response and each attachment will have a separate signed URL.\n* Multiple signed URLs are separated by commas.\n* The signed URL to an attachment is valid for only 2 minutes.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

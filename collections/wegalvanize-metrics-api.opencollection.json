@@ -1,0 +1,132 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Metrics API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a metric",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/metrics",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new metric within an existing table.\n\n<strong>Limitations</strong>:\n* Your organization can have a maximum of 8,000 metrics.\n"
+        },
+        {
+          "info": {
+            "name": "Get a metric",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/metrics/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a metric."
+        },
+        {
+          "info": {
+            "name": "Update a metric",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/metrics/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a metric to make changes, like renaming it or changing its frequency.\n\n> **Note —**\nIf the metric is associated with an assessment driver in the <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-automate-assessments\" target=\"_blank\">Projects</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rim-automate-assessments\" target=\"_blank\">Strategy</a> app, updating the metric disables the assessment automation in the relevant app.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a metric",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/metrics/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "If you no longer need a metric, you can delete it. Deleting a metric also removes it from any associated triggers and storyboards. It does not delete the table this metric exists in.\n\n> **Note —**\nIf the metric is associated with an assessment driver in the <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-automate-assessments\" target=\"_blank\">Projects</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rim-automate-assessments\" targe"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

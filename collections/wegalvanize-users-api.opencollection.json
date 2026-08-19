@@ -1,0 +1,175 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Users API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List users in an instance\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/users",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "filter[user_type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter Users by their type. Can only be one of the following types `\"user\"`, `\"system\"`, and `\"root\"`"
+              },
+              {
+                "name": "filter[membership_role]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter Users by their type of membership role in the organization. Can only be one of the following types `\"admin\"`, and `\"member\"`"
+              },
+              {
+                "name": "filter[query]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only Users matching their name or email if it contains the search query string. Case-insensitive."
+              },
+              {
+                "name": "page[size]",
+                "value": "100",
+                "type": "query",
+                "description": "The number of items returned per page. Default and maximum is 8000 to support backwards compatibility. Recommended best practice is to use 20-50 for user interface usage, and 100-500 for API usage."
+              },
+              {
+                "name": "page[number]",
+                "value": "1",
+                "type": "query",
+                "description": "The page number of records to return. Default is 1."
+              }
+            ]
+          },
+          "docs": "Get a list of users, excluding system and root users, who are part of a particular HighBond instance.\n\nAdditional details: The filters have a priority order and at a time one filter can be applied. The priority is as follows:\n1. filter[user_type]\n2. filter[query]\n3. filter[membership_role]\n\nWhen multiple filters are passed, the filter with the highest priority is applied.\n\nNote: System and root users are special types of users that act on behalf of the HighBond platform, like in automation tasks"
+        },
+        {
+          "info": {
+            "name": "Create a new user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/users",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a user to a HighBond instance."
+        },
+        {
+          "info": {
+            "name": "Get user information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/users/:uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "uid",
+                "value": "",
+                "type": "path",
+                "description": "The UID of the user."
+              }
+            ]
+          },
+          "docs": "Get basic information for a single user."
+        },
+        {
+          "info": {
+            "name": "Update user information",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/users/:uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "uid",
+                "value": "",
+                "type": "path",
+                "description": "The UID of the user."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates basic information for a single user."
+        },
+        {
+          "info": {
+            "name": "Remove user from organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/users/:uid",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "uid",
+                "value": "",
+                "type": "path",
+                "description": "The UID of the user."
+              }
+            ]
+          },
+          "docs": "Removes the membership of a user to an organization."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

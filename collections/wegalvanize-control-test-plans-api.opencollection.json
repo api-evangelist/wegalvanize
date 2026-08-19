@@ -1,0 +1,181 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Control test plans API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Control test plans",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get organization test plans",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_test_plans",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[control_test_plans]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to sort test plans by the values in a given field. The test plans are sorted ascending by default, but you can prefix the field name with `-` to sort descending (e.g., `-id`). You can sort test plans by only one field at a time."
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.name]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project name. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control IDs. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get a list of all of the test plans in an organization.\n\n> **Note:**\nBy default, this endpoint only returns test plans from active projects. To fetch objects from archived projects or frameworks, do one of the following:\n> * Specify the project or framework ID using `filter[project.id]`\n> * Specify that you want results from archived projects using `filter[project.state]=archive`\n> * Specify that you want results from frameworks using `filter[project.state]=framework`\n"
+        },
+        {
+          "info": {
+            "name": "Get a test plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_test_plans/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a test plan."
+        },
+        {
+          "info": {
+            "name": "Update a test plan",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_test_plans/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a test plan in a project or framework, like updating the testing method or test steps.\n\n<strong>Limitations</strong>:\n* You cannot update the test plan if it is signed off.\n* You cannot update the test plan if the objective it belongs to has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

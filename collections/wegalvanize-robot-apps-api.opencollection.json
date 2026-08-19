@@ -1,0 +1,103 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Apps API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Apps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get one analytic script from a robot",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_apps/:robot_app_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              }
+            ]
+          },
+          "docs": "Get one analytic script from a robot."
+        },
+        {
+          "info": {
+            "name": "List a robot's analytic scripts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_apps",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              }
+            ]
+          },
+          "docs": "Get a list of a robot's analytic scripts."
+        },
+        {
+          "info": {
+            "name": "Create an analytic script",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_apps",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Create a new analytic script for a robot."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

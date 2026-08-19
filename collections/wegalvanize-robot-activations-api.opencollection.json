@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Activations API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Activations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a robot's script activation history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_activations",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              }
+            ]
+          },
+          "docs": "Get information about a robot's script activation history."
+        },
+        {
+          "info": {
+            "name": "Activate a script version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_apps/:robot_app_id/activate",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "robot_app_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot app."
+              },
+              {
+                "name": "force",
+                "value": "",
+                "type": "query",
+                "description": "Overwrites the production scripts with the selected development mode version and ignores conflicts. Forcing the activation sets any existing tasks that are affected by the conflict to an idle status. When a task is set to idle, you must provide the missing parameter input or select the new script names before you can restart the task."
+              },
+              {
+                "name": "comment",
+                "value": "",
+                "type": "query",
+                "description": "An informative statement in the version history that explains what you are activating."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "You can activate a script version in a robot's development history that has an environment with runtime `Python 3.11` and includes `HCL 3.0.*` in its requirements. When you activate a version, the scripts in that version become the scripts that run in production tasks."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

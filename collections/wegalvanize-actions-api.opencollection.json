@@ -1,0 +1,271 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Actions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List actions in an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:issue_id/actions",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the issue."
+              },
+              {
+                "name": "fields[actions]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get a list of all actions associated with an issue."
+        },
+        {
+          "info": {
+            "name": "Create an action",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:issue_id/actions",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the issue."
+              },
+              {
+                "name": "fields[actions]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new action in an existing issue.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 500 actions per issue.\n* You cannot create a new action in the following scenarios:\n  * if the <strong>Follow-up & Remediation</strong> subtab of the associated issue is signed off\n  * if the action belongs to an objective that has been checked out using\n    <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n"
+        },
+        {
+          "info": {
+            "name": "Get an action",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/actions/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[actions]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about an action."
+        },
+        {
+          "info": {
+            "name": "Update an action",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/actions/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[actions]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to an action, like renaming it or specifying an owner.\n\n<strong>Limitations</strong>:\nYou cannot update the action in the following scenarios:\n* if the <strong>Follow-up & Remediation</strong> subtab of the associated issue is signed off\n* if the action belongs to an objective that has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/he"
+        },
+        {
+          "info": {
+            "name": "Delete an action",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/actions/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete an action from an existing issue.\n\n<strong>Limitations</strong>:\nYou cannot delete the action in the following scenarios:\n* if the <strong>Follow-up & Remediation</strong> subtab of the associated issue is signed off\n* if the action belongs to an objective that has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Defau"
+        },
+        {
+          "info": {
+            "name": "List action comments in an action",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/actions/:action_id/comments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "action_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the action."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "fields[action_comments]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get a list of all action comments associated with an action."
+        },
+        {
+          "info": {
+            "name": "Create an action comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/actions/:action_id/comments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "action_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the action."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new comment for an existing action.\n\nThe comment requires one mandatory attribute:\n* `message_content` - The content of the comment\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

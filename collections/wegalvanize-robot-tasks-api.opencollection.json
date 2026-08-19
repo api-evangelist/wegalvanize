@@ -1,0 +1,331 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Tasks API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tasks in a robot",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_tasks",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              }
+            ]
+          },
+          "docs": "Get a list of tasks for a robot."
+        },
+        {
+          "info": {
+            "name": "Create a robot task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/robot_tasks",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new task for a specified robot."
+        },
+        {
+          "info": {
+            "name": "Update a robot task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit an existing task to change the settings. The next time a robot runs the task, the new settings are used."
+        },
+        {
+          "info": {
+            "name": "Delete a robot task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a task from a robot.\n\n> **Note —**\nWhen you delete a task, any previous task runs and output files are retained. You cannot delete a task if a task run is queued or in progress.\n"
+        },
+        {
+          "info": {
+            "name": "Run a robot task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:id/run_now",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "To return child objects of the job. Example ?include=job_values,result_tables"
+              }
+            ]
+          },
+          "docs": "Run a robot task. This creates a robot job\n"
+        },
+        {
+          "info": {
+            "name": "List values in a robot task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:robot_task_id/values",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_task_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot task."
+              }
+            ]
+          },
+          "docs": "Get information about a robot's task, like its analytic name and data type."
+        },
+        {
+          "info": {
+            "name": "Update values in a robot task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:robot_task_id/values",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_task_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot task."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Change values for a robot task, like its analytic name."
+        },
+        {
+          "info": {
+            "name": "Get a robot task's schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:robot_task_id/schedule",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_task_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot task."
+              }
+            ]
+          },
+          "docs": "See when a task is scheduled to run and additional information, like time zone and its last run date."
+        },
+        {
+          "info": {
+            "name": "Create a robot task's schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:robot_task_id/schedule",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_task_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot task."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Schedule a task to run it on an automated basis."
+        },
+        {
+          "info": {
+            "name": "Update a robot task's schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:robot_task_id/schedule",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_task_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot task."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Change when a task runs."
+        },
+        {
+          "info": {
+            "name": "Delete a robot task's schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robot_tasks/:robot_task_id/schedule",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_task_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot task."
+              }
+            ]
+          },
+          "docs": "Delete a task's schedule. Unscheduled tasks can still be run on an ad hoc basis."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

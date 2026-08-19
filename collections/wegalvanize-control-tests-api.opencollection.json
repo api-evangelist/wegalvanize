@@ -1,0 +1,271 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Control tests API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Control tests",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get organization control tests",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_tests",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[control_tests]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to sort control tests by the values in a given field. The control tests are sorted ascending by default, but you can prefix the field name with `-` to sort descending (e.g., `-id`). You can sort control tests by only one field at a time."
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.name]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project name. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control IDs. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.title]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective title. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.reference]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective reference. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.title]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control title. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.query]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control title or description. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.owner]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control owner. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.frequency]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control frequency. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control type. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control numbers. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.1.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the first testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.2.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the second testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.3.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the third testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.4.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the fourth testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get a list of all of the control tests in an organization.\n\n> **Note:**\nBy default, this endpoint only returns control tests from active projects. To fetch objects from archived projects or frameworks, do one of the following:\n> * Specify the project or framework ID using `filter[project.id]`\n> * Specify that you want results from archived projects using `filter[project.state]=archive`\n> * Specify that you want results from frameworks using `filter[project.state]=framework`\n"
+        },
+        {
+          "info": {
+            "name": "Get a control test",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_tests/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[control_tests]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a control test in a project."
+        },
+        {
+          "info": {
+            "name": "Update a control test",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/control_tests/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[control_tests]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "> **Deprecation notice —**\nPlease note that `testing_conclusion` field will be deprecated. Consider using new `testing_conclusion_status` field instead.\n\nMake changes to a control test in a project, like updating the testing results or conclusion.\n\n<strong>Limitations</strong>:\n* You cannot update the control test if it is signed off or if the objective it belongs to has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target="
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

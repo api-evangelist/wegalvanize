@@ -1,0 +1,326 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Issues API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Issues",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an organization's issues",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project's ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[target.type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by target's type. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[target.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by target's id. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[closed]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by closed status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Orders the resulting resources by the given field(s). Sorts ascending by default, prefix with `-` to sort descending. You can provide multiple sort fields separated by comma."
+              },
+              {
+                "name": "fields[issues]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all issues in an organization.\n\n> **Note:**\nBy default, this endpoint only returns issues from active projects. To fetch objects from archived projects, do one of the following:\n> * Specify the active or archived project ID using `filter[project.id]`\n> * Specify that you want results from archived projects using `filter[project.state]=archive`\n"
+        },
+        {
+          "info": {
+            "name": "Get issues",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects/:project_id/issues",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project."
+              },
+              {
+                "name": "fields[issues]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all issues in a project."
+        },
+        {
+          "info": {
+            "name": "Create an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects/:project_id/issues",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project."
+              },
+              {
+                "name": "fields[issues]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new issue in an existing project.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 8000 issues per project.\n* You cannot create an issue directly under individual objectives, risks, controls, walkthroughs, test plans, or testing rounds. Issues can only be created under a project.\n* Issues created under a project do not display as part of assurance features in HighBond.\n* Specifying a person's name or email in the following fields does not automatically notify them via email: `"
+        },
+        {
+          "info": {
+            "name": "Get an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[issues]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about an issue."
+        },
+        {
+          "info": {
+            "name": "Update an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[issues]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to an issue, like renaming it or specifying an owner.\n\n<strong>Limitations</strong>:\n* If the <strong>Issue Information</strong> subtab of the issue is signed off, you cannot update basic details about the issue.\n* If the <strong>Follow-up & Remediation</strong> subtab of the issue is signed off, you cannot update remediation details.\n* If the <strong>Retest Information</strong> subtab of the issue is signed off, you cannot update retesting details.\n* If the issue belongs to an obje"
+        },
+        {
+          "info": {
+            "name": "Delete an issue",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete an issue from a project.\n\n<strong>Limitation</strong>:\nIf the issue belongs to an objective that has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile\" target=\"_blank\">HighBond iPad app</a>, you cannot delete the issue.\n\n> **Caution —**\nDeleting an issue also removes any associate"
+        },
+        {
+          "info": {
+            "name": "Create issue entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:issue_id/entities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the issue."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Link entity to an issue.\n\n> **Note**\n> * Tagging an issue to an entity automatically tags an issue with all ancestor entities and descendant entities.\n> * Request <a href=\"#operation/getIssue\">Get an issue</a> with `entities` query param to get the whole list of entities linked to an issue.\n\n<strong>Limitations</strong>:\n  * You cannot tag the issue with entity if the objective it belongs to has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid"
+        },
+        {
+          "info": {
+            "name": "Delete issue entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/issues/:issue_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "issue_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the issue."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete issue entity link.\n\n> **Note -**\nUntagging an issue from an entity automatically untags an issue from all descendant entities.\n\n<strong>Limitations</strong>:\n  * You cannot untag an issue from an entity if the objective it belongs to has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

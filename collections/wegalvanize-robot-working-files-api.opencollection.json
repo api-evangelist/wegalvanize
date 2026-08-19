@@ -1,0 +1,139 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Working Files API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Working Files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Download a HighBond/Workflow robot working file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/working_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              },
+              {
+                "name": "filename",
+                "value": "",
+                "type": "query",
+                "description": "Filename id."
+              }
+            ]
+          },
+          "docs": "Download a working file to a HighBond or Workflow robot."
+        },
+        {
+          "info": {
+            "name": "Upload a HighBond/Workflow robot working file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/working_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              },
+              {
+                "name": "overwrite",
+                "value": "",
+                "type": "query",
+                "description": "Overwrite an existing working file with the same name."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload a working file to a HighBond or Workflow robot."
+        },
+        {
+          "info": {
+            "name": "Delete a HighBond/Workflow robot working file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/working_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              },
+              {
+                "name": "filename",
+                "value": "",
+                "type": "query",
+                "description": "Filename id."
+              }
+            ]
+          },
+          "docs": "Delete a working file to a HighBond or Workflow robot."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

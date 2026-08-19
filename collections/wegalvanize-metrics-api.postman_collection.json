@@ -1,0 +1,2417 @@
+{
+  "item": [
+    {
+      "id": "2e46cd8f-14e7-4b73-96e7-3c8b647cf2b9",
+      "name": "Metrics",
+      "description": {
+        "content": "A metric is a calculation that you label as a specific type of key indicator. Key indicators are quantitative measurements of success (KPI, KCI) or risk (KRI) that are\nassociated with a company's objectives. Metrics monitor the data in a single column over a time period using an aggregate function such as average, count, or\npercentage of total.\n\nYour organization can have a maximum of 8,000 metrics.\n\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rm-monitor-metric\" target=\"_blank\">Learn more about metrics</a>.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bb680ba2-a950-4334-b8c9-13eaf5ec6089",
+          "name": "Create a metric",
+          "request": {
+            "name": "Create a metric",
+            "description": {
+              "content": "Create a new metric within an existing table.\n\n<strong>Limitations</strong>:\n* Your organization can have a maximum of 8,000 metrics.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "tables",
+                ":table_id",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "table_id",
+                  "description": "(Required) The ID of the table."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"field_name\": \"<string>\",\n      \"time_field_name\": \"<string>\",\n      \"func\": \"<string>\",\n      \"interval\": \"<string>\",\n      \"base_color\": \"<string>\",\n      \"metric_type\": \"<string>\",\n      \"show_sparkline\": \"<boolean>\",\n      \"view_thresholds\": \"<boolean>\",\n      \"config\": \"<string>\",\n      \"filter_config\": \"<string>\",\n      \"func_argument\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b0d76414-57b1-4857-8f00-3d1906440bf3",
+              "name": "Created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"base_color\": \"#3F3D3C\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\",\n      \"created_at\": \"2019-02-09T13:17:26Z\",\n      \"updated_at\": \"2019-03-18T22:02:05Z\"\n    },\n    \"relationships\": {\n      \"table\": {\n        \"data\": {\n          \"id\": \"string\",\n          \"type\": \"collection\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08e4cc83-23f4-4670-9786-3afd5f9b90b7",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"resource_type_mismatch\",\n      \"title\": \"Resource type mismatch\",\n      \"detail\": \"The requested data type, a-bad-type, is incompatible with the endpoint.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56ae7611-8df2-4996-82d9-08faa11cc49b",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "82c00893-dac7-4ca6-b347-13ee0ec82728",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "da8e6e21-be77-4739-9ad9-cacf94df847b",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b5e200ce-12ba-4971-8172-0196f80f3c60",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a281c794-c1cf-4c38-a16e-62263a23f4c1",
+              "name": "Unprocessable entity.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "tables",
+                    ":table_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "table_id",
+                      "description": "(Required) The ID of the table."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 422,\n      \"source\": {\n        \"pointer\": \"/data/attributes/field_name\"\n      },\n      \"code\": \"invalid_resource\",\n      \"detail\": \"can't be blank\"\n    },\n    {\n      \"status\": 422,\n      \"code\": \"unprocessable_entity\",\n      \"detail\": \"Maximum number of 8,000 Metrics reached.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "58f83dfe-bbf3-4b7f-b1df-54ef5413fe79",
+          "name": "Get a metric",
+          "request": {
+            "name": "Get a metric",
+            "description": {
+              "content": "Get information about a metric.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "metrics",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the requested resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4e23793d-5d65-45d9-8610-b975f68d4c03",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"base_color\": \"#3F3D3C\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\",\n      \"created_at\": \"2019-02-09T13:17:26Z\",\n      \"updated_at\": \"2019-03-18T22:02:05Z\"\n    },\n    \"relationships\": {\n      \"table\": {\n        \"data\": {\n          \"id\": \"string\",\n          \"type\": \"collection\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87b6f116-0374-4e66-9092-950894ef664c",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f36ca169-13a2-40dc-9831-006490673678",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cc94975e-6344-4c2e-b7db-6ff1bf04639d",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1fbfb303-e117-48ff-944e-62090d98acc3",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa17d8fb-54f4-4edc-8ff7-a6894af96739",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53715b57-2023-4abd-8e24-c3d74a9072d9",
+          "name": "Update a metric",
+          "request": {
+            "name": "Update a metric",
+            "description": {
+              "content": "Update a metric to make changes, like renaming it or changing its frequency.\n\n> **Note —**\nIf the metric is associated with an assessment driver in the <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-automate-assessments\" target=\"_blank\">Projects</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rim-automate-assessments\" target=\"_blank\">Strategy</a> app, updating the metric disables the assessment automation in the relevant app.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "metrics",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the requested resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"field_name\": \"<string>\",\n      \"time_field_name\": \"<string>\",\n      \"func\": \"<string>\",\n      \"interval\": \"<string>\",\n      \"base_color\": \"<string>\",\n      \"metric_type\": \"<string>\",\n      \"show_sparkline\": \"<boolean>\",\n      \"view_thresholds\": \"<boolean>\",\n      \"config\": \"<string>\",\n      \"filter_config\": \"<string>\",\n      \"func_argument\": \"<string>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "abff4ca2-970c-45d2-a752-ae7ce4f4e9f0",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"base_color\": \"#3F3D3C\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\",\n      \"created_at\": \"2019-02-09T13:17:26Z\",\n      \"updated_at\": \"2019-03-18T22:02:05Z\"\n    },\n    \"relationships\": {\n      \"table\": {\n        \"data\": {\n          \"id\": \"string\",\n          \"type\": \"collection\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cd7fbad-c799-457d-a887-f007708cef12",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"resource_id_conflict\",\n      \"title\": \"Resource ID conflict\",\n      \"detail\": \"The id specified in the request body, 1, conflicts with\\nthe id specified in the path, 101.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da6c9c9e-96ba-486f-a2a9-3182ad8cf503",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4c2660dc-2db8-4174-a4e9-250900cf4307",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "86dc29ab-ea46-4335-986e-cbe89ba85a13",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f9ec572-84f9-4d68-b46c-80c13aeb5032",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24e8bd23-3069-4b7b-99c3-4ba8d08a2384",
+              "name": "Unprocessable entity.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"5001\",\n    \"type\": \"metrics\",\n    \"attributes\": {\n      \"name\": \"My first Metric\",\n      \"field_name\": \"balance\",\n      \"time_field_name\": \"created_at\",\n      \"func\": \"percent-of\",\n      \"interval\": \"month\",\n      \"base_color\": \"#3F3D3C\",\n      \"metric_type\": \"kpi\",\n      \"show_sparkline\": true,\n      \"view_thresholds\": false,\n      \"config\": \"{\\n  \\\"field_format_map\\\": { },\\n  \\\"conditional_formats_map\\\": { }\\n}\\n\",\n      \"filter_config\": \"{\\n  \\\"filtersOpen\\\": true,\\n  \\\"params\\\": { }\\n}\\n\",\n      \"func_argument\": \"{\\n  \\\"operator\\\": \\\"is-blank\\\"\\n}\\n\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 422,\n      \"source\": {\n        \"pointer\": \"/data/attributes/func\"\n      },\n      \"code\": \"invalid_resource\",\n      \"detail\": \"is not included in the list.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "692e8685-f133-4744-85f1-010aec257c96",
+          "name": "Delete a metric",
+          "request": {
+            "name": "Delete a metric",
+            "description": {
+              "content": "If you no longer need a metric, you can delete it. Deleting a metric also removes it from any associated triggers and storyboards. It does not delete the table this metric exists in.\n\n> **Note —**\nIf the metric is associated with an assessment driver in the <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-automate-assessments\" target=\"_blank\">Projects</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rim-automate-assessments\" target=\"_blank\">Strategy</a> app, deleting the metric disables the assessment automation in the relevant app.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "metrics",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the requested resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4c3d5b1d-00da-4a65-9358-a653d528128c",
+              "name": "No content.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "704e50e0-3b3b-4590-9f43-57a5c64cc6d2",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, org_id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0246daf6-5a36-4392-b7fd-7478ad84ec54",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0aa9c058-bbaf-42df-9bc8-653923d403c7",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f3857022-e585-4121-bcdd-9d213439da9a",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b6f5232-1e82-4009-bc0a-aa8f856b259e",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "metrics",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "https",
+      "key": "protocol"
+    },
+    {
+      "description": {
+        "content": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "apis-us.highbond.com",
+      "key": "server"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{server}}/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2a34790c-f8d6-4fcd-bcb9-429ee03d6a6e",
+    "name": "HighBond API Reference Actions Metrics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\nWelcome to the API documentation for HighBond.\n\n## Introduction\nThe HighBond API is the developer interface for the HighBond platform. You can use it to automate interactions with HighBond,\nbuild reporting, and integrate HighBond with other systems in your company. This introduction contains information you should\nknow before you get started.\n\nThe HighBond API is organized around <a href=\"https://en.wikipedia.org/wiki/Representational_state_transfer\" target=\"_blank\">REST</a> and is built on the\n<a href=\"https://jsonapi.org/format/\" target=\"_blank\">JSON API v1.0 specification</a>.\n\n> **Warning —**\nThis API interacts with your company's live data. It gives you the power to delete important data that your\ncompany needs. Carefully consider the consequences of your actions when using this API. If you are not sure, contact the\nperson or group who administers HighBond in your company.\n\n### Permissions\nUsers can generate and manage API tokens in their user profiles in HighBond. Because these tokens are tied to users, not companies, your permissions in the API are the same as your permissions in HighBond.\n\n> **Note —**\nYou must be a System Admin in at least one HighBond instance to access the API.\n\nIf you leave your company and your HighBond user account is deleted, your application will break. Before getting started, consider the long-term requirements of your application. You may wish to create a system account in HighBond and build your application from that, but verify that your company's security policies permit accounts that aren't tied to particular people.\n\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749\" target=\"_blank\">OAuth 2.0 authorization framework</a> to control access to the API.\n\n\n### Apps\nApps are components in HighBond that provide specific functionality. You can use this API to interact with data in the apps you have access to.\n\nThe apps available to you depend on the edition of HighBond (standard or premium) in use, and whether or not your company has purchased any add-on apps.\nFor more information, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-product-editions\" target=\"_blank\">Subscriptions, editions, and capabilities</a>.\n\n### Rate limitations\nThe API safeguards against bursts of usage to help maximize its stability. For most endpoints, you cannot make more than 6 requests per second.\n\nThe following endpoints have a stricter rate limitation of 3 requests per minute:\n\n* Groups\n* Users\n\nTreat these limits as a maximum and avoid making unnecessary requests to the API.\n\nIf you make too many requests, the API responds with a `429` \"Too many requests\" status.\n\n## Getting started\nTo start interacting with your HighBond organization via the API, you need a few things:\n\n* An authentication token from your HighBond instance\n* The correct region URL for your HighBond instance\n* Information about the HighBond instance and resource IDs you want to interact with\n\nIf you need assistance with any of these, contact a HighBond administrator at your company, or email <a href=\"mailto:support@wegalvanize.com\">support@wegalvanize.com</a>.\n\n### Authentication\nAll requests require authentication. To authenticate, use Launchpad to create a HighBond API (bearer) token for your account. The token is a string that authenticates you\nand allows you to securely access the HighBond API.\n\nFor help creating a token, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">Creating and managing access tokens</a>.\n\nOnce you have created your token, you can provide it in the header of your request:\n```\nAuthorization: Bearer <TOKEN>\n```\n > **Important —**\nIf you do not authenticate yourself, the API fails. The API responds to authentication failures with a `401` \"Bad credentials\" status.\n\n<security-definitions />\n\n### Token security\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749#section-1.3.1\" target=\"_blank\">Authorization Code workflow</a> to generate tokens.\n\nTo enable continuous access to the API, and to provide full ownership and accountability to users, Galvanize does not impose an expiration date\non the token. You can <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">delete a token in\nLaunchpad</a> when you no longer need access to the API.\n\n> **Important —**\nYour access token provides many privileges, so keep it secure and private. Galvanize recommends that you encrypt your\nmachine to securely store the token. Avoid sharing your token in publicly accessible areas such GitHub or within client-side code.\n\n### API regions\n\nThe HighBond service is provided from different regions in order to give customers options for where your data is stored, and to enable you to\ncomply with data privacy location requirements.\n\nYour request URL must include one of the following region codes, based on where your HighBond instance resides:\n\n* **United States** — `https://apis-us.diligentoneplatform.com`\n* **Canada** — `https://apis-ca.diligentoneplatform.com`\n* **Europe** — `https://apis-eu.diligentoneplatform.com`\n* **Asia** — `https://apis-ap.diligentoneplatform.com`\n* **Australia** — `https://apis-au.diligentoneplatform.com`\n* **Africa** — `https://apis-af.diligentoneplatform.com`\n* **South America** — `https://apis-sa.diligentoneplatform.com`\n* **Japan** — `https://apis-jp.diligentoneplatform.com`\n\nAdditionally, for government clients, there are two government \"regions\":\n* **Gov** (US federal) — `https://apis.diligentoneplatform-gov.com`\n* **SLED** (state, local, and education; non-federal) — `https://apis.diligentoneplatform-gov2.com`\n\n> **Important —**\nAll API requests must be made over <a href=\"https://en.wikipedia.org/wiki/HTTPS\" target=\"_blank\">HTTPS</a>. Calls over HTTP respond with the `301` \"Moved Permanently\" status.\n\n\n### HighBond instance and resource IDs\nRequests require a HighBond instance ID and the ID of the resource you are interacting with. These IDs are numeric keys that uniquely\nidentify the HighBond instance and every resource in that instance.\n\nThe easiest way to get your HighBond instance ID is to log in to HighBond and take the ID from the URL:\n```\nhttps://accounts.highbond.com/orgs/12345\n```\n\nTo obtain IDs for resources like collections, analyses, tables, and robots, you can navigate to the item you want to reference, and take the IDs from the URL.\nFor example, this URL shows a collection ID:\n```\nhttps://example-company.results.highbond.com/projects/55843\n```\n\n> **Tip —**\nThe `GET` methods in this API also return IDs that you can use to identify resources you can act on.\n\n\n## Making requests\nOnce you have all the information you need, you can start making requests in an API client of your choice.\n\n### HTTP methods\nThe API uses the appropriate HTTP method for each action:\n* `GET` — used for retrieving resources\n* `POST` — used for creating resources\n* `PUT` / `PATCH` — used for updating resources\n* `DELETE` — used for deleting resources\n\n\n### Content type\nAlways specify the `Content-Type` of your request in the header. Supported content types are:\n* JSON API\n* JSON (for backwards compatibility)\n\n```\nContent-Type: application/vnd.api+json\nContent-Type: application/json\n```\n\nA complete **Get a table** request using `curl` would look like this:\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/11594/tables/388930\n```\n\n### Requesting the API to return only specific fields\nFor certain resources, such as control tests, you can request the API to return only specific fields using the `fields` query parameter. Sparse fieldsets are\nhelpful for limiting your responses to only the data you require.\n\n> **Note —**\nThe `type` argument must specify the resource you want to retrieve. The value of the `fields` parameter must be a comma-delimited list that specifies\nthe name of the field(s) to be returned. Avoid whitespace before or after each comma.\n```\nfields[type]=field_name1,field_name2,fieldname3\n```\n\nA complete **Get a control test** request that only returns the `assigned_user`, `control`, and `testing_round_number` fields would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/12345/control_tests/105?fields[control_tests]=assigned_user,control,testing_round_number\n```\n\n### Requesting the API to return related resources\nTo reduce the number of requests, you may use the `include` query parameter to return related resources in the response along with the requested primary resources. Such responses are called \"compound documents\".\n\nAccepted values for the `include` parameter are documented in the `Query Parameters` section of each API method.\n\n> **Note —**\nThe `include` parameter must be a comma-delimited list that specifies\nthe name of the relationship(s) or nested relationship(s) to be returned. Avoid whitespace before or after each comma.\n\nExample - requesting a relationship and a nested relationship\n```\ninclude=control,control.objective\n```\n\nA complete **Get a control test** request that returns the `control` relationship, and `control.objective` nested relationship would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis.highbond.com/v1/orgs/12345/control_tests/105?include=control,control.objective\n```\n\n\n### Blank fields\nBlank fields are included in all response schemas as `\"\"` or `null` instead of being omitted.\n\n\n### Time zones\nAll timestamps are returned in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.\n\nSome requests that create new data, such as creating a robot task's schedule, allow you to provide time zone information.\nFor API requests that allow for a timestamp to be specified, you must explicitly provide an ISO 8601 timestamp with time zone information.\n\n```\n\"starts_at\": \"2019-03-21T16:25:00.478Z\",\n\"starts_at_timezone\": \"America/Los_Angeles\",\n```\n\n\n### Rich text fields\n\nSome requests and responses contain rich text fields that include HTML tags. These are typically description fields. If you need to format text,\nthe best approach is to upload your raw data first and apply formatting later in the user interface.\n\n> **Note —**\nImages that exist in rich text fields are returned in responses, but they are not rendered. You cannot upload new images to rich text fields using the API.\n\n\n### User identifiers\nA unique identifier (UID) is an alphanumeric string that is associated with a user in HighBond. UIDs make it possible to address users,\nso that they can be accessed and interacted with using the API. Some requests that allow you to assign items to users, such as creating an objective,\nrequire you to specify a user's UID.\n\nTo obtain a user's UID:\n\n1. Sign in to <a href=\"https://accounts.highbond.com/login\" target=\"_blank\">HighBond</a>.\n2. If your company uses more than one instance in HighBond, make sure <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-switch-instances\"\ntarget=\"_blank\">the appropriate instance is active</a>.\n3. Select **Options > Users (#)**.\n4. Navigate to the appropriate user and click the user's name.\n5. In the **User Details** side panel, copy the UID to your clipboard.\nOnce you have copied the UID, you can specify it in your request.\n\n\n### Pagination\nWhen a response consists of a large number of items, the API breaks it into separate pages for performance reasons. You can control the way the API paginates your results by specifying how many items you want to have per page, and which page you want the API to return.\n\nFor example, if you request a list of controls, the request could look like this: `{protocol}://{server}/v1/orgs/{org_id}/objectives/{objective_id}/controls?page[size]=25&page[number]=Mg==`\n\nWhere:\n\n* `page[size]=25` specifies that there should be 25 items per page. Different endpoints have different default values and maximum numbers of values you can have per page.\n* `page[number]=Mg==` specifies that the API should return the second page of results (the 26th through 50th items that match the request).\n\n > **Note —**\n In most cases, page numbers must be encoded in Base64. In this example, `Mg==` is the Base64 encoded value for `2`.\n\nAdditionally, responses include the `links` parameter, which provides URLs for the `prev` and `next` attributes (or `null` values if all of the items are on one page). Those URLs include the above parameters, so you can paste them into subsequent requests if needed.\n\n\n\n## Errors\nHighBond uses standard <a href=\"https://en.wikipedia.org/wiki/List_of_HTTP_status_codes\" target=\"_blank\">HTTP response codes</a>\nto indicate the success or failure of a request. The range of a code indicates information about why it succeeded or failed:\n\n* **`2xx` range —** Success\n* **`4xx` range —** Error given the information provided\n* **`5xx` range —** Server failed to fulfil a valid request\n\nSome common errors that occur when making requests include:\n* **`400` Bad request —** When a parameter is missing (such as the `org_id` or resource `id`), when more\nthan one unique resource is specified in the request, or when a specified data type is incompatible with the endpoint\n* **`401` Bad credentials —** When there is an authentication error\n* **`403` Forbidden —** When there is an authorization problem based on your <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-managing-apps\"\ntarget=\"_blank\">role in a HighBond app</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-assigning-subscriptions\" target=\"_blank\">subscription</a>\n* **`404` Not found —** When there is a problem on the client side due to an incorrect URL or resource deletion\n* **`415` Unsupported media type —** When the `Content-Type` specified is unsupported\n* **`422` Unprocessable entity —** When a required attribute is missing (such as the name of a resource), or when a conflict occurs\n(such as a script activation conflict)\n\n\n## Versioning\nAll API endpoints use a version number in the path. As can be seen in the examples, `/v1/` specifies version 1 of the API.\n\nOver time, the API will evolve. New API versions will be introduced and existing versions may be updated.\n\nSome API updates are considered a breaking change, requiring a new version of the API to be introduced. An example of a breaking\nchange is fields being changed or removed. By introducing a new version, API consumers can safely continue to use prior API versions.\n\nThe other type of API update is a non-breaking change. You should expect non-breaking change updates to existing API versions.\nAn example of a non-breaking change is adding a field to a response object. Non-breaking changes are additive. While they do\nchange the response body, they should not impact the API consumer.\n",
+      "type": "text/plain"
+    }
+  }
+}

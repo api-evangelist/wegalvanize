@@ -1,0 +1,307 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions To-dos API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "To-dos",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get organization's to-dos",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[projects_todos]",
+                "value": "description,created_at,updated_at,due_date,status,project,target",
+                "type": "query",
+                "description": "Requesting the API to return only specific fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[target.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by target ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[target.type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by target type. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Orders the resulting resources by the given field. Sorts ascending by default, prefix with `-` to sort descending. You can provide multiple sort fields separated by comma."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all projects to-dos in an organization.\n\n> **Note:**\nBy default, this endpoint only returns to-dos from active projects. To fetch objects from frameworks, do one of the following:\n> * Specify the project or framework ID using `filter[project.id]`\n> * Specify that you want results from frameworks using `filter[project.state]=framework`\n"
+        },
+        {
+          "info": {
+            "name": "Create a to-do",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[projects_todos]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new todo in an existing project.\n"
+        },
+        {
+          "info": {
+            "name": "Get to-do",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[projects_todos]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get single project's to-do.\n"
+        },
+        {
+          "info": {
+            "name": "Update a to-do",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[projects_todos]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a todo in project or framework, like updating the todo's description, status, due date or relationships.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a to-do",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a todo.\n"
+        },
+        {
+          "info": {
+            "name": "Get to-do comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos/:todo_id/comments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project."
+              },
+              {
+                "name": "todo_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the to-do."
+              },
+              {
+                "name": "fields[comments]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "user",
+                "type": "query",
+                "description": "Requesting the API to return related resources."
+              }
+            ]
+          },
+          "docs": "Get a list of to-do comments\n"
+        },
+        {
+          "info": {
+            "name": "Create a to-do comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/projects_todos/:todo_id/comments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the project."
+              },
+              {
+                "name": "todo_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the to-do."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new to-do comment\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

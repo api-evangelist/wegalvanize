@@ -1,0 +1,187 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Project types API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Project types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get project types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[project_types]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "filter[name]",
+                "value": "",
+                "type": "query",
+                "description": "Filter by name.  Response will include partial matches and ignore case."
+              }
+            ]
+          },
+          "docs": "> **Deprecation notice —**\nPlease note that `conclusion_values_true` and `conclusion_values_false` fields will be deprecated. Consider using new `conclusion_status_options_true` and `conclusion_status_options_false` fields instead.\n\nGet all project types for an account.\n"
+        },
+        {
+          "info": {
+            "name": "Create or copy a project type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[project_types]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or copy a new project type to define a customized project or framework structure.\n\n<strong>Creating a project type:</strong><br />\nWhen creating a new project type, only the basic defining attributes are available. After creating the project type default customizable terms and toggles\nare returned and available on PATCH requests for update.\n\n<strong>Copying a project type:</strong><br />\nWhen copying an existing project type, you must define a `source_project_type_id` parameter in your re"
+        },
+        {
+          "info": {
+            "name": "Get a project type",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[project_types]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "> **Deprecation notice —**\nPlease note that `conclusion_values_true` and `conclusion_values_false` fields will be deprecated. Consider using new `conclusion_status_options_true` and `conclusion_status_options_false` fields instead.\n\nGet information about a project type.\n"
+        },
+        {
+          "info": {
+            "name": "Update a project type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[project_types]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "> **Deprecation notice —**\nPlease note that `conclusion_values_true` and `conclusion_values_false` fields will be deprecated. Consider using new `conclusion_status_options_true` and `conclusion_status_options_false` fields instead.\n\nMake changes to a project type, like renaming it or updating its description.\n\n<strong>Limitations</strong>:\n* You cannot update the attribute if a term is not compatible with workflow. <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-p"
+        },
+        {
+          "info": {
+            "name": "Delete a project type",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/project_types/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a project type from a HighBond instance.\n\n<strong>Limitation</strong>:\nYou cannot delete project types that are associated with active projects, archived projects, temporarily deleted projects, or frameworks.\n\n> **Caution —**\nDeleting a project type is permanent. Once deleted, you cannot access or restore the project type.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

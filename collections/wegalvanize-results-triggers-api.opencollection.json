@@ -1,0 +1,74 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Results Triggers API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Results Triggers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of Results triggers in a table\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/table/:table_id/triggers",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              }
+            ]
+          },
+          "docs": "Get a list of Results triggers in a table.\n"
+        },
+        {
+          "info": {
+            "name": "Get a results trigger\n",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/triggers/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "trigger_id",
+                "value": "4",
+                "type": "path",
+                "description": "The ID of the Results trigger."
+              }
+            ]
+          },
+          "docs": "Get the configuration of a single Results Trigger by Trigger ID.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

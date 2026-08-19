@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Activities API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Activities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/activities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "filter[event_origin]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter activities by event origin. Event origin is an identifier specifying where an activity originated from."
+              },
+              {
+                "name": "filter[date][start]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by start date. This parameter is required. The maximum date range supported is 31 days. The exact time can be specified using the ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (see example). Please note that all times are UTC by default."
+              },
+              {
+                "name": "filter[date][end]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by end date. This parameter is required. The maximum date range supported is 31 days. The exact time can be specified using the ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (see example). Please note that all times are UTC by default."
+              },
+              {
+                "name": "filter[resource_id]",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the specific resource. It is used to filter activities by the resource ID. Either both`resource_id` and `resource_type` should be provided or both should not be provided, only with one of these filters should not be requested."
+              },
+              {
+                "name": "filter[resource_type]",
+                "value": "",
+                "type": "query",
+                "description": "The type of the specific resource. It is used to filter activities by the resource type.  Either both `resource_id` and `resource_type` should be provided or both should not be provided, only with one of these filters should not be requested."
+              }
+            ]
+          },
+          "docs": "Gets a paginated JSON list of activities."
+        },
+        {
+          "info": {
+            "name": "Export activities CSV",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/activities/export",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "filter[event_origin]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter activities by event origin. Event origin is an identifier specifying where an activity originated from."
+              },
+              {
+                "name": "filter[date][start]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by start date. This parameter is required. The maximum date range supported is 31 days. The exact time can be specified using the ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (see example). Please note that all times are UTC by default."
+              },
+              {
+                "name": "filter[date][end]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by end date. This parameter is required. The maximum date range supported is 31 days. The exact time can be specified using the ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (see example). Please note that all times are UTC by default."
+              },
+              {
+                "name": "filter[resource_id]",
+                "value": "",
+                "type": "query",
+                "description": "The ID of the specific resource. It is used to filter activities by the resource ID. Either both`resource_id` and `resource_type` should be provided or both should not be provided, only with one of these filters should not be requested."
+              },
+              {
+                "name": "filter[resource_type]",
+                "value": "",
+                "type": "query",
+                "description": "The type of the specific resource. It is used to filter activities by the resource type.  Either both `resource_id` and `resource_type` should be provided or both should not be provided, only with one of these filters should not be requested."
+              }
+            ]
+          },
+          "docs": "Generate a log in CSV format containing your organization's activity over the specified dates.\nAn email with a link where you can download the activity log will be sent to you.\n\n> **Note —**\nThe download link will expire 30 minutes after you receive the email.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

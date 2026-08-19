@@ -1,0 +1,205 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Planning files API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Planning files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get planning files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/planning_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[planning_files]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get planning files that belong to a project or framework."
+        },
+        {
+          "info": {
+            "name": "Create a planning file",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/planning_files",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[planning_files]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new planning file in an existing project or framework.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 1000 planning files per project or framework.\n"
+        },
+        {
+          "info": {
+            "name": "Get a planning file",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/planning_files/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[planning_files]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a planning file.\n\n<strong>Limitation</strong>:\nExisting Citation Mode highlights and links are not displayed in the `description` field.\n"
+        },
+        {
+          "info": {
+            "name": "Update a planning file",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/planning_files/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[planning_files]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a planning file, like renaming it or updating its description.\n\n<strong>Limitations</strong>:\n* You cannot update the planning file if it is signed off.\n* Existing Citation Mode highlights and links are not displayed in the `description` field.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a planning file",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/planning_files/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a planning file from a project or framework.\n\n> **Caution —**\nDeleting a planning file is permanent. Once deleted, you cannot access or restore the planning file.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

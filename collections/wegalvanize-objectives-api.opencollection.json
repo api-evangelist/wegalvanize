@@ -1,0 +1,265 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Objectives API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Objectives",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get objectives",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/objectives",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get all objectives in a project or framework."
+        },
+        {
+          "info": {
+            "name": "Create an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/:parent_resource_type/:parent_resource_id/objectives",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "parent_resource_type",
+                "value": "",
+                "type": "path",
+                "description": "The type of the parent resource."
+              },
+              {
+                "name": "parent_resource_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the parent resource."
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new objective in an existing project or framework.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 500 objectives per project or framework.\n* Specifying a person's name or email in the following fields does not automatically notify them via email: `owner`, `executive_owner`. If you want these fields to take effect, omit the `owner_user` and `executive_owner_user` fields.\n* Providing `owner_user` and `executive_owner_user` will assign the objective to the user respectively and"
+        },
+        {
+          "info": {
+            "name": "Get an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about an objective.\n"
+        },
+        {
+          "info": {
+            "name": "Update an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to an objective in a project or framework, like renaming the objective or specifying an owner.\n\n<strong>Limitations</strong>:\n* You cannot update the objective if it has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile\" target=\"_blank\">HighBond iPad app</a>.\n* Specifying a person's nam"
+        },
+        {
+          "info": {
+            "name": "Delete an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete an objective from a project or framework.\n\n<strong>Limitations</strong>:\nYou cannot delete the objective in the following scenarios:\n* if the objective is included in <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications\" target=\"_blank\">an existing certification program</a>\n* if the objective has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offlin"
+        },
+        {
+          "info": {
+            "name": "Create objective entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:objective_id/entities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "objective_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the objective."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Link entity to an objective.\n\n> **Note**\n> * Tagging an objective to an entity automatically tags an objective with all ancestor entities and descendant entities.\n> * Request <a href=\"#operation/getObjective\">Get an objective</a> with `entities` query param to get the whole list of entities linked to an objective.\n\n<strong>Limitations</strong>:\n  * You cannot tag the objective with entity if it has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cs"
+        },
+        {
+          "info": {
+            "name": "Delete objective entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:objective_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "objective_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the objective."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete objective entity link.\n\n> **Note -**\nUntagging an objective from an entity automatically untags an objective from all descendant entities.\n\n<strong>Limitations</strong>:\n  * You cannot untag an objective from an entity if it has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobil"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

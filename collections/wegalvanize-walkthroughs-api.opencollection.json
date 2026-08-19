@@ -1,0 +1,277 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Walkthroughs API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Walkthroughs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get organization walkthroughs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/walkthroughs",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[walkthroughs]",
+                "value": "walkthrough_results,control_design,created_at,updated_at,custom_attributes,control,planned_milestone_date,actual_milestone_date",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to sort walkthroughs by the values in a given field. The walkthroughs are sorted ascending by default, but you can prefix the field name with `-` to sort descending (e.g., `-id`). You can sort walkthroughs by only one field at a time."
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.name]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project name. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control IDs. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_design]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results to only include walkthroughs that were marked as designed appropriately. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.title]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective title. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.reference]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective reference. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by numbers of the control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.title]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control title. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.query]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control title or description. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.owner]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control owner. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.frequency]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control frequency. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control type. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.1.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the first testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.2.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the second testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.3.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the third testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control.control_tests.4.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the fourth testing round in the related control. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get a list of all of the walkthroughs in an organization.\n\n> **Note:**\nBy default, this endpoint only returns walkthroughs from active projects. To fetch objects from archived projects or frameworks, do one of the following:\n> * Specify the project or framework ID using `filter[project.id]`\n> * Specify that you want results from archived projects using `filter[project.state]=archive`\n> * Specify that you want results from frameworks using `filter[project.state]=framework`\n"
+        },
+        {
+          "info": {
+            "name": "Get a walkthrough",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/walkthroughs/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[walkthroughs]",
+                "value": "walkthrough_results,control_design,created_at,updated_at,custom_attributes,control,planned_milestone_date,actual_milestone_date",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a walkthrough.\n\n<strong>Limitation</strong>:\nExisting Citation Mode highlights and links are not displayed in the `walkthrough_results` field.\n"
+        },
+        {
+          "info": {
+            "name": "Update a walkthrough",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/walkthroughs/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[walkthroughs]",
+                "value": "walkthrough_results,control_design,created_at,updated_at,custom_attributes,control,planned_milestone_date,actual_milestone_date",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a walkthrough in a project, like updating the walkthrough results or specifying whether or not the control was designed appropriately.\n\n<strong>Limitations</strong>:\n* You cannot update the walkthrough if it is signed off or if the objective it belongs to has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/De"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

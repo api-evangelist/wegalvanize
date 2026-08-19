@@ -1,0 +1,3182 @@
+{
+  "item": [
+    {
+      "id": "c0bb0055-c34a-438f-8774-f7eda8701a08",
+      "name": "Planning files",
+      "description": {
+        "content": "A planning file (also known as a reference file) is a supporting document that relates to a project or framework. Planning files typically\ncontain information associated with the planning phase of a project or framework.\n\n> **Note:**\nPlanning files located in such resources can be accessed using the API:\n> * In projects that have an \"active\" state\n> * In frameworks\n\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-plan-project\" target=\"_blank\">Learn more about planning files</a>.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0d53af36-e65c-46f7-8dfb-c5abdd8c39de",
+          "name": "Get planning files",
+          "request": {
+            "name": "Get planning files",
+            "description": {
+              "content": "Get planning files that belong to a project or framework.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                ":parent_resource_type",
+                ":parent_resource_id",
+                "planning_files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields[planning_files]",
+                  "value": "<string>",
+                  "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+                },
+                {
+                  "disabled": false,
+                  "key": "page[size]",
+                  "value": "<string>",
+                  "description": "The number of items returned per page. Default is 50. Maximum is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "page[number]",
+                  "value": "<string>",
+                  "description": "The Base64-encoded page number of records to return."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "projects",
+                  "key": "parent_resource_type",
+                  "description": "(Required) The type of the parent resource."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "parent_resource_id",
+                  "description": "(Required) The ID of the parent resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f975746a-58f4-474c-b589-124eba40b0a1",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    },
+                    {
+                      "key": "page[size]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page[number]",
+                      "value": "Mg=="
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"id\": \"string\",\n      \"type\": \"planning_files\",\n      \"attributes\": {\n        \"name\": \"Planning File Name\",\n        \"reference_id\": \"BPWS1\",\n        \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n        \"position\": 1,\n        \"custom_attributes\": [\n          {\n            \"id\": \"42\",\n            \"term\": \"Custom Planning Attribute\",\n            \"value\": [\n              \"Custom Select Option Text\"\n            ]\n          },\n          {\n            \"id\": \"42\",\n            \"term\": \"Custom Planning Attribute\",\n            \"value\": [\n              \"Custom Select Option Text\"\n            ]\n          }\n        ],\n        \"created_at\": \"2019-02-09T13:17:26Z\",\n        \"updated_at\": \"2019-02-09T13:17:26Z\",\n        \"planned_start_date\": \"2019-02-09\",\n        \"planned_end_date\": \"2019-02-10\",\n        \"actual_start_date\": \"2019-02-09\",\n        \"actual_end_date\": \"2019-02-10\",\n        \"actual_milestone_date\": \"2019-02-10\",\n        \"planned_milestone_date\": \"2019-02-09\"\n      },\n      \"relationships\": {\n        \"project\": {\n          \"data\": {\n            \"id\": \"1\",\n            \"type\": \"projects\"\n          }\n        },\n        \"framework\": {\n          \"data\": {\n            \"id\": \"1\",\n            \"type\": \"frameworks\"\n          }\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"type\": \"planning_files\",\n      \"attributes\": {\n        \"name\": \"Planning File Name\",\n        \"reference_id\": \"BPWS1\",\n        \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n        \"position\": 1,\n        \"custom_attributes\": [\n          {\n            \"id\": \"42\",\n            \"term\": \"Custom Planning Attribute\",\n            \"value\": [\n              \"Custom Select Option Text\"\n            ]\n          },\n          {\n            \"id\": \"42\",\n            \"term\": \"Custom Planning Attribute\",\n            \"value\": [\n              \"Custom Select Option Text\"\n            ]\n          }\n        ],\n        \"created_at\": \"2019-02-09T13:17:26Z\",\n        \"updated_at\": \"2019-02-09T13:17:26Z\",\n        \"planned_start_date\": \"2019-02-09\",\n        \"planned_end_date\": \"2019-02-10\",\n        \"actual_start_date\": \"2019-02-09\",\n        \"actual_end_date\": \"2019-02-10\",\n        \"actual_milestone_date\": \"2019-02-10\",\n        \"planned_milestone_date\": \"2019-02-09\"\n      },\n      \"relationships\": {\n        \"project\": {\n          \"data\": {\n            \"id\": \"1\",\n            \"type\": \"projects\"\n          }\n        },\n        \"framework\": {\n          \"data\": {\n            \"id\": \"1\",\n            \"type\": \"frameworks\"\n          }\n        }\n      }\n    }\n  ],\n  \"links\": {\n    \"next\": \"/api/resource?page[number]=Mg==\",\n    \"prev\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c97ce0e-0d7c-4d76-8fa7-055185946206",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    },
+                    {
+                      "key": "page[size]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page[number]",
+                      "value": "Mg=="
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, org_id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8da81502-d849-48f7-bc1e-8ae8cce17a1a",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    },
+                    {
+                      "key": "page[size]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page[number]",
+                      "value": "Mg=="
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f24d613b-effa-4d9f-98a0-a29b6a67d21b",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    },
+                    {
+                      "key": "page[size]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page[number]",
+                      "value": "Mg=="
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3cd6cdb1-40b9-4f0e-9cd5-b83b09c98291",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    },
+                    {
+                      "key": "page[size]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page[number]",
+                      "value": "Mg=="
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "091cff46-9ffb-4535-a474-720e3da1f82c",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    },
+                    {
+                      "key": "page[size]",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page[number]",
+                      "value": "Mg=="
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9aeafc38-7349-4923-a46e-7f6d53129cfd",
+          "name": "Create a planning file",
+          "request": {
+            "name": "Create a planning file",
+            "description": {
+              "content": "Create a new planning file in an existing project or framework.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 1000 planning files per project or framework.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                ":parent_resource_type",
+                ":parent_resource_id",
+                "planning_files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields[planning_files]",
+                  "value": "<string>",
+                  "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "projects",
+                  "key": "parent_resource_type",
+                  "description": "(Required) The type of the parent resource."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "parent_resource_id",
+                  "description": "(Required) The ID of the parent resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"reference_id\": \"<string>\",\n      \"description\": \"<string>\",\n      \"position\": \"<long>\",\n      \"custom_attributes\": [\n        {\n          \"id\": \"<string>\",\n          \"term\": \"<string>\",\n          \"value\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"id\": \"<string>\",\n          \"term\": \"<string>\",\n          \"value\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "af61b46e-1b58-458d-a5b5-53a0cc5a6256",
+              "name": "Created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"string\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"created_at\": \"2019-02-09T13:17:26Z\",\n      \"updated_at\": \"2019-02-09T13:17:26Z\",\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    },\n    \"relationships\": {\n      \"project\": {\n        \"data\": {\n          \"id\": \"1\",\n          \"type\": \"projects\"\n        }\n      },\n      \"framework\": {\n        \"data\": {\n          \"id\": \"1\",\n          \"type\": \"frameworks\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc89f7a9-5c64-41a7-8989-74e6d71060f5",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, project_id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f2e90dbb-c0ea-4434-b55e-918972005e6d",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b3e704ce-144a-427e-a2ad-495ff55e87fd",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "235d204f-aca6-4e98-b934-7f0295980d88",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e74f0c05-ce47-47c0-b2c4-d3115ecd46a4",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ced59209-dc14-4d62-86a5-ee832655740b",
+              "name": "Unprocessable entity.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    ":parent_resource_type",
+                    ":parent_resource_id",
+                    "planning_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "projects",
+                      "key": "parent_resource_type",
+                      "description": "(Required) The type of the parent resource."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "parent_resource_id",
+                      "description": "(Required) The ID of the parent resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 422,\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"code\": \"invalid_resource\",\n      \"detail\": \"can't be blank\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7847b758-79a4-48d6-abc6-f9a2f78949f7",
+          "name": "Get a planning file",
+          "request": {
+            "name": "Get a planning file",
+            "description": {
+              "content": "Get information about a planning file.\n\n<strong>Limitation</strong>:\nExisting Citation Mode highlights and links are not displayed in the `description` field.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "planning_files",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields[planning_files]",
+                  "value": "<string>",
+                  "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the requested resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f4488357-25cf-47f4-9e8a-d6c6c630726b",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"string\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"created_at\": \"2019-02-09T13:17:26Z\",\n      \"updated_at\": \"2019-02-09T13:17:26Z\",\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    },\n    \"relationships\": {\n      \"project\": {\n        \"data\": {\n          \"id\": \"1\",\n          \"type\": \"projects\"\n        }\n      },\n      \"framework\": {\n        \"data\": {\n          \"id\": \"1\",\n          \"type\": \"frameworks\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d71eb8c4-65ba-42ab-b7a7-12f3fb7752e0",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b358b29-ea33-4740-bfb6-754ae0576169",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "42919ca4-6d65-487e-befa-d741ff29a5c4",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "626175fe-aefb-4c5f-bb79-b5b33663aefd",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4fe2fa6a-c702-49b3-8438-31539a068e07",
+          "name": "Update a planning file",
+          "request": {
+            "name": "Update a planning file",
+            "description": {
+              "content": "Make changes to a planning file, like renaming it or updating its description.\n\n<strong>Limitations</strong>:\n* You cannot update the planning file if it is signed off.\n* Existing Citation Mode highlights and links are not displayed in the `description` field.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "planning_files",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "fields[planning_files]",
+                  "value": "<string>",
+                  "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the requested resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/vnd.api+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"<string>\",\n    \"attributes\": {\n      \"name\": \"<string>\",\n      \"reference_id\": \"<string>\",\n      \"description\": \"<string>\",\n      \"position\": \"<long>\",\n      \"custom_attributes\": [\n        {\n          \"id\": \"<string>\",\n          \"term\": \"<string>\",\n          \"value\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        },\n        {\n          \"id\": \"<string>\",\n          \"term\": \"<string>\",\n          \"value\": [\n            \"<string>\",\n            \"<string>\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"<date>\",\n      \"planned_end_date\": \"<date>\",\n      \"actual_start_date\": \"<date>\",\n      \"actual_end_date\": \"<date>\",\n      \"actual_milestone_date\": \"<date>\",\n      \"planned_milestone_date\": \"<date>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d49ef8b-0558-443f-bec7-0c868aa0637f",
+              "name": "OK.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"id\": \"string\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"created_at\": \"2019-02-09T13:17:26Z\",\n      \"updated_at\": \"2019-02-09T13:17:26Z\",\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    },\n    \"relationships\": {\n      \"project\": {\n        \"data\": {\n          \"id\": \"1\",\n          \"type\": \"projects\"\n        }\n      },\n      \"framework\": {\n        \"data\": {\n          \"id\": \"1\",\n          \"type\": \"frameworks\"\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edf7755a-120b-4c85-ba49-76f8719f3dbf",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b1b06b4-d159-4b04-837d-6c8ae6f5e1cc",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "013e5af0-856d-4036-af93-bcd3a6c1b852",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "192a7648-fb13-4a70-9756-74ffd468af13",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "954bebe4-2feb-4a49-9086-dfa5eb2698c6",
+              "name": "Unsupported media type.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unsupported Media Type",
+              "code": 415,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 415,\n      \"code\": \"unsupported_media_type\",\n      \"title\": \"Unsupported media type\",\n      \"detail\": \"The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.\\n\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d78a1668-247e-4bb3-ae80-c38fa6b46e8c",
+              "name": "Unprocessable entity.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "fields[planning_files]",
+                      "value": "name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"data\": {\n    \"id\": \"<string>\",\n    \"type\": \"planning_files\",\n    \"attributes\": {\n      \"name\": \"Planning File Name\",\n      \"reference_id\": \"BPWS1\",\n      \"description\": \"<h1>Planning file heading</h1><p>Planning file description.</p>\",\n      \"position\": 1,\n      \"custom_attributes\": [\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        },\n        {\n          \"id\": \"42\",\n          \"term\": \"Custom Planning Attribute\",\n          \"value\": [\n            \"Custom Select Option Text\"\n          ]\n        }\n      ],\n      \"planned_start_date\": \"2019-02-09\",\n      \"planned_end_date\": \"2019-02-10\",\n      \"actual_start_date\": \"2019-02-09\",\n      \"actual_end_date\": \"2019-02-10\",\n      \"actual_milestone_date\": \"2019-02-10\",\n      \"planned_milestone_date\": \"2019-02-09\"\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 422,\n      \"source\": {\n        \"pointer\": \"/data/attributes/name\"\n      },\n      \"code\": \"invalid_resource\",\n      \"detail\": \"can't be blank\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9fa46f5d-4270-4bf6-a02d-4e53add889a3",
+          "name": "Delete a planning file",
+          "request": {
+            "name": "Delete a planning file",
+            "description": {
+              "content": "Delete a planning file from a project or framework.\n\n> **Caution —**\nDeleting a planning file is permanent. Once deleted, you cannot access or restore the planning file.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orgs",
+                ":org_id",
+                "planning_files",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "org_id",
+                  "description": "(Required) The ID of the HighBond instance."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The ID of the requested resource."
+                },
+                {
+                  "description": {
+                    "content": "",
+                    "type": "text/plain"
+                  },
+                  "type": "any",
+                  "value": "{{protocol}}",
+                  "key": "protocol"
+                },
+                {
+                  "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                  "type": "any",
+                  "value": "{{server}}",
+                  "key": "server"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/vnd.api+json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c4eab8e8-266e-4914-bc2f-2cd9a85badb1",
+              "name": "No content.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2c871799-0599-4696-a624-8c66451c8ac4",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 400,\n      \"code\": \"parameter_missing\",\n      \"title\": \"Parameter missing\",\n      \"detail\": \"The required parameter, id, is missing.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a9d44db-c88e-46e3-b83d-f423f6c80848",
+              "name": "Bad credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "11303278-35fd-450a-a17a-776e7b3f42e2",
+              "name": "Forbidden.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b20f98b8-9d7d-4b3f-83d9-dbb626d9cbcf",
+              "name": "Not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": \"404\",\n      \"title\": \"Not Found\",\n      \"detail\": \"The requested resource does not exist.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02f8db55-487f-4926-9256-929255802efc",
+              "name": "Unprocessable entity.\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "orgs",
+                    ":org_id",
+                    "planning_files",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "org_id",
+                      "description": "(Required) The ID of the HighBond instance."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The ID of the requested resource."
+                    },
+                    {
+                      "description": {
+                        "content": "",
+                        "type": "text/plain"
+                      },
+                      "type": "any",
+                      "value": "{{protocol}}",
+                      "key": "protocol"
+                    },
+                    {
+                      "description": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+                      "type": "any",
+                      "value": "{{server}}",
+                      "key": "server"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.api+json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.api+json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    {\n      \"status\": 422,\n      \"source\": {\n        \"pointer\": \"/data/attributes/base\"\n      },\n      \"code\": \"invalid_resource\",\n      \"title\": \"Invalid resource\",\n      \"detail\": \"This planning file cannot be deleted because the preparer has already signed off.\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "https",
+      "key": "protocol"
+    },
+    {
+      "description": {
+        "content": " (This can only be one of apis-us.highbond.com,apis-ca.highbond.com,apis-eu.highbond.com,apis-ap.highbond.com,apis-au.highbond.com,apis-af.highbond.com,apis-sa.highbond.com,apis-jp.highbond.com)",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "apis-us.highbond.com",
+      "key": "server"
+    },
+    {
+      "type": "string",
+      "value": "{{protocol}}://{{server}}/v1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4fe6d9e7-ded2-4e75-b017-77b25ff86089",
+    "name": "HighBond API Reference Actions Planning files API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "\nWelcome to the API documentation for HighBond.\n\n## Introduction\nThe HighBond API is the developer interface for the HighBond platform. You can use it to automate interactions with HighBond,\nbuild reporting, and integrate HighBond with other systems in your company. This introduction contains information you should\nknow before you get started.\n\nThe HighBond API is organized around <a href=\"https://en.wikipedia.org/wiki/Representational_state_transfer\" target=\"_blank\">REST</a> and is built on the\n<a href=\"https://jsonapi.org/format/\" target=\"_blank\">JSON API v1.0 specification</a>.\n\n> **Warning —**\nThis API interacts with your company's live data. It gives you the power to delete important data that your\ncompany needs. Carefully consider the consequences of your actions when using this API. If you are not sure, contact the\nperson or group who administers HighBond in your company.\n\n### Permissions\nUsers can generate and manage API tokens in their user profiles in HighBond. Because these tokens are tied to users, not companies, your permissions in the API are the same as your permissions in HighBond.\n\n> **Note —**\nYou must be a System Admin in at least one HighBond instance to access the API.\n\nIf you leave your company and your HighBond user account is deleted, your application will break. Before getting started, consider the long-term requirements of your application. You may wish to create a system account in HighBond and build your application from that, but verify that your company's security policies permit accounts that aren't tied to particular people.\n\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749\" target=\"_blank\">OAuth 2.0 authorization framework</a> to control access to the API.\n\n\n### Apps\nApps are components in HighBond that provide specific functionality. You can use this API to interact with data in the apps you have access to.\n\nThe apps available to you depend on the edition of HighBond (standard or premium) in use, and whether or not your company has purchased any add-on apps.\nFor more information, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-product-editions\" target=\"_blank\">Subscriptions, editions, and capabilities</a>.\n\n### Rate limitations\nThe API safeguards against bursts of usage to help maximize its stability. For most endpoints, you cannot make more than 6 requests per second.\n\nThe following endpoints have a stricter rate limitation of 3 requests per minute:\n\n* Groups\n* Users\n\nTreat these limits as a maximum and avoid making unnecessary requests to the API.\n\nIf you make too many requests, the API responds with a `429` \"Too many requests\" status.\n\n## Getting started\nTo start interacting with your HighBond organization via the API, you need a few things:\n\n* An authentication token from your HighBond instance\n* The correct region URL for your HighBond instance\n* Information about the HighBond instance and resource IDs you want to interact with\n\nIf you need assistance with any of these, contact a HighBond administrator at your company, or email <a href=\"mailto:support@wegalvanize.com\">support@wegalvanize.com</a>.\n\n### Authentication\nAll requests require authentication. To authenticate, use Launchpad to create a HighBond API (bearer) token for your account. The token is a string that authenticates you\nand allows you to securely access the HighBond API.\n\nFor help creating a token, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">Creating and managing access tokens</a>.\n\nOnce you have created your token, you can provide it in the header of your request:\n```\nAuthorization: Bearer <TOKEN>\n```\n > **Important —**\nIf you do not authenticate yourself, the API fails. The API responds to authentication failures with a `401` \"Bad credentials\" status.\n\n<security-definitions />\n\n### Token security\nHighBond uses the <a href=\"https://tools.ietf.org/html/rfc6749#section-1.3.1\" target=\"_blank\">Authorization Code workflow</a> to generate tokens.\n\nTo enable continuous access to the API, and to provide full ownership and accountability to users, Galvanize does not impose an expiration date\non the token. You can <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-access-tokens\" target=\"_blank\">delete a token in\nLaunchpad</a> when you no longer need access to the API.\n\n> **Important —**\nYour access token provides many privileges, so keep it secure and private. Galvanize recommends that you encrypt your\nmachine to securely store the token. Avoid sharing your token in publicly accessible areas such GitHub or within client-side code.\n\n### API regions\n\nThe HighBond service is provided from different regions in order to give customers options for where your data is stored, and to enable you to\ncomply with data privacy location requirements.\n\nYour request URL must include one of the following region codes, based on where your HighBond instance resides:\n\n* **United States** — `https://apis-us.diligentoneplatform.com`\n* **Canada** — `https://apis-ca.diligentoneplatform.com`\n* **Europe** — `https://apis-eu.diligentoneplatform.com`\n* **Asia** — `https://apis-ap.diligentoneplatform.com`\n* **Australia** — `https://apis-au.diligentoneplatform.com`\n* **Africa** — `https://apis-af.diligentoneplatform.com`\n* **South America** — `https://apis-sa.diligentoneplatform.com`\n* **Japan** — `https://apis-jp.diligentoneplatform.com`\n\nAdditionally, for government clients, there are two government \"regions\":\n* **Gov** (US federal) — `https://apis.diligentoneplatform-gov.com`\n* **SLED** (state, local, and education; non-federal) — `https://apis.diligentoneplatform-gov2.com`\n\n> **Important —**\nAll API requests must be made over <a href=\"https://en.wikipedia.org/wiki/HTTPS\" target=\"_blank\">HTTPS</a>. Calls over HTTP respond with the `301` \"Moved Permanently\" status.\n\n\n### HighBond instance and resource IDs\nRequests require a HighBond instance ID and the ID of the resource you are interacting with. These IDs are numeric keys that uniquely\nidentify the HighBond instance and every resource in that instance.\n\nThe easiest way to get your HighBond instance ID is to log in to HighBond and take the ID from the URL:\n```\nhttps://accounts.highbond.com/orgs/12345\n```\n\nTo obtain IDs for resources like collections, analyses, tables, and robots, you can navigate to the item you want to reference, and take the IDs from the URL.\nFor example, this URL shows a collection ID:\n```\nhttps://example-company.results.highbond.com/projects/55843\n```\n\n> **Tip —**\nThe `GET` methods in this API also return IDs that you can use to identify resources you can act on.\n\n\n## Making requests\nOnce you have all the information you need, you can start making requests in an API client of your choice.\n\n### HTTP methods\nThe API uses the appropriate HTTP method for each action:\n* `GET` — used for retrieving resources\n* `POST` — used for creating resources\n* `PUT` / `PATCH` — used for updating resources\n* `DELETE` — used for deleting resources\n\n\n### Content type\nAlways specify the `Content-Type` of your request in the header. Supported content types are:\n* JSON API\n* JSON (for backwards compatibility)\n\n```\nContent-Type: application/vnd.api+json\nContent-Type: application/json\n```\n\nA complete **Get a table** request using `curl` would look like this:\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/11594/tables/388930\n```\n\n### Requesting the API to return only specific fields\nFor certain resources, such as control tests, you can request the API to return only specific fields using the `fields` query parameter. Sparse fieldsets are\nhelpful for limiting your responses to only the data you require.\n\n> **Note —**\nThe `type` argument must specify the resource you want to retrieve. The value of the `fields` parameter must be a comma-delimited list that specifies\nthe name of the field(s) to be returned. Avoid whitespace before or after each comma.\n```\nfields[type]=field_name1,field_name2,fieldname3\n```\n\nA complete **Get a control test** request that only returns the `assigned_user`, `control`, and `testing_round_number` fields would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis-us.highbond.com/v1/orgs/12345/control_tests/105?fields[control_tests]=assigned_user,control,testing_round_number\n```\n\n### Requesting the API to return related resources\nTo reduce the number of requests, you may use the `include` query parameter to return related resources in the response along with the requested primary resources. Such responses are called \"compound documents\".\n\nAccepted values for the `include` parameter are documented in the `Query Parameters` section of each API method.\n\n> **Note —**\nThe `include` parameter must be a comma-delimited list that specifies\nthe name of the relationship(s) or nested relationship(s) to be returned. Avoid whitespace before or after each comma.\n\nExample - requesting a relationship and a nested relationship\n```\ninclude=control,control.objective\n```\n\nA complete **Get a control test** request that returns the `control` relationship, and `control.objective` nested relationship would look like this:\n\n```\ncurl -H \"Authorization: Bearer XYZ\" -H \"Content-Type: application/vnd.api+json\" https://apis.highbond.com/v1/orgs/12345/control_tests/105?include=control,control.objective\n```\n\n\n### Blank fields\nBlank fields are included in all response schemas as `\"\"` or `null` instead of being omitted.\n\n\n### Time zones\nAll timestamps are returned in ISO 8601 format: `YYYY-MM-DDTHH:MM:SSZ`.\n\nSome requests that create new data, such as creating a robot task's schedule, allow you to provide time zone information.\nFor API requests that allow for a timestamp to be specified, you must explicitly provide an ISO 8601 timestamp with time zone information.\n\n```\n\"starts_at\": \"2019-03-21T16:25:00.478Z\",\n\"starts_at_timezone\": \"America/Los_Angeles\",\n```\n\n\n### Rich text fields\n\nSome requests and responses contain rich text fields that include HTML tags. These are typically description fields. If you need to format text,\nthe best approach is to upload your raw data first and apply formatting later in the user interface.\n\n> **Note —**\nImages that exist in rich text fields are returned in responses, but they are not rendered. You cannot upload new images to rich text fields using the API.\n\n\n### User identifiers\nA unique identifier (UID) is an alphanumeric string that is associated with a user in HighBond. UIDs make it possible to address users,\nso that they can be accessed and interacted with using the API. Some requests that allow you to assign items to users, such as creating an objective,\nrequire you to specify a user's UID.\n\nTo obtain a user's UID:\n\n1. Sign in to <a href=\"https://accounts.highbond.com/login\" target=\"_blank\">HighBond</a>.\n2. If your company uses more than one instance in HighBond, make sure <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-switch-instances\"\ntarget=\"_blank\">the appropriate instance is active</a>.\n3. Select **Options > Users (#)**.\n4. Navigate to the appropriate user and click the user's name.\n5. In the **User Details** side panel, copy the UID to your clipboard.\nOnce you have copied the UID, you can specify it in your request.\n\n\n### Pagination\nWhen a response consists of a large number of items, the API breaks it into separate pages for performance reasons. You can control the way the API paginates your results by specifying how many items you want to have per page, and which page you want the API to return.\n\nFor example, if you request a list of controls, the request could look like this: `{protocol}://{server}/v1/orgs/{org_id}/objectives/{objective_id}/controls?page[size]=25&page[number]=Mg==`\n\nWhere:\n\n* `page[size]=25` specifies that there should be 25 items per page. Different endpoints have different default values and maximum numbers of values you can have per page.\n* `page[number]=Mg==` specifies that the API should return the second page of results (the 26th through 50th items that match the request).\n\n > **Note —**\n In most cases, page numbers must be encoded in Base64. In this example, `Mg==` is the Base64 encoded value for `2`.\n\nAdditionally, responses include the `links` parameter, which provides URLs for the `prev` and `next` attributes (or `null` values if all of the items are on one page). Those URLs include the above parameters, so you can paste them into subsequent requests if needed.\n\n\n\n## Errors\nHighBond uses standard <a href=\"https://en.wikipedia.org/wiki/List_of_HTTP_status_codes\" target=\"_blank\">HTTP response codes</a>\nto indicate the success or failure of a request. The range of a code indicates information about why it succeeded or failed:\n\n* **`2xx` range —** Success\n* **`4xx` range —** Error given the information provided\n* **`5xx` range —** Server failed to fulfil a valid request\n\nSome common errors that occur when making requests include:\n* **`400` Bad request —** When a parameter is missing (such as the `org_id` or resource `id`), when more\nthan one unique resource is specified in the request, or when a specified data type is incompatible with the endpoint\n* **`401` Bad credentials —** When there is an authentication error\n* **`403` Forbidden —** When there is an authorization problem based on your <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-managing-apps\"\ntarget=\"_blank\">role in a HighBond app</a> or <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=lp-assigning-subscriptions\" target=\"_blank\">subscription</a>\n* **`404` Not found —** When there is a problem on the client side due to an incorrect URL or resource deletion\n* **`415` Unsupported media type —** When the `Content-Type` specified is unsupported\n* **`422` Unprocessable entity —** When a required attribute is missing (such as the name of a resource), or when a conflict occurs\n(such as a script activation conflict)\n\n\n## Versioning\nAll API endpoints use a version number in the path. As can be seen in the examples, `/v1/` specifies version 1 of the API.\n\nOver time, the API will evolve. New API versions will be introduced and existing versions may be updated.\n\nSome API updates are considered a breaking change, requiring a new version of the API to be introduced. An example of a breaking\nchange is fields being changed or removed. By introducing a new version, API consumers can safely continue to use prior API versions.\n\nThe other type of API update is a non-breaking change. You should expect non-breaking change updates to existing API versions.\nAn example of a non-breaking change is adding a field to a response object. Non-breaking changes are additive. While they do\nchange the response body, they should not impact the API consumer.\n",
+      "type": "text/plain"
+    }
+  }
+}

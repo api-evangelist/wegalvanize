@@ -1,0 +1,61 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Collaborators API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Collaborators",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Robot Collaborators",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/collaborators",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Required data records start position, start from 0"
+              },
+              {
+                "name": "usersPerPage",
+                "value": "",
+                "type": "query",
+                "description": "Required number of records to read, start from 1"
+              }
+            ]
+          },
+          "docs": "Get a list of collaborators for a robot.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

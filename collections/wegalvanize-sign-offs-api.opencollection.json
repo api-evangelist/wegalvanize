@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Sign-offs API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sign-offs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get organization's sign-offs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/signoffs",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[signoffs]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "preparer,project",
+                "type": "query",
+                "description": "Requesting the API to return related resources."
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[target.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by target ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[target.type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by target type. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[preparer.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by preparer UID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[detail_reviewer.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by detail reviewer UID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[general_reviewer.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by general reviewer UID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[supplemental_reviewer.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by supplemental reviewer UID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[specialty_reviewer.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by specialty reviewer UID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[next_reviewer.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by next reviewer UID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all sign-offs within organization.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,91 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Scheduled Hours API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scheduled Hours",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get scheduled hours",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/users/:uid/scheduled_hours",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "uid",
+                "value": "",
+                "type": "path",
+                "description": "The UID of the user."
+              },
+              {
+                "name": "filter[date][start]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by start date.\nFor more information, see <a href=\"#section/Making-requests\">Making requests</a>\n"
+              },
+              {
+                "name": "filter[date][end]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by end date.\nFor more information, see <a href=\"#section/Making-requests\">Making requests</a>\n"
+              },
+              {
+                "name": "filter[schedule_type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by schedule type.\nFor more information, see <a href=\"#section/Making-requests\">Making requests</a>\nValues can be:\n  * `project` - for getting project schedules\n  * `non_project` - for getting non project schedules\n"
+              },
+              {
+                "name": "filter[scheduled_project_id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by scheduled project IDs.\nFor more information, see <a href=\"#section/Making-requests\">Making requests</a>\n"
+              },
+              {
+                "name": "fields[scheduled_hours]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get scheduled hours for the user"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

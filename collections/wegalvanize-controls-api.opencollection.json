@@ -1,0 +1,488 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Controls API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Controls",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get controls",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:objective_id/controls",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "objective_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the objective."
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all controls for an objective."
+        },
+        {
+          "info": {
+            "name": "Create a control",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/objectives/:objective_id/controls",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "objective_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the objective."
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new control in an existing objective.\n\n<strong>Limitations</strong>:\n* Each objective in a project or framework can contain a maximum of 1000 controls.\n* You cannot create a control if the existing objective has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile\" target=\"_blank\">HighBond iPa"
+        },
+        {
+          "info": {
+            "name": "Get a control",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a control.\n"
+        },
+        {
+          "info": {
+            "name": "Update a control",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return related resources. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a control in a project or framework, like renaming the control or updating the control description.\n\n<strong>Limitations</strong>:\n* You cannot update the control if the objective it belongs to has been checked out using\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-mobile\" target=\"_blank\">HighBond iPad app</"
+        },
+        {
+          "info": {
+            "name": "Delete a control",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a control from an objective.\n\n<strong>Limitations</strong>:\nYou cannot delete the control in the following scenarios:\n* if the control is included in <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-certifications\" target=\"_blank\">an existing certification program</a>,\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-control-performance\" target=\"_blank\">control performance schedule</a>, or\n<a href=\"https://help.high"
+        },
+        {
+          "info": {
+            "name": "Get all controls in an organization",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[controls]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[objectives]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[walkthroughs]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[control_tests]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to sort controls by the values in a given field. The controls are sorted ascending by default, but you can prefix the field name with `-` to sort descending (e.g., `-id`). You can sort controls by only one field at a time."
+              },
+              {
+                "name": "filter[frequency]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by frequency. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[owner]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by owner. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.1.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the first testing round. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.2.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the second testing round. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.3.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the third testing round. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.4.assigned_user.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by the user assigned to the fourth testing round. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.not_applicable]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results to only include controls that are not being tested as part of any given testing round. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.testing_conclusion]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results to only include controls that were marked as operating effectively. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_tests.testing_conclusion_status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results to only include controls that were marked as operating effectively. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[walkthrough.control_design]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results to only include controls that were marked as designed appropriately. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_type]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control type. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.title]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective title. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.name]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective name. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[objective.reference]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by objective reference. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project ID. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.name]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project name. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.state]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project state. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[project.status]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by project status. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[description]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control description. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[title]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control title. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[query]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control description, title, control_id or owner. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[control_id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control numbers. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "filter[id]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to filter results by control IDs. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "include",
+                "value": "objective,walkthough,control_tests,control_tests.assigned_user",
+                "type": "query",
+                "description": "Requesting the API to return related resources."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Get a list of all of the controls in an organization.\n\n> **Note:**\nBy default, this endpoint only returns controls from active projects. To fetch objects from archived projects or frameworks, do one of the following:\n> * Specify the project or framework ID using `filter[project.id]`\n> * Specify that you want results from archived projects using `filter[project.state]=archive`\n> * Specify that you want results from frameworks using `filter[project.state]=framework`\n"
+        },
+        {
+          "info": {
+            "name": "Create control entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:control_id/entities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "control_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the control."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Link entity to a control.\n\n> **Note**\n> * Tagging a control to an entity automatically tags a control with all ancestor entities and descendant entities.\n> * Request <a href=\"#operation/getControl\">Get a control</a> with `entities` query param to get the whole list of entities linked to a control.\n\n<strong>Limitations</strong>:\n  * You cannot tag the control with entity if the objective it belongs to has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default."
+        },
+        {
+          "info": {
+            "name": "Delete control entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/controls/:control_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "control_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the control."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete control entity link.\n\n> **Note -**\nUntagging a control from an entity automatically untags a control from all descendant entities.\n\n<strong>Limitations</strong>:\n  * You cannot untag a control from an entity if the objective it belongs to has been checked out using\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-offline-client\" target=\"_blank\">Offline Projects</a> or the\n  <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

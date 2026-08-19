@@ -1,0 +1,247 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Frameworks API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Frameworks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get frameworks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[frameworks]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 50. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              },
+              {
+                "name": "filter[name]",
+                "value": "",
+                "type": "query",
+                "description": "Filter by name.  Response will include partial matches and ignore case."
+              }
+            ]
+          },
+          "docs": "Get a list of all frameworks in an account."
+        },
+        {
+          "info": {
+            "name": "Create a framework",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[frameworks]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new framework from scratch.\n\n<strong>Limitations</strong>:\n* There can be a maximum of 1000 frameworks per HighBond instance.\n* You cannot enable <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/risk_assurance/getting_started_with_assurance_for_risk.html\" target=\"_blank\">risk assurance</a> (`risk_assurance: true`) when you first create a framework.\nHowever, you can enable risk assurance when you update a framework.\n"
+        },
+        {
+          "info": {
+            "name": "Get a framework",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[frameworks]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a framework."
+        },
+        {
+          "info": {
+            "name": "Update a framework",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[frameworks]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a framework.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a framework",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a framework that you no longer require.\n\n> **Caution —**\nOnce a framework is permanently deleted, you cannot access or restore the framework.\n\nFor more information, see <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/frameworks/managing_information_using_frameworks.html?#navlink-8\" target=\"_blank\">Deleting frameworks</a>.\n"
+        },
+        {
+          "info": {
+            "name": "Create framework entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks/:framework_id/entities",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "framework_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the framework."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Link entity to a framework.\n\n> **Note**\n> * Tagging a framework to an entity automatically tags a framework with all ancestor entities and descendant entities.\n> * Request <a href=\"#operation/getFramework\">Get a framework</a> with `entities` query param to get the whole list of entities linked to a framework.\n\n<strong>Limitations</strong>:\n  * Only 1 entity can be sent in the request payload.\n\n<a href=\"https://help.highbond.com/helpdocs/auditbond/en-us/Content/projects/admin/config/Setting_up_en"
+        },
+        {
+          "info": {
+            "name": "Delete framework entity link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/frameworks/:framework_id/entities/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "framework_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the framework."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete framework entity link.\n\n> **Note -**\nUntagging a framework from an entity automatically untags a framework from all descendant entities.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,107 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Table columns API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Table columns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create columns in a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/columns/bulk",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add new columns to a table.\n\n<strong>Limitations:</strong>\n* Once a table exists, you cannot change a column's data type.\n* You cannot set a primary key when adding columns to a table.\n* Each table can contain a maximum of 500 columns.\n"
+        },
+        {
+          "info": {
+            "name": "Delete table columns",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/columns/bulk",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete all the columns in a table.\n\n> **Caution —**\nOnce you delete columns, the data is permanently removed. You cannot access or restore deleted columns.\nOnce a table is created and populated with records, deleting a column can break workflows in HighBond that depend on the affected column,\nlike metrics, visualizations, and triggers.\n\n<strong>Limitations:</strong> You cannot delete metadata columns (Priority, Status, Published, Publisher Name, Updated, Closed, Assignee, and Workflow Group) or "
+        },
+        {
+          "info": {
+            "name": "Get columns in a table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/tables/:table_id/columns",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the table."
+              }
+            ]
+          },
+          "docs": "Get information about the columns in a table."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

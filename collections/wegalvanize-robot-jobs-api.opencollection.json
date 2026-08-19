@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Robot Jobs API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Robot Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List robot task runs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/:robot_id/jobs",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "robot_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot."
+              },
+              {
+                "name": "env",
+                "value": "production",
+                "type": "query",
+                "description": "The environment of an analytic script."
+              },
+              {
+                "name": "include",
+                "value": "robot,task,triggered_by",
+                "type": "query",
+                "description": "If specified, the associated objects will be included in the `included` list"
+              },
+              {
+                "name": "page[size]",
+                "value": "100",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "1",
+                "type": "query",
+                "description": "The page number of records to return. Default is 1."
+              }
+            ]
+          },
+          "docs": "Get a list of task runs for a robot."
+        },
+        {
+          "info": {
+            "name": "Delete robot task run",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/robots/jobs/:job_id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the robot job."
+              }
+            ]
+          },
+          "docs": "Delete a single robot task run."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

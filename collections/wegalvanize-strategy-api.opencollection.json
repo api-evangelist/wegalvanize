@@ -1,0 +1,1722 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "HighBond API Reference Actions Strategy API",
+    "version": "1.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Strategy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get risks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "fields[strategy_risks]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's risks from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nA strategic risk is an effect of uncertainty on a strategic objective, with the effect having a positive or\nnegative deviation from what is expected. <br />\nThe `status` field is the current state of the risk on the <a href=\"/#operation/getStrategyKanbanColumns\" target=\"_blank\">Kanban Board</a>,\nits"
+        },
+        {
+          "info": {
+            "name": "Create a risk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new risk in <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nA strategic risk is an effect of uncertainty on a strategic objective, with the effect having a positive or\nnegative deviation from what is expected.\n<br/>\nThe `status` field is the current state of the risk on the <a href=\"/#operation/getStrategyKanbanColumns\" target=\"_blank\">Kanban Board</a>,\nits values can be:\n  - `assess`\n  - `acc"
+        },
+        {
+          "info": {
+            "name": "Get a risk",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[strategy_risks]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about a risk."
+        },
+        {
+          "info": {
+            "name": "Update a risk",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a risk, including updating the risk's title, description, status and custom attributes.\n<br/>\nAssigning an empty array to the `strategy_custom_attributes` field will remove all custom attributes from the risk.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a risk",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a risk."
+        },
+        {
+          "info": {
+            "name": "Get risk assurances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_assurances",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the list of assurances for the current risk from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\n\nAssurances link risks in Strategy to testing results, issues and controls inside the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/landing_pages/user_guide.html\" target=\"_blank\">Projects</a>\napplication.\nSee the Projects <a href=\"/#operation/getObjective\" target=\"_bl"
+        },
+        {
+          "info": {
+            "name": "Create a risk assurance link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_assurances",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new link between a risk and an assurance."
+        },
+        {
+          "info": {
+            "name": "Get a risk assurance",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_assurances/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about an assurance."
+        },
+        {
+          "info": {
+            "name": "Delete a risk assurance link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_assurances/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a link between a risk and an assurance.\n"
+        },
+        {
+          "info": {
+            "name": "Get risk comments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_comments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the list of comments on the discussion tab for the current risk from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nComments can have multiple file attachments. These can be retrieved via the\n<a href=\"/#operation/getStrategyRiskComment\" target=\"_blank\">Comment</a> resource.\n\nThe `user_id` points to the user's unique identifier who created the comment.\nThe <a href=\"/#operation/getStrategyUser"
+        },
+        {
+          "info": {
+            "name": "Create a risk comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_comments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a risk comment."
+        },
+        {
+          "info": {
+            "name": "Get a risk comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_comments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a comment and its attachments."
+        },
+        {
+          "info": {
+            "name": "Delete a risk comment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_comments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a risk comment"
+        },
+        {
+          "info": {
+            "name": "Get risk objectives",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_objectives",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of a risk's objectives from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nA strategic objective is a business process, functional area, or auditable area that relates to an operating segment.\nThe organization's objectives can be accessed with the\n<a href=\"/#operation/getStrategyObjectives\" target=\"_blank\">Objectives</a> resource.\n"
+        },
+        {
+          "info": {
+            "name": "Create a risk objective link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_objectives",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new link between a risk and an objective.\n"
+        },
+        {
+          "info": {
+            "name": "Get a risk objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a risk's objective."
+        },
+        {
+          "info": {
+            "name": "Delete a risk objective link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a link between a risk and an objective.\n"
+        },
+        {
+          "info": {
+            "name": "Get risk segments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_segments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the risks's operating segments from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nAn operating segment is a region, business unit, division, location, or entity across which strategic risks are assessed.\nThe organization's operating segments can be accessed with the\n<a href=\"/#operation/getStrategySegments\" target=\"_blank\">Segments</a> resource.\n"
+        },
+        {
+          "info": {
+            "name": "Get a risk segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_segments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              },
+              {
+                "name": "fields[strategy_segments]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields for the segment. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              },
+              {
+                "name": "fields[strategy_factors]",
+                "value": "",
+                "type": "query",
+                "description": "Requesting the API to return only the specified fields for treatments. For more information, see <a href=\"#section/Making-requests\">Making requests</a>"
+              }
+            ]
+          },
+          "docs": "Get information about an operating segment for the risk.\nThe field `strategy_factors` lists the values of the assessed severity levels for the current segment of the risk.\nTo get information about this factor, use the <a href=\"/#operation/getStrategyFactor\" target=\"_blank\">Factor</a>\nresource.\n\nTo fetch the treatment data, you can specify the required fields via the `fields[strategy_segments]` or\n`fields[strategy_factors]` query parameters, as described below.\n"
+        },
+        {
+          "info": {
+            "name": "Update a risk segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_segments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a risk segment, including updating the segment's severity values and treatment weights.\n"
+        },
+        {
+          "info": {
+            "name": "Get risk metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_metrics",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the list of metrics linked to the current risk from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nA metric is a calculation that can be labeled as a specific type of key indicator.<br />\n\nThis list contains the metric's URI as `metric_uri` pointing to the specific Metric inside the\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/results/landing_pages/user_guide.htm\" targe"
+        },
+        {
+          "info": {
+            "name": "Create a risk metric link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_metrics",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new link between a risk and a metric.\n"
+        },
+        {
+          "info": {
+            "name": "Get a risk metric",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_metrics/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a risk metric."
+        },
+        {
+          "info": {
+            "name": "Update a risk metric",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_metrics/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a risk metric, including updating the metric's description.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a risk metric link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_metrics/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a link between a risk and a metric.\n"
+        },
+        {
+          "info": {
+            "name": "Get risk tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_tags",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the risks's tags from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nTags are associated with strategic risks, and aid in organizing and filtering risks for heatmap creation and other\nvisualization.\nThe organization's tags can be accessed with the\n<a href=\"/#operation/getStrategyTags\" target=\"_blank\">Tags</a> resource.\n"
+        },
+        {
+          "info": {
+            "name": "Create a risk tag link",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_tags",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new link between a risk and a tag.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a risk tag link",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_risks/:risk_id/strategy_tags/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "risk_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the risk."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Delete a link between a risk and a tag.\n"
+        },
+        {
+          "info": {
+            "name": "Get objectives",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_objectives",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's objectives from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nA strategic objective is a business process, functional area, or auditable area that relates to an operating segment.\nA risk's objectives can be accessed with the\n<a href=\"/#operation/getStrategyRiskObjectives\" target=\"_blank\">Risk objectives</a> resource.\n"
+        },
+        {
+          "info": {
+            "name": "Create an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_objectives",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new objective.\n"
+        },
+        {
+          "info": {
+            "name": "Get an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about an objective.\n"
+        },
+        {
+          "info": {
+            "name": "Update an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to an objective, including updating the objective's name or linking it to segments.\n"
+        },
+        {
+          "info": {
+            "name": "Delete an objective",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_objectives/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete an objective.\n"
+        },
+        {
+          "info": {
+            "name": "Get segments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_segments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's segments from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nAn operating segment is a region, business unit, division, location, or entity across which strategic risks are assessed.\nA risk's segments can be accessed with the\n<a href=\"/#operation/getStrategyRiskSegments\" target=\"_blank\">Risk segments</a> resource.\n"
+        },
+        {
+          "info": {
+            "name": "Create a segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_segments",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new segment.\n"
+        },
+        {
+          "info": {
+            "name": "Get a segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_segments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about an operating segment."
+        },
+        {
+          "info": {
+            "name": "Update a segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_segments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to an objective, including updating the segment's name or linking it to objectives.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a segment",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_segments/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a segment.\n"
+        },
+        {
+          "info": {
+            "name": "Get custom attributes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_custom_attributes",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's custom attribute definitions from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nEach organization can have a maximum of 10 user-defined attributes, which can be associated with each risk inside\nthe application.\nThe `field_type` specifies the data type of the attribute. Its value can be one of the following:\n- `text`\n- `rich_text`\n- `select`\n- `multiselect"
+        },
+        {
+          "info": {
+            "name": "Create a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_custom_attributes",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new custom attribute.\nUpdates the organization's custom attribute definitions in\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nEach organization can have a maximum of 10 user-defined attributes, which can be associated with each risk inside\nthe application.\nThe `field_type` specifies the data type of the attribute. Its value can be one of the following:\n- `text`\n- `rich_text`\n- `select`\n- `m"
+        },
+        {
+          "info": {
+            "name": "Get a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_custom_attributes/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Retrieves the definition of a custom attribute."
+        },
+        {
+          "info": {
+            "name": "Update a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_custom_attributes/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to the definition of a custom attribute, including updating its term or options in\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nEach organization can have a maximum of 10 user-defined attributes, which can be associated with each risk inside\nthe application.\nThe `field_type` specifies the data type of the attribute. Its value can be one of the following:\n- `text`\n- `rich_text`\n- `select"
+        },
+        {
+          "info": {
+            "name": "Delete a custom attribute",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_custom_attributes/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a custom attribute.\n"
+        },
+        {
+          "info": {
+            "name": "Get risk status columns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_kanban_columns",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ]
+          },
+          "docs": "Retrieves the risk status board from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nEach column lists the risks contained inside that column.<br />\nThe `id` can be one of the following:\n  - `assess`\n  - `accepted`\n  - `audit`\n  - `continuously_audit`\n  - `mitigated`\n\nThis information is also provided inside the <a href=\"/#operation/getStrategyRisk\" target=\"_blank\">Risk</a>\nresource as the field `statu"
+        },
+        {
+          "info": {
+            "name": "Get a risk status column",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_kanban_columns/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "List all the risks inside a risk status column."
+        },
+        {
+          "info": {
+            "name": "Get scoring factors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_factors",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's risk scoring factors from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nRisk scoring factors are multiplied together to calculate the risk score, with each risk scoring factor\nmultiplied by its assigned weight.\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/admin/config/configuring_risk_scoring_settings.html?cshid=rim-risk-sco"
+        },
+        {
+          "info": {
+            "name": "Create a scoring factor",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_factors",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new scoring factor."
+        },
+        {
+          "info": {
+            "name": "Get a scoring factor",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_factors/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a scoring factor and its severity scale."
+        },
+        {
+          "info": {
+            "name": "Update a scoring factor",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_factors/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a scoring factor, including updating the factor's name, description, weight and severities."
+        },
+        {
+          "info": {
+            "name": "Delete a scoring factor",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_factors/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a scoring factor.\n"
+        },
+        {
+          "info": {
+            "name": "Get tags",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_tags",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's tags from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\nTags are associated with strategic risks, and aid in organizing and filtering risks for heatmap creation and other\nvisualization.\nA risk's tags can be accessed with the\n<a href=\"/#operation/getStrategyRiskTags\" target=\"_blank\">Risk tags</a> resource.\n"
+        },
+        {
+          "info": {
+            "name": "Create a tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_tags",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new tag.\n"
+        },
+        {
+          "info": {
+            "name": "Get a tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_tags/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a tag."
+        },
+        {
+          "info": {
+            "name": "Update a Tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_tags/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a tag, including updating the tag's name or linking it to segments.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a tag",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_tags/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Permanently delete a tag.\n"
+        },
+        {
+          "info": {
+            "name": "Get users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_users",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "page[size]",
+                "value": "",
+                "type": "query",
+                "description": "The number of items returned per page. Default is 20. Maximum is 100."
+              },
+              {
+                "name": "page[number]",
+                "value": "",
+                "type": "query",
+                "description": "The Base64-encoded page number of records to return."
+              }
+            ]
+          },
+          "docs": "Retrieves the full list of the organization's users from\n<a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Content/strategy/landing_pages/user_guide.htm\" target=\"_blank\">Strategy</a>.\n<br />\n"
+        },
+        {
+          "info": {
+            "name": "Get a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_users/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ]
+          },
+          "docs": "Get information about a user."
+        },
+        {
+          "info": {
+            "name": "Update a user role",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "{protocol}://{server}/v1/orgs/:org_id/strategy_users/:id",
+            "params": [
+              {
+                "name": "org_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the HighBond instance."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the requested resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Make changes to a user's role.\n</br>\nThe `role` attribute is required and must be one of the following values:\n- `admin`\n- `executive`\n- `reviewer`\n- `no_access`\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
