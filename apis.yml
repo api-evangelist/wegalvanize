@@ -164,6 +164,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Collection
+  tags_raw:
   - Collections
   properties:
   - type: OpenAPI
@@ -330,6 +332,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Custom Attributes
+  tags_raw:
   - Custom attributes
   properties:
   - type: OpenAPI
@@ -381,6 +385,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -443,6 +449,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -709,6 +717,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Project Types
+  tags_raw:
   - Project types
   properties:
   - type: OpenAPI
@@ -743,6 +753,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -1310,6 +1322,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Table Columns
+  tags_raw:
   - Table columns
   properties:
   - type: OpenAPI
@@ -1354,6 +1368,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Time Entries
+  tags_raw:
   - Time entries
   properties:
   - type: OpenAPI
@@ -1371,6 +1387,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - To-Dos
+  tags_raw:
   - To-dos
   properties:
   - type: OpenAPI
@@ -1388,6 +1406,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
