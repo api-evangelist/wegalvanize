@@ -344,7 +344,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Custom Attributes
+  - Custom attributes
   tags_raw:
   - Custom attributes
   properties:
@@ -729,7 +729,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Project Types
+  - Project types
   tags_raw:
   - Project types
   properties:
@@ -1334,7 +1334,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Table Columns
+  - Table columns
   tags_raw:
   - Table columns
   properties:
@@ -1380,7 +1380,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Time Entries
+  - Time entries
   tags_raw:
   - Time entries
   properties:
@@ -1399,7 +1399,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - To-Dos
+  - To-dos
   tags_raw:
   - To-dos
   properties:
@@ -1502,6 +1502,11 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: ParentCompany
+  url: https://apis.io/providers/diligent-boards/
+  name: Diligent
+  x-relationship: acquired
+  x-evidence: "com is the former web home of Galvanize, the governance, risk, and compliance (GRC) software company behind the HighBond platform; Galvanize was acquired by Diligent and wegalvanize."
 - type: CapabilityMap
   url: capabilities/wegalvanize-capability-edges.yml
   name: Wegalvanize Business Capability Map
