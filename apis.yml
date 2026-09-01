@@ -344,7 +344,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Custom attributes
+  - Custom Attributes
   tags_raw:
   - Custom attributes
   properties:
@@ -729,7 +729,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Project types
+  - Project Types
   tags_raw:
   - Project types
   properties:
@@ -1334,7 +1334,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Table columns
+  - Table Columns
   tags_raw:
   - Table columns
   properties:
@@ -1380,7 +1380,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - Time entries
+  - Time Entries
   tags_raw:
   - Time entries
   properties:
@@ -1399,7 +1399,7 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
-  - To-dos
+  - To-Dos
   tags_raw:
   - To-dos
   properties:
