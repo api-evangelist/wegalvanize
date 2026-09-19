@@ -319,6 +319,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Control
+  tags_raw:
   - Controls
   properties:
   - type: OpenAPI
@@ -443,6 +445,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Framework
+  tags_raw:
   - Frameworks
   properties:
   - type: OpenAPI
@@ -822,6 +826,8 @@ apis:
   humanURL: https://docs-apis.highbond.com/
   baseURL: https://apis-us.highbond.com/v1
   tags:
+  - Questionnaire
+  tags_raw:
   - Questionnaires
   properties:
   - type: OpenAPI
