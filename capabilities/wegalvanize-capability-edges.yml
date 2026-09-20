@@ -1,0 +1,107 @@
+slug: wegalvanize
+provider: Wegalvanize
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 9
+edges:
+- tag: Compliance Maps
+  spec_file: wegalvanize-compliance-maps-api-openapi.yml
+  capability_id: BC-130.10
+  capability_id_l1: BC-130
+  capability_name: Regulatory Compliance Management
+  confidence: 0.85
+  evidence: POST /orgs/{org_id}/compliance_regulations 'Create a compliance regulation'; 'Get compliance
+    requirements'; 'Create a link between requirements'
+  reason: Operations manage regulations, their requirements and cross-requirement mappings in a GRC platform
+    — direct realisation of regulatory compliance management (mapping controls/requirements to regulations).
+- tag: Risks
+  spec_file: wegalvanize-risks-api-openapi.yml
+  capability_id: BC-120.20
+  capability_id_l1: BC-120
+  capability_name: Risk Identification & Assessment
+  confidence: 0.85
+  evidence: '"POST /orgs/{org_id}/objectives/{objective_id}/risks createRisk Create a risk"; "createRiskEntityLink
+    Create risk entity link"'
+  reason: 'Maintains a risk register: risks created under objectives and linked to entities on a GRC platform.
+    This is risk identification and assessment; sub-capability chosen over treatment/monitoring because
+    the operations only capture and relate risk records.'
+- tag: Strategy
+  spec_file: wegalvanize-strategy-api-openapi.yml
+  capability_id: BC-120
+  capability_id_l1: BC-120
+  capability_name: Enterprise Risk Management
+  confidence: 0.8
+  evidence: POST /orgs/{org_id}/strategy_risks  "Create a risk"; "Create a risk assurance link"; schemas
+    CreateStrategyObjectiveRequest, UpdateStrategyRiskMetricRequest
+  reason: The surface manages risks, risk assurances, risk metrics, factors and objectives at organisation
+    level — enterprise risk management. Spans framework, assessment and monitoring sub-capabilities, so
+    no single L2 is asserted.
+- tag: Issues
+  spec_file: wegalvanize-issues-api-openapi.yml
+  capability_id: BC-140.30
+  capability_id_l1: BC-140
+  capability_name: Audit Findings & Remediation Management
+  confidence: 0.78
+  evidence: GET /orgs/{org_id}/projects/{project_id}/issues  Get issues; POST /orgs/{org_id}/issues/{issue_id}/entities  Create
+    issue entity link
+  reason: In the HighBond GRC/audit platform, issues raised within audit projects are findings tracked
+    to remediation, matching Audit Findings & Remediation Management. Some chance they are used more broadly
+    as generic GRC issues, so not maximal confidence.
+- tag: Mitigations
+  spec_file: wegalvanize-mitigations-api-openapi.yml
+  capability_id: BC-120.30
+  capability_id_l1: BC-120
+  capability_name: Risk Treatment Management
+  confidence: 0.78
+  evidence: POST /orgs/{org_id}/mitigations  Create a mitigation; CreateMitigationRequest
+  reason: On a GRC platform, mitigations are recorded responses/treatments to identified risks, matching
+    Risk Treatment Management.
+- tag: Actions
+  spec_file: wegalvanize-actions-api-openapi.yml
+  capability_id: BC-140.30
+  capability_id_l1: BC-140
+  capability_name: Audit Findings & Remediation Management
+  confidence: 0.72
+  evidence: GET /orgs/{org_id}/issues/{issue_id}/actions  'List actions in an issue'; 'Create an action'
+  reason: In the HighBond GRC/audit platform, actions are remediation tasks attached to issues (findings),
+    with comments for follow-up — classic audit issue tracking and management action follow-up. Slight
+    ambiguity with risk treatment, hence not higher.
+- tag: Request Items
+  spec_file: wegalvanize-request-items-api-openapi.yml
+  capability_id: BC-140.20
+  capability_id_l1: BC-140
+  capability_name: Audit Execution Management
+  confidence: 0.7
+  evidence: '"POST /orgs/{org_id}/projects/{project_id}/request_items createRequestItem Create a request
+    item"'
+  reason: Request items are created within audit projects and are the information/evidence requests issued
+    to auditees during fieldwork, which is audit execution. Confidence moderated because the spec does
+    not explicitly describe the request semantics.
+- tag: Sign-offs
+  spec_file: wegalvanize-sign-offs-api-openapi.yml
+  capability_id: BC-140.20
+  capability_id_l1: BC-140
+  capability_name: Audit Execution Management
+  confidence: 0.7
+  evidence: GET /orgs/{org_id}/signoffs  "Get organization's sign-offs"
+  reason: Sign-offs in HighBond are the preparer/reviewer approvals on audit workpapers and fieldwork,
+    which is audit execution evidence and review. Single operation limits confidence.
+- tag: Walkthroughs
+  spec_file: wegalvanize-walkthroughs-api-openapi.yml
+  capability_id: BC-140.20
+  capability_id_l1: BC-140
+  capability_name: Audit Execution Management
+  confidence: 0.7
+  evidence: GET /orgs/{org_id}/walkthroughs  "Get organization walkthroughs"
+  reason: Walkthroughs in HighBond are the control walkthrough/testing artefacts produced during audit
+    and controls fieldwork, i.e. audit execution. Only read/update operations are shown, limiting certainty
+    on scope.
