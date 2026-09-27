@@ -240,79 +240,77 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
+  responses:
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NoContent:
+      description: No content.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
   schemas:
-    UpdateNarrativeRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The type of narrative (`"narratives"`).
-              example: narratives
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              properties:
-                title:
-                  type: string
-                  description: The title of the narrative.
-                  maxLength: 60
-                  example: Narrative title
-                description:
-                  type: string
-                  description: A detailed description of the narrative.
-                  maxLength: 524288
-                  example: Narrative description
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-            relationships:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                framework_origin:
-                  type: object
-                  description: 'In the Projects app, a project `narrative` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `narrative` in a project with its related counterpart in a framework.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the parent control.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"narratives"`).
-                          example: narratives
     CreateNarrativeRequest:
       type: object
       description: The data associated with the resource.
@@ -380,36 +378,6 @@ components:
                           type: string
                           description: The classification of the object (`"narratives"`).
                           example: narratives
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     GetNarrativeResponse:
       type: object
       required:
@@ -519,13 +487,6 @@ components:
                           type: string
                           description: The classification of the object (`"narratives"`).
                           example: narratives
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     GetNarrativesResponse:
       type: object
       required:
@@ -657,15 +618,124 @@ components:
               - 'null'
               description: Previous page url
               example: null
+    UpdateNarrativeRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The type of narrative (`"narratives"`).
+              example: narratives
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: The title of the narrative.
+                  maxLength: 60
+                  example: Narrative title
+                description:
+                  type: string
+                  description: A detailed description of the narrative.
+                  maxLength: 524288
+                  example: Narrative description
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+            relationships:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                framework_origin:
+                  type: object
+                  description: 'In the Projects app, a project `narrative` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `narrative` in a project with its related counterpart in a framework.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parent control.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"narratives"`).
+                          example: narratives
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   parameters:
-    objectiveIdParam:
-      in: path
-      name: objective_id
-      description: The ID of the objective.
-      required: true
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
       schema:
-        type: integer
-        example: 1
+        type: string
+        example: Mg==
     orgIdParam:
       in: path
       name: org_id
@@ -673,6 +743,30 @@ components:
       required: true
       schema:
         type: string
+        example: 1
+    narrativeSparseFieldsetParams:
+      in: query
+      name: fields[narratives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,created_at,updated_at,objective,framework_origin
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    objectiveIdParam:
+      in: path
+      name: objective_id
+      description: The ID of the objective.
+      required: true
+      schema:
+        type: integer
         example: 1
     pageSizeParam:
       in: query
@@ -682,100 +776,6 @@ components:
       schema:
         type: string
         example: 25
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    narrativeSparseFieldsetParams:
-      in: query
-      name: fields[narratives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,created_at,updated_at,objective,framework_origin
-  responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

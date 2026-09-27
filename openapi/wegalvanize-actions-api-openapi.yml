@@ -379,6 +379,729 @@ paths:
                   detail: can't be blank
 components:
   schemas:
+    GetActionsResponse:
+      type: object
+      required:
+      - data
+      - included
+      - links
+      properties:
+        data:
+          type: array
+          description: Array of actions
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: 1
+              type:
+                type: string
+                description: The classification of the object (`"actions"`).
+                example: actions
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  title:
+                    type: string
+                    description: The title of the action.
+                    maxLength: 255
+                    example: Title of the action
+                  created_at:
+                    type: string
+                    description: The timestamp identifying when the action was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp identifying when the action was updated.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  owner_name:
+                    type: string
+                    description: 'The action owner. Specifying a person''s name does not immediately send them an email notification about the action.
+
+                      However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
+
+                      based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
+
+                      action reminders</a>.
+
+                      '
+                    example: Tom Wachowski
+                  owner_email:
+                    type: string
+                    description: 'The action owner’s email address. Specifying a person''s email does not immediately send them an email notification
+
+                      about the action. However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
+
+                      based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
+
+                      action reminders</a>.
+
+                      '
+                    example: tom.wachowski@greenhills.com
+                  send_recurring_reminder:
+                    type: boolean
+                    description: 'If `true`, a recurring email reminder about the action is sent to the owner. If `false`, a recurring email reminder is not sent.
+
+                      Recurring reminder frequencies are configurable. For more information, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
+
+                      action reminders</a>.
+
+                      '
+                    example: true
+                  include_issue_details:
+                    type: boolean
+                    description: 'If `true`, the issue title and description fields are displayed to the action owner. Once the action owner clicks on the link to the
+
+                      action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
+
+                      '
+                    example: true
+                  include_remediation_details:
+                    type: boolean
+                    description: 'If `true`, the remediation plan and remediation deadline fields are displayed to the action owner. Once the action owner clicks on the
+
+                      link to the action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
+
+                      '
+                    example: false
+                  description:
+                    type: string
+                    description: A detailed description of the action.
+                    maxLength: 524288
+                    example: <h1>Action heading</h1><p>Action description.</p>
+                  due_date:
+                    type: string
+                    description: Specifies the date the action must be completed by.
+                    example: '2020-01-02'
+                    format: date
+                  priority:
+                    type: string
+                    description: 'A user configurable classification that specifies the priority of the action. The options available depend
+
+                      on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the
+
+                      project type</a>.
+
+                      '
+                    example: high
+                  closed:
+                    type: boolean
+                    description: 'Specifies the state of the action. An action can have one of the following states: `"open"` or `"closed"`. If `true`, the action
+
+                      is in a `"closed"` state. The action owner stops receiving recurring email notifications about the action. The link to the action
+
+                      in any previously sent email notifications also expires. If `false`, the action is in an `"open"` state. Recurring notifications
+
+                      about the action continue to be sent to the action owner.
+
+                      '
+                    example: true
+                  completed_date:
+                    type: string
+                    description: Specifies the date that the action was completed or addressed. This field is typically filled out by the issue owner.
+                    example: '2020-01-02'
+                    format: date
+                  status:
+                    type: string
+                    description: 'A user configurable classification that specifies the current status of the action. The options available
+
+                      depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration
+
+                      of the project type</a>. This field is typically filled out by the action owner.
+
+                      '
+                    example: Audit Verifying
+                  submitted_on:
+                    type: string
+                    description: Specifies the date that the action was completed or addressed. This field is typically filled out by the action owner.
+                    example: '2020-01-02'
+                    format: date
+                  slug:
+                    type: string
+                    description: Specifies the secret token that is being used in an unauthenticated link that the free responders can use to access the action. Visible only to System Admins
+                    example: a68c352c-3b2d-4ae8-9b78-b4d06b6bd5bd
+                  custom_attributes:
+                    type: array
+                    description: An array of custom attributes defined by the user that are available on this object.
+                    items:
+                      type: object
+                      description: A user defined custom attribute value.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                          example: '42'
+                        term:
+                          type: string
+                          description: The user defined term used to identify the custom attribute. Optional if id is included.
+                          example: Custom Action Attribute
+                        value:
+                          type: array
+                          description: The value or values (for multiselect) to set this custom attribute to.
+                          example:
+                          - Custom Select Option Text
+                          items:
+                            type: string
+                  cc_contacts:
+                    type:
+                    - array
+                    - 'null'
+                    description: An array of user emails
+                    example:
+                    - user@company.com
+                    - user1@company.com
+                    items:
+                      type: string
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                required:
+                - issue
+                - assigned_by
+                properties:
+                  issue:
+                    type: object
+                    description: The attributes associated with the resource.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the issue.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"issues"`).
+                            example: issues
+                  assigned_by:
+                    type: object
+                    description: 'The person who created the action. You can only specify users with a Professional Manager or Professional User role in the project this action belongs to.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  cc_users:
+                    type:
+                    - object
+                    - 'null'
+                    description: 'Specifies one or more users in a HighBond instance that are cc''ed on this action.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: The data associated with the resource.
+                          required:
+                          - id
+                          - type
+                          properties:
+                            id:
+                              type: string
+                              description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                                <a href="#section/Making-requests">Making requests</a>.
+
+                                '
+                              example: 3NQ6XzAUxqJMnAQ7n4KF
+                            type:
+                              type: string
+                              description: The classification of the object (`"users"`).
+                              example: users
+                  owner_user:
+                    type:
+                    - object
+                    - 'null'
+                    description: 'Specifies the user in a HighBond instance that responsible for the action.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+        included:
+          type: array
+          description: Array of related action comments
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The classification of the object (`"action_comments"`).
+                example: action_comments
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  message_content:
+                    type: string
+                    description: The content of the action comment.
+                    example: Message content
+                  commenter_name:
+                    type: string
+                    description: The name of the user who created the action comment.
+                    example: Tom Wachowski
+                  commenter_email:
+                    type: string
+                    description: The email of the user who created the action comment.
+                    example: tom@example.com
+                  created_at:
+                    type: string
+                    description: The timestamp identifying when the action comment was created.
+                    example: '2021-06-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp identifying when the action comment was updated.
+                    example: '2021-06-09T13:17:26Z'
+                    format: date-time
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                required:
+                - action
+                properties:
+                  action:
+                    type: object
+                    description: The attributes associated with the resource.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the action.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"actions"`).
+                            example: actions
+                  commenter_user:
+                    type: object
+                    description: 'The ID for the user who created the action comment. Can be `null` if commenter is an external user.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the commenter user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type:
+              - string
+              - 'null'
+              description: Next page url
+              example: /api/resource?page[number]=Mg==
+            prev:
+              type:
+              - string
+              - 'null'
+              description: Previous page url
+              example: null
+    GetActionResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"actions"`).
+              example: actions
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                title:
+                  type: string
+                  description: The title of the action.
+                  maxLength: 255
+                  example: Title of the action
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the action was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the action was updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                owner_name:
+                  type: string
+                  description: 'The action owner. Specifying a person''s name does not immediately send them an email notification about the action.
+
+                    However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
+
+                    based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
+
+                    action reminders</a>.
+
+                    '
+                  example: Tom Wachowski
+                owner_email:
+                  type: string
+                  description: 'The action owner’s email address. Specifying a person''s email does not immediately send them an email notification
+
+                    about the action. However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
+
+                    based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
+
+                    action reminders</a>.
+
+                    '
+                  example: tom.wachowski@greenhills.com
+                send_recurring_reminder:
+                  type: boolean
+                  description: 'If `true`, a recurring email reminder about the action is sent to the owner. If `false`, a recurring email reminder is not sent.
+
+                    Recurring reminder frequencies are configurable. For more information, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
+
+                    action reminders</a>.
+
+                    '
+                  example: true
+                include_issue_details:
+                  type: boolean
+                  description: 'If `true`, the issue title and description fields are displayed to the action owner. Once the action owner clicks on the link to the
+
+                    action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
+
+                    '
+                  example: true
+                include_remediation_details:
+                  type: boolean
+                  description: 'If `true`, the remediation plan and remediation deadline fields are displayed to the action owner. Once the action owner clicks on the
+
+                    link to the action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
+
+                    '
+                  example: false
+                description:
+                  type: string
+                  description: A detailed description of the action.
+                  maxLength: 524288
+                  example: <h1>Action heading</h1><p>Action description.</p>
+                due_date:
+                  type: string
+                  description: Specifies the date the action must be completed by.
+                  example: '2020-01-02'
+                  format: date
+                priority:
+                  type: string
+                  description: 'A user configurable classification that specifies the priority of the action. The options available depend
+
+                    on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the
+
+                    project type</a>.
+
+                    '
+                  example: high
+                closed:
+                  type: boolean
+                  description: 'Specifies the state of the action. An action can have one of the following states: `"open"` or `"closed"`. If `true`, the action
+
+                    is in a `"closed"` state. The action owner stops receiving recurring email notifications about the action. The link to the action
+
+                    in any previously sent email notifications also expires. If `false`, the action is in an `"open"` state. Recurring notifications
+
+                    about the action continue to be sent to the action owner.
+
+                    '
+                  example: true
+                completed_date:
+                  type: string
+                  description: Specifies the date that the action was completed or addressed. This field is typically filled out by the issue owner.
+                  example: '2020-01-02'
+                  format: date
+                status:
+                  type: string
+                  description: 'A user configurable classification that specifies the current status of the action. The options available
+
+                    depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration
+
+                    of the project type</a>. This field is typically filled out by the action owner.
+
+                    '
+                  example: Audit Verifying
+                submitted_on:
+                  type: string
+                  description: Specifies the date that the action was completed or addressed. This field is typically filled out by the action owner.
+                  example: '2020-01-02'
+                  format: date
+                slug:
+                  type: string
+                  description: Specifies the secret token that is being used in an unauthenticated link that the free responders can use to access the action. Visible only to System Admins
+                  example: a68c352c-3b2d-4ae8-9b78-b4d06b6bd5bd
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined by the user that are available on this object.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify the custom attribute. Optional if id is included.
+                        example: Custom Action Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) to set this custom attribute to.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+                cc_contacts:
+                  type:
+                  - array
+                  - 'null'
+                  description: An array of user emails
+                  example:
+                  - user@company.com
+                  - user1@company.com
+                  items:
+                    type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - issue
+              - assigned_by
+              properties:
+                issue:
+                  type: object
+                  description: The attributes associated with the resource.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the issue.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"issues"`).
+                          example: issues
+                assigned_by:
+                  type: object
+                  description: 'The person who created the action. You can only specify users with a Professional Manager or Professional User role in the project this action belongs to.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                cc_users:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Specifies one or more users in a HighBond instance that are cc''ed on this action.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                owner_user:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Specifies the user in a HighBond instance that responsible for the action.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
     CreateActionRequest:
       type: object
       required:
@@ -651,156 +1374,6 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
-    CreateActionCommentRequest:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"action_comments"`).
-              example: action_comments
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - message_content
-              properties:
-                message_content:
-                  type: string
-                  description: The content of the action comment.
-                  example: Message content
-    GetActionCommentsResponse:
-      type: object
-      required:
-      - data
-      - links
-      properties:
-        data:
-          type: array
-          description: Array of action comments
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            - relationships
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '1'
-              type:
-                type: string
-                description: The classification of the object (`"action_comments"`).
-                example: action_comments
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  message_content:
-                    type: string
-                    description: The content of the action comment.
-                    example: Message content
-                  commenter_name:
-                    type: string
-                    description: The name of the user who created the action comment.
-                    example: Tom Wachowski
-                  commenter_email:
-                    type: string
-                    description: The email of the user who created the action comment.
-                    example: tom@example.com
-                  created_at:
-                    type: string
-                    description: The timestamp identifying when the action comment was created.
-                    example: '2021-06-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The timestamp identifying when the action comment was updated.
-                    example: '2021-06-09T13:17:26Z'
-                    format: date-time
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                required:
-                - action
-                properties:
-                  action:
-                    type: object
-                    description: The attributes associated with the resource.
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the action.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"actions"`).
-                            example: actions
-                  commenter_user:
-                    type: object
-                    description: 'The ID for the user who created the action comment. Can be `null` if commenter is an external user.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the commenter user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-        links:
-          type: object
-          required:
-          - next
-          - prev
-          properties:
-            next:
-              type:
-              - string
-              - 'null'
-              description: Next page url
-              example: /api/resource?page[number]=Mg==
-            prev:
-              type:
-              - string
-              - 'null'
-              description: Previous page url
-              example: null
     GetActionResponseWithIncluded:
       type: object
       required:
@@ -1478,6 +2051,13 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     Error:
       type: object
       required:
@@ -1508,7 +2088,7 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    GetActionResponse:
+    CreateActionCommentResponse:
       type: object
       required:
       - data
@@ -1525,182 +2105,44 @@ components:
             id:
               type: string
               description: The ID of the requested resource.
-              example: 1
+              example: '1'
             type:
               type: string
-              description: The classification of the object (`"actions"`).
-              example: actions
+              description: The classification of the object (`"action_comments"`).
+              example: action_comments
             attributes:
               type: object
               description: The attributes associated with the resource.
               properties:
-                title:
+                message_content:
                   type: string
-                  description: The title of the action.
-                  maxLength: 255
-                  example: Title of the action
+                  description: The content of the action comment.
+                  example: Message content
+                commenter_name:
+                  type: string
+                  description: The name of the user who created the action comment.
+                  example: Tom Wachowski
+                commenter_email:
+                  type: string
+                  description: The email of the user who created the action comment.
+                  example: tom@example.com
                 created_at:
                   type: string
-                  description: The timestamp identifying when the action was created.
-                  example: '2019-02-09T13:17:26Z'
+                  description: The timestamp identifying when the action comment was created.
+                  example: '2021-06-09T13:17:26Z'
                   format: date-time
                 updated_at:
                   type: string
-                  description: The timestamp identifying when the action was updated.
-                  example: '2019-02-09T13:17:26Z'
+                  description: The timestamp identifying when the action comment was updated.
+                  example: '2021-06-09T13:17:26Z'
                   format: date-time
-                owner_name:
-                  type: string
-                  description: 'The action owner. Specifying a person''s name does not immediately send them an email notification about the action.
-
-                    However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
-
-                    based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
-
-                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
-
-                    action reminders</a>.
-
-                    '
-                  example: Tom Wachowski
-                owner_email:
-                  type: string
-                  description: 'The action owner’s email address. Specifying a person''s email does not immediately send them an email notification
-
-                    about the action. However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
-
-                    based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
-
-                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
-
-                    action reminders</a>.
-
-                    '
-                  example: tom.wachowski@greenhills.com
-                send_recurring_reminder:
-                  type: boolean
-                  description: 'If `true`, a recurring email reminder about the action is sent to the owner. If `false`, a recurring email reminder is not sent.
-
-                    Recurring reminder frequencies are configurable. For more information, see
-
-                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
-
-                    action reminders</a>.
-
-                    '
-                  example: true
-                include_issue_details:
-                  type: boolean
-                  description: 'If `true`, the issue title and description fields are displayed to the action owner. Once the action owner clicks on the link to the
-
-                    action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
-
-                    '
-                  example: true
-                include_remediation_details:
-                  type: boolean
-                  description: 'If `true`, the remediation plan and remediation deadline fields are displayed to the action owner. Once the action owner clicks on the
-
-                    link to the action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
-
-                    '
-                  example: false
-                description:
-                  type: string
-                  description: A detailed description of the action.
-                  maxLength: 524288
-                  example: <h1>Action heading</h1><p>Action description.</p>
-                due_date:
-                  type: string
-                  description: Specifies the date the action must be completed by.
-                  example: '2020-01-02'
-                  format: date
-                priority:
-                  type: string
-                  description: 'A user configurable classification that specifies the priority of the action. The options available depend
-
-                    on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the
-
-                    project type</a>.
-
-                    '
-                  example: high
-                closed:
-                  type: boolean
-                  description: 'Specifies the state of the action. An action can have one of the following states: `"open"` or `"closed"`. If `true`, the action
-
-                    is in a `"closed"` state. The action owner stops receiving recurring email notifications about the action. The link to the action
-
-                    in any previously sent email notifications also expires. If `false`, the action is in an `"open"` state. Recurring notifications
-
-                    about the action continue to be sent to the action owner.
-
-                    '
-                  example: true
-                completed_date:
-                  type: string
-                  description: Specifies the date that the action was completed or addressed. This field is typically filled out by the issue owner.
-                  example: '2020-01-02'
-                  format: date
-                status:
-                  type: string
-                  description: 'A user configurable classification that specifies the current status of the action. The options available
-
-                    depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration
-
-                    of the project type</a>. This field is typically filled out by the action owner.
-
-                    '
-                  example: Audit Verifying
-                submitted_on:
-                  type: string
-                  description: Specifies the date that the action was completed or addressed. This field is typically filled out by the action owner.
-                  example: '2020-01-02'
-                  format: date
-                slug:
-                  type: string
-                  description: Specifies the secret token that is being used in an unauthenticated link that the free responders can use to access the action. Visible only to System Admins
-                  example: a68c352c-3b2d-4ae8-9b78-b4d06b6bd5bd
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined by the user that are available on this object.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify the custom attribute. Optional if id is included.
-                        example: Custom Action Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) to set this custom attribute to.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-                cc_contacts:
-                  type:
-                  - array
-                  - 'null'
-                  description: An array of user emails
-                  example:
-                  - user@company.com
-                  - user1@company.com
-                  items:
-                    type: string
             relationships:
               type: object
               description: The relationships associated with the resource.
               required:
-              - issue
-              - assigned_by
+              - action
               properties:
-                issue:
+                action:
                   type: object
                   description: The attributes associated with the resource.
                   required:
@@ -1715,15 +2157,15 @@ components:
                       properties:
                         id:
                           type: string
-                          description: The ID of the issue.
+                          description: The ID of the action.
                           example: '1'
                         type:
                           type: string
-                          description: The classification of the object (`"issues"`).
-                          example: issues
-                assigned_by:
+                          description: The classification of the object (`"actions"`).
+                          example: actions
+                commenter_user:
                   type: object
-                  description: 'The person who created the action. You can only specify users with a Professional Manager or Professional User role in the project this action belongs to.
+                  description: 'The ID for the user who created the action comment. Can be `null` if commenter is an external user.
 
                     '
                   required:
@@ -1738,7 +2180,7 @@ components:
                       properties:
                         id:
                           type: string
-                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
+                          description: 'The unique identifier (UID) of the commenter user. For more information on obtaining this value, see
 
                             <a href="#section/Making-requests">Making requests</a>.
 
@@ -1748,374 +2190,41 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
-                cc_users:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Specifies one or more users in a HighBond instance that are cc''ed on this action.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-                owner_user:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Specifies the user in a HighBond instance that responsible for the action.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-    GetActionsResponse:
+    CreateActionCommentRequest:
       type: object
       required:
       - data
-      - included
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"action_comments"`).
+              example: action_comments
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - message_content
+              properties:
+                message_content:
+                  type: string
+                  description: The content of the action comment.
+                  example: Message content
+    GetActionCommentsResponse:
+      type: object
+      required:
+      - data
       - links
       properties:
         data:
           type: array
-          description: Array of actions
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            - relationships
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: 1
-              type:
-                type: string
-                description: The classification of the object (`"actions"`).
-                example: actions
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  title:
-                    type: string
-                    description: The title of the action.
-                    maxLength: 255
-                    example: Title of the action
-                  created_at:
-                    type: string
-                    description: The timestamp identifying when the action was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The timestamp identifying when the action was updated.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  owner_name:
-                    type: string
-                    description: 'The action owner. Specifying a person''s name does not immediately send them an email notification about the action.
-
-                      However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
-
-                      based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
-
-                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
-
-                      action reminders</a>.
-
-                      '
-                    example: Tom Wachowski
-                  owner_email:
-                    type: string
-                    description: 'The action owner’s email address. Specifying a person''s email does not immediately send them an email notification
-
-                      about the action. However, if `send_recurring_reminder` is configured to `true`, recurring email reminders are sent to the action owner
-
-                      based on the frequency configured. This field becomes required if the `owner_user` relationship is not provided. For more information, see
-
-                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
-
-                      action reminders</a>.
-
-                      '
-                    example: tom.wachowski@greenhills.com
-                  send_recurring_reminder:
-                    type: boolean
-                    description: 'If `true`, a recurring email reminder about the action is sent to the owner. If `false`, a recurring email reminder is not sent.
-
-                      Recurring reminder frequencies are configurable. For more information, see
-
-                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-action-reminders" target="_blank">Sending recurring
-
-                      action reminders</a>.
-
-                      '
-                    example: true
-                  include_issue_details:
-                    type: boolean
-                    description: 'If `true`, the issue title and description fields are displayed to the action owner. Once the action owner clicks on the link to the
-
-                      action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
-
-                      '
-                    example: true
-                  include_remediation_details:
-                    type: boolean
-                    description: 'If `true`, the remediation plan and remediation deadline fields are displayed to the action owner. Once the action owner clicks on the
-
-                      link to the action in the email, they can see the fields on the action page. If `false`, the fields are not displayed to the action owner.
-
-                      '
-                    example: false
-                  description:
-                    type: string
-                    description: A detailed description of the action.
-                    maxLength: 524288
-                    example: <h1>Action heading</h1><p>Action description.</p>
-                  due_date:
-                    type: string
-                    description: Specifies the date the action must be completed by.
-                    example: '2020-01-02'
-                    format: date
-                  priority:
-                    type: string
-                    description: 'A user configurable classification that specifies the priority of the action. The options available depend
-
-                      on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the
-
-                      project type</a>.
-
-                      '
-                    example: high
-                  closed:
-                    type: boolean
-                    description: 'Specifies the state of the action. An action can have one of the following states: `"open"` or `"closed"`. If `true`, the action
-
-                      is in a `"closed"` state. The action owner stops receiving recurring email notifications about the action. The link to the action
-
-                      in any previously sent email notifications also expires. If `false`, the action is in an `"open"` state. Recurring notifications
-
-                      about the action continue to be sent to the action owner.
-
-                      '
-                    example: true
-                  completed_date:
-                    type: string
-                    description: Specifies the date that the action was completed or addressed. This field is typically filled out by the issue owner.
-                    example: '2020-01-02'
-                    format: date
-                  status:
-                    type: string
-                    description: 'A user configurable classification that specifies the current status of the action. The options available
-
-                      depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration
-
-                      of the project type</a>. This field is typically filled out by the action owner.
-
-                      '
-                    example: Audit Verifying
-                  submitted_on:
-                    type: string
-                    description: Specifies the date that the action was completed or addressed. This field is typically filled out by the action owner.
-                    example: '2020-01-02'
-                    format: date
-                  slug:
-                    type: string
-                    description: Specifies the secret token that is being used in an unauthenticated link that the free responders can use to access the action. Visible only to System Admins
-                    example: a68c352c-3b2d-4ae8-9b78-b4d06b6bd5bd
-                  custom_attributes:
-                    type: array
-                    description: An array of custom attributes defined by the user that are available on this object.
-                    items:
-                      type: object
-                      description: A user defined custom attribute value.
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the custom attribute that this custom attribute value is for. Optional if term is included.
-                          example: '42'
-                        term:
-                          type: string
-                          description: The user defined term used to identify the custom attribute. Optional if id is included.
-                          example: Custom Action Attribute
-                        value:
-                          type: array
-                          description: The value or values (for multiselect) to set this custom attribute to.
-                          example:
-                          - Custom Select Option Text
-                          items:
-                            type: string
-                  cc_contacts:
-                    type:
-                    - array
-                    - 'null'
-                    description: An array of user emails
-                    example:
-                    - user@company.com
-                    - user1@company.com
-                    items:
-                      type: string
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                required:
-                - issue
-                - assigned_by
-                properties:
-                  issue:
-                    type: object
-                    description: The attributes associated with the resource.
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the issue.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"issues"`).
-                            example: issues
-                  assigned_by:
-                    type: object
-                    description: 'The person who created the action. You can only specify users with a Professional Manager or Professional User role in the project this action belongs to.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-                  cc_users:
-                    type:
-                    - object
-                    - 'null'
-                    description: 'Specifies one or more users in a HighBond instance that are cc''ed on this action.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          description: The data associated with the resource.
-                          required:
-                          - id
-                          - type
-                          properties:
-                            id:
-                              type: string
-                              description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                                <a href="#section/Making-requests">Making requests</a>.
-
-                                '
-                              example: 3NQ6XzAUxqJMnAQ7n4KF
-                            type:
-                              type: string
-                              description: The classification of the object (`"users"`).
-                              example: users
-                  owner_user:
-                    type:
-                    - object
-                    - 'null'
-                    description: 'Specifies the user in a HighBond instance that responsible for the action.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-        included:
-          type: array
-          description: Array of related action comments
+          description: Array of action comments
           items:
             type: object
             description: The data associated with the resource.
@@ -2231,172 +2340,7 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    CreateActionCommentResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"action_comments"`).
-              example: action_comments
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                message_content:
-                  type: string
-                  description: The content of the action comment.
-                  example: Message content
-                commenter_name:
-                  type: string
-                  description: The name of the user who created the action comment.
-                  example: Tom Wachowski
-                commenter_email:
-                  type: string
-                  description: The email of the user who created the action comment.
-                  example: tom@example.com
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the action comment was created.
-                  example: '2021-06-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the action comment was updated.
-                  example: '2021-06-09T13:17:26Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - action
-              properties:
-                action:
-                  type: object
-                  description: The attributes associated with the resource.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the action.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"actions"`).
-                          example: actions
-                commenter_user:
-                  type: object
-                  description: 'The ID for the user who created the action comment. Can be `null` if commenter is an external user.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the commenter user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
   parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    actionIncludeParams:
-      in: query
-      name: include
-      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: action_comments
-    actionSparseFieldsetParams:
-      in: query
-      name: fields[actions]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,created_at,updated_at,owner_name,owner_email,send_recurring_reminder,include_issue_details,include_remediation_details,description,due_date,priority,closed,completed_date,status,submitted_on,slug,custom_attributes,issue,assigned_by,cc_users
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    actionCommentSparseFieldsetParams:
-      in: query
-      name: fields[action_comments]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: message_content,commenter_name,commenter_email,created_at,updated_at,action,commenter_user
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    actionIdParam:
-      in: path
-      name: action_id
-      description: The ID of the action.
-      required: true
-      schema:
-        type: integer
-        example: 1
     pageNumberEncodedParam:
       in: query
       name: page[number]
@@ -2405,6 +2349,54 @@ components:
       schema:
         type: string
         example: Mg==
+    actionIdParam:
+      in: path
+      name: action_id
+      description: The ID of the action.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    actionIncludeParams:
+      in: query
+      name: include
+      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: action_comments
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    actionSparseFieldsetParams:
+      in: query
+      name: fields[actions]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,created_at,updated_at,owner_name,owner_email,send_recurring_reminder,include_issue_details,include_remediation_details,description,due_date,priority,closed,completed_date,status,submitted_on,slug,custom_attributes,issue,assigned_by,cc_users
     issueIdParam:
       in: path
       name: issue_id
@@ -2413,11 +2405,29 @@ components:
       schema:
         type: integer
         example: 1
+    actionCommentSparseFieldsetParams:
+      in: query
+      name: fields[action_comments]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: message_content,commenter_name,commenter_email,created_at,updated_at,action,commenter_user
   responses:
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NoContent:
+      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -2443,6 +2453,8 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
+    Forbidden:
+      description: Forbidden.
     MissingIssueId:
       description: Bad request.
       content:
@@ -2455,20 +2467,8 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, issue_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
+    BadCredentials:
+      description: Bad credentials.
     ResourceTypeMismatch:
       description: Bad request.
       content:

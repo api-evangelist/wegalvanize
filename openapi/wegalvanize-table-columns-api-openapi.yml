@@ -174,6 +174,27 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
+    RelationshipObject:
+      type: object
+      description: The object related to the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the related object.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the related object.
+              example: 1
+            type:
+              type: string
+              description: The classification of the related object.
+              example: collection
     CreateColumnPayload:
       type: object
       description: The data associated with the resource.
@@ -232,31 +253,6 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    DeleteColumnPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            required:
-            - field_name
-            properties:
-              field_name:
-                type: string
-                description: The underlying name of a column in a table. `field_name` must be unique within a table and follow the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rm-import-export-results" target="_blank">column naming requirements</a>.
-                example: account_number
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     MultiColumnsResponse:
       type: object
       description: The data associated with the resource.
@@ -310,27 +306,31 @@ components:
                     data:
                       id: '300'
                       type: tables
-    RelationshipObject:
+    DeleteColumnPayload:
       type: object
-      description: The object related to the resource.
+      description: The data associated with the resource.
       required:
       - data
       properties:
         data:
-          type: object
-          description: The data associated with the related object.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            required:
+            - field_name
+            properties:
+              field_name:
+                type: string
+                description: The underlying name of a column in a table. `field_name` must be unique within a table and follow the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rm-import-export-results" target="_blank">column naming requirements</a>.
+                example: account_number
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   responses:
     NotFound:
       description: Not found.
@@ -343,6 +343,10 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
+    NoContent:
+      description: No content.
+    BadCredentials:
+      description: Bad credentials.
     MissingOrgId:
       description: Bad request.
       content:
@@ -355,8 +359,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    NoContent:
-      description: No content.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -371,8 +373,6 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    BadCredentials:
-      description: Bad credentials.
     Forbidden:
       description: Forbidden.
     MissingTableId:

@@ -193,58 +193,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    UpdateRobotsFolderRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"robots_folders"`).
-              example: robots_folders
-            attributes:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: The name of the Robots Folder.
-                  example: updated test folder
-    CreateRobotsFolderRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"robots_folders"`).
-              example: robots_folders
-            attributes:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: The name of the Robots Folder.
-                  example: test folder
-                category:
-                  type: string
-                  description: Category of the Robots Folder.
-                  example: highbond
     ListRobotsInFolderResponse:
       type: object
       description: The data associated with the resource.
@@ -355,43 +303,6 @@ components:
                             type: string
                             description: The classification of the object (`"folder"`).
                             example: folder
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     RobotsFolderResponse:
       type: object
       properties:
@@ -431,6 +342,43 @@ components:
               type: string
               description: Specifies if the Robots Folder deletion failed.
               example: false
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     ListRobotsFoldersResponse:
       type: object
       description: The data associated with the resource.
@@ -477,6 +425,58 @@ components:
                     type: string
                     description: Specifies if the Robots Folder deletion failed.
                     example: false
+    UpdateRobotsFolderRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"robots_folders"`).
+              example: robots_folders
+            attributes:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the Robots Folder.
+                  example: updated test folder
+    CreateRobotsFolderRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"robots_folders"`).
+              example: robots_folders
+            attributes:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the Robots Folder.
+                  example: test folder
+                category:
+                  type: string
+                  description: Category of the Robots Folder.
+                  example: highbond
   responses:
     NotFound:
       description: Not found.
@@ -501,10 +501,10 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    Forbidden:
-      description: Forbidden.
     BadCredentials:
       description: Bad credentials.
+    Forbidden:
+      description: Forbidden.
     MissingFolderId:
       description: Bad request.
       content:
@@ -518,6 +518,17 @@ components:
               title: Parameter missing
               detail: The required parameter, folder_id, is missing.
   parameters:
+    robotCategoryParam:
+      in: query
+      name: category
+      description: The Robots category for the Folder.
+      required: false
+      schema:
+        type: string
+        enum:
+        - acl
+        - highbond
+        - workflow
     folderIdParam:
       in: path
       name: folder_id
@@ -534,17 +545,6 @@ components:
       schema:
         type: string
         example: 1
-    robotCategoryParam:
-      in: query
-      name: category
-      description: The Robots category for the Folder.
-      required: false
-      schema:
-        type: string
-        enum:
-        - acl
-        - highbond
-        - workflow
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

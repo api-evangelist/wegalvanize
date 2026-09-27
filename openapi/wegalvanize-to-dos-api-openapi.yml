@@ -315,24 +315,6 @@ paths:
                   detail: can't be blank
 components:
   parameters:
-    projectIdParam:
-      in: path
-      name: project_id
-      description: The ID of the project.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    todoCommentIncludeParam:
-      in: query
-      name: include
-      description: Requesting the API to return related resources.
-      required: false
-      schema:
-        type: string
-        enum:
-        - user
-      example: user
     todoIdParam:
       in: path
       name: todo_id
@@ -341,6 +323,14 @@ components:
       schema:
         type: integer
         example: 1
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
     orgIdParam:
       in: path
       name: org_id
@@ -365,22 +355,40 @@ components:
       schema:
         type: string
         example: test_plans
-    pageSizeParam:
+    orgProjectsTodosTargetIdFilterParams:
       in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
+      name: filter[target.id]
+      description: Requesting the API to filter results by target ID. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: 25
-    projectsTodosSparseFieldsetParams:
+        example: '1'
+    orgProjectsTodosProjectIdFilterParams:
       in: query
-      name: fields[projects_todos]
+      name: filter[project.id]
+      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '1'
+    todoCommentIncludeParam:
+      in: query
+      name: include
+      description: Requesting the API to return related resources.
+      required: false
+      schema:
+        type: string
+        enum:
+        - user
+      example: user
+    todoCommentSparseFieldsetParams:
+      in: query
+      name: fields[comments]
       description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: description,due_date,status,created_at,updated_at,assigned_to,creator,target
+        example: text,user
     resourceIdParam:
       in: path
       name: id
@@ -389,14 +397,46 @@ components:
       schema:
         type: string
         example: 9999
-    pageNumberEncodedParam:
+    projectsTodosIncludeParams:
       in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
+      name: include
+      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: Mg==
+        example: assigned_to,target,creator
+    projectIdParam:
+      in: path
+      name: project_id
+      description: The ID of the project.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    orgProjectsTodosFieldsetParams:
+      in: query
+      name: fields[projects_todos]
+      description: Requesting the API to return only specific fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+      example: description,created_at,updated_at,due_date,status,project,target
+    projectsTodosSparseFieldsetParams:
+      in: query
+      name: fields[projects_todos]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: description,due_date,status,created_at,updated_at,assigned_to,creator,target
     orgProjectsTodosSortParams:
       in: query
       name: sort
@@ -408,186 +448,7 @@ components:
         - status
         - created_at
         default: id
-    todoCommentSparseFieldsetParams:
-      in: query
-      name: fields[comments]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: text,user
-    orgProjectsTodosFieldsetParams:
-      in: query
-      name: fields[projects_todos]
-      description: Requesting the API to return only specific fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-      example: description,created_at,updated_at,due_date,status,project,target
-    orgProjectsTodosProjectIdFilterParams:
-      in: query
-      name: filter[project.id]
-      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '1'
-    orgProjectsTodosTargetIdFilterParams:
-      in: query
-      name: filter[target.id]
-      description: Requesting the API to filter results by target ID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '1'
-    projectsTodosIncludeParams:
-      in: query
-      name: include
-      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: assigned_to,target,creator
   schemas:
-    CreateTodoResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"projects_todos"`).
-              example: projects_todos
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - description
-              - created_at
-              - updated_at
-              - due_date
-              - status
-              properties:
-                description:
-                  type: string
-                  description: A detailed description of the todo.
-                  maxLength: 524288
-                  example: Todo details
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the todo was created.
-                  example: '2021-01-18T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the todo was last updated.
-                  example: '2021-01-18T13:17:26Z'
-                  format: date-time
-                due_date:
-                  type: string
-                  description: Specifies when the todo should be fulfilled by.
-                  example: '2021-01-18'
-                  format: date
-                status:
-                  type: string
-                  description: Status of the todo. Can have one of the following values - "open", "cleared", "closed".
-                  example: open
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - assigned_to
-              - creator
-              - target
-              properties:
-                assigned_to:
-                  type: object
-                  description: Specifies the user to whom the todo is assigned to.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with a project.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The unique identifier (UID) of the user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
-                          example: YhxzalsjfhauYna
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-                creator:
-                  type: object
-                  description: Specifies the user to who is the todo's creator.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with a project.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The unique identifier (UID) of the user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
-                          example: YhxzalsjfhauYna
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-                target:
-                  type: object
-                  description: Specifies the resource that the todo is associated with.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with a project.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: 'The classification of the object.
-
-
-                            A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
-
-                            `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
-
-                            `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
-
-                            `"testing_rounds"`, `"walkthroughs"`.
-
-                            '
-                          example: objectives
     GetUpdateTodoResponse:
       type: object
       description: The data associated with the resource.
@@ -723,160 +584,7 @@ components:
 
                             '
                           example: objectives
-    GetOrgProjectsTodosResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            - relationships
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '1'
-              type:
-                type: string
-                description: The classification of the object (`"projects_todos"`).
-                example: projects_todos
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  description:
-                    type: string
-                    description: A detailed description of the todo.
-                    maxLength: 524288
-                    example: Todo details
-                  created_at:
-                    type: string
-                    description: The timestamp identifying when the todo was created.
-                    example: '2021-01-18T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The timestamp identifying when the todo was last updated.
-                    example: '2021-01-18T13:17:26Z'
-                    format: date-time
-                  due_date:
-                    type: string
-                    description: Specifies when the todo should be fulfilled by.
-                    example: '2021-01-18'
-                    format: date
-                  status:
-                    type: string
-                    description: Status of the todo. Can have one of the following values - "open", "cleared", "closed".
-                    example: open
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                properties:
-                  project:
-                    type: object
-                    description: Specifies the project that the todo is associated with.
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with a project.
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the project.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"projects"`).
-                            example: projects
-                  target:
-                    type: object
-                    description: Specifies the resource that the todo is associated with.
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with a project.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the resource.
-                            example: '1'
-                          type:
-                            type: string
-                            description: 'The classification of the object.
-
-
-                              A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
-
-                              `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
-
-                              `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
-
-                              `"testing_rounds"`, `"walkthroughs"`.
-
-                              '
-                            example: objectives
-        links:
-          type: object
-          required:
-          - next
-          - prev
-          properties:
-            next:
-              type:
-              - string
-              - 'null'
-              description: Next page url
-              example: /api/resource?page[number]=Mw==
-            prev:
-              type:
-              - string
-              - 'null'
-              description: Previous page url
-              example: null
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    UpdateTodoRequest:
+    CreateTodoResponse:
       type: object
       description: The data associated with the resource.
       required:
@@ -889,6 +597,7 @@ components:
           - id
           - type
           - attributes
+          - relationships
           properties:
             id:
               type: string
@@ -901,12 +610,28 @@ components:
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - description
+              - created_at
+              - updated_at
+              - due_date
+              - status
               properties:
                 description:
                   type: string
                   description: A detailed description of the todo.
                   maxLength: 524288
                   example: Todo details
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the todo was created.
+                  example: '2021-01-18T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the todo was last updated.
+                  example: '2021-01-18T13:17:26Z'
+                  format: date-time
                 due_date:
                   type: string
                   description: Specifies when the todo should be fulfilled by.
@@ -919,10 +644,35 @@ components:
             relationships:
               type: object
               description: The relationships associated with the resource.
+              required:
+              - assigned_to
+              - creator
+              - target
               properties:
                 assigned_to:
                   type: object
                   description: Specifies the user to whom the todo is assigned to.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier (UID) of the user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
+                          example: YhxzalsjfhauYna
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                creator:
+                  type: object
+                  description: Specifies the user to who is the todo's creator.
                   required:
                   - data
                   properties:
@@ -1071,6 +821,31 @@ components:
 
                             '
                           example: objectives
+    CreateTodoCommentRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"comments"`).
+              example: comments
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                text:
+                  type: string
+                  description: Body of commment.
+                  example: Sample body
     GetTodoCommentsResponse:
       type: object
       description: The data associated with the resource.
@@ -1151,31 +926,36 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-    CreateTodoCommentRequest:
+    Error:
       type: object
-      description: The data associated with the resource.
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the resource.
+          description: Indicates which part of the request document caused the error.
           required:
-          - type
-          - attributes
+          - pointer
           properties:
-            type:
+            pointer:
               type: string
-              description: The classification of the object (`"comments"`).
-              example: comments
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                text:
-                  type: string
-                  description: Body of commment.
-                  example: Sample body
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     GetTodoCommentResponse:
       type: object
       required:
@@ -1246,11 +1026,241 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
+    GetOrgProjectsTodosResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The classification of the object (`"projects_todos"`).
+                example: projects_todos
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  description:
+                    type: string
+                    description: A detailed description of the todo.
+                    maxLength: 524288
+                    example: Todo details
+                  created_at:
+                    type: string
+                    description: The timestamp identifying when the todo was created.
+                    example: '2021-01-18T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp identifying when the todo was last updated.
+                    example: '2021-01-18T13:17:26Z'
+                    format: date-time
+                  due_date:
+                    type: string
+                    description: Specifies when the todo should be fulfilled by.
+                    example: '2021-01-18'
+                    format: date
+                  status:
+                    type: string
+                    description: Status of the todo. Can have one of the following values - "open", "cleared", "closed".
+                    example: open
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                properties:
+                  project:
+                    type: object
+                    description: Specifies the project that the todo is associated with.
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with a project.
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the project.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"projects"`).
+                            example: projects
+                  target:
+                    type: object
+                    description: Specifies the resource that the todo is associated with.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with a project.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the resource.
+                            example: '1'
+                          type:
+                            type: string
+                            description: 'The classification of the object.
+
+
+                              A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
+
+                              `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
+
+                              `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
+
+                              `"testing_rounds"`, `"walkthroughs"`.
+
+                              '
+                            example: objectives
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type:
+              - string
+              - 'null'
+              description: Next page url
+              example: /api/resource?page[number]=Mw==
+            prev:
+              type:
+              - string
+              - 'null'
+              description: Previous page url
+              example: null
+    UpdateTodoRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"projects_todos"`).
+              example: projects_todos
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                description:
+                  type: string
+                  description: A detailed description of the todo.
+                  maxLength: 524288
+                  example: Todo details
+                due_date:
+                  type: string
+                  description: Specifies when the todo should be fulfilled by.
+                  example: '2021-01-18'
+                  format: date
+                status:
+                  type: string
+                  description: Status of the todo. Can have one of the following values - "open", "cleared", "closed".
+                  example: open
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                assigned_to:
+                  type: object
+                  description: Specifies the user to whom the todo is assigned to.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier (UID) of the user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
+                          example: YhxzalsjfhauYna
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                target:
+                  type: object
+                  description: Specifies the resource that the todo is associated with.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
+
+                            `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
+
+                            `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
+
+                            `"testing_rounds"`, `"walkthroughs"`.
+
+                            '
+                          example: objectives
   responses:
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NoContent:
+      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -1276,20 +1286,10 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
     ResourceTypeMismatch:
       description: Bad request.
       content:

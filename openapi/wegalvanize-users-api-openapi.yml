@@ -186,76 +186,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    listMembershipRoleFilterParam:
-      in: query
-      name: filter[membership_role]
-      description: Requesting the API to filter Users by their type of membership role in the organization. Can only be one of the following types `"admin"`, and `"member"`
-      required: false
-      schema:
-        type: string
-        example: admin
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    userPageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default and maximum is 8000 to support backwards compatibility. Recommended best practice is to use 20-50 for user interface usage, and 100-500 for API usage.
-      required: false
-      schema:
-        type: number
-      example: 100
-    userPageNumberParam:
-      in: query
-      name: page[number]
-      description: The page number of records to return. Default is 1.
-      required: false
-      schema:
-        type: number
-      example: 1
-    uidPathParam:
-      name: uid
-      description: The UID of the user.
-      schema:
-        type: string
-        example: yvqdNCtv8TeM47WQtzau
-      in: path
-      required: true
-    listUsersSearchParam:
-      in: query
-      name: filter[query]
-      description: Requesting the API to return only Users matching their name or email if it contains the search query string. Case-insensitive.
-      required: false
-      schema:
-        type: string
-        example: diligent.com
-    listUsersTypeFilterParam:
-      in: query
-      name: filter[user_type]
-      description: Requesting the API to filter Users by their type. Can only be one of the following types `"user"`, `"system"`, and `"root"`
-      required: false
-      schema:
-        type: string
-        example: user
   responses:
-    CannotRemoveOnlyAdminInOrg:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: cannot_remove_only_admin_in_org
-              title: Cannot remove only Admin in Org
-              detail: You need at least one Administrator in the Org.
     MissingOrgId:
       description: Bad request.
       content:
@@ -268,10 +199,20 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
+    TooManyRequests:
+      description: Too many requests.
+    CannotRemoveOnlyAdminInOrg:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: cannot_remove_only_admin_in_org
+              title: Cannot remove only Admin in Org
+              detail: You need at least one Administrator in the Org.
     NotFound:
       description: Not found.
       content:
@@ -283,36 +224,93 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
-    TooManyRequests:
-      description: Too many requests.
     UnprocessableEntity:
       description: Unprocessable entity.
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
+  parameters:
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    listUsersSearchParam:
+      in: query
+      name: filter[query]
+      description: Requesting the API to return only Users matching their name or email if it contains the search query string. Case-insensitive.
+      required: false
+      schema:
+        type: string
+        example: diligent.com
+    userPageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default and maximum is 8000 to support backwards compatibility. Recommended best practice is to use 20-50 for user interface usage, and 100-500 for API usage.
+      required: false
+      schema:
+        type: number
+      example: 100
+    listUsersTypeFilterParam:
+      in: query
+      name: filter[user_type]
+      description: Requesting the API to filter Users by their type. Can only be one of the following types `"user"`, `"system"`, and `"root"`
+      required: false
+      schema:
+        type: string
+        example: user
+    userPageNumberParam:
+      in: query
+      name: page[number]
+      description: The page number of records to return. Default is 1.
+      required: false
+      schema:
+        type: number
+      example: 1
+    listMembershipRoleFilterParam:
+      in: query
+      name: filter[membership_role]
+      description: Requesting the API to filter Users by their type of membership role in the organization. Can only be one of the following types `"admin"`, and `"member"`
+      required: false
+      schema:
+        type: string
+        example: admin
+    uidPathParam:
+      name: uid
+      description: The UID of the user.
+      schema:
+        type: string
+        example: yvqdNCtv8TeM47WQtzau
+      in: path
+      required: true
   schemas:
-    CreateUserRequest:
+    CreateUserResponse:
       type: object
-      description: The parameters required to create a new user.
+      description: The data associated with the resource.
       required:
       - data
       properties:
         data:
           type: object
-          description: The data associated with the new user.
           required:
+          - id
           - type
           - attributes
           properties:
+            id:
+              type: string
+              description: The user ID for the user, used across all HighBond instances.
+              example: P2tuGWyTWxCAQgTd1XKx
             type:
               type: string
               description: The classification of the object (`"users"`) for API schema serialization purposes.
               example: users
             attributes:
               type: object
-              description: The attributes associated with the new user.
-              required:
-              - name
-              - first_name
-              - last_name
-              - email
               properties:
                 email:
                   type: string
@@ -372,18 +370,62 @@ components:
                   description: The date and time when the user last signed in.
                   example: '2019-02-09T13:17:26Z'
                   format: date-time
+                name:
+                  type: string
+                  description: The user's full name. This value is system generated, based on `"first_name"` and `"last_name"`.
+                  example: John Smith
+                preferred_community_org:
+                  type: string
+                  description: The name of the user's preferred community instance.
+                  example: Organization A
                 preferred_community_org_id:
                   type: integer
                   format: int64
                   description: The id of the preferred HighBond instance for the user to access community.
                   example: 12345
-                membership:
+                user_type:
+                  type: string
+                  description: The type of user in the HighBond instance, one of `"user"`, `"system"` or `"root"`.
+                  example: user
+                enabled:
+                  type: boolean
+                  description: Shows if the user is enabled or not in the platform.
+                  example: true
+                subscription:
+                  type: string
+                  description: 'The type of user subscription in this HighBond instance. This field will be returned to provide information, currently it cannot be updated via APIs.
+
+                    Available codes are: `"grc_full"` for _Professional_, `"grc_lite"` for _Contributor_, `"grc_intermediate"` for _Oversight_,
+
+                    `"grc_results_cloud_admin"` for _Results Lite Professional_, `"grc_results_cloud_user"` for _Results Lite Contributor_, and `null` for _None_.
+
+                    '
+                  example: grc_full
+                is_system_admin:
+                  type: boolean
+                  description: Returns true when the user is a System Admin in this HighBond instance.
+                  example: false
+                is_external:
+                  type: boolean
+                  description: Returns true when the user is managed externally and synced into this HighBond instance.
+                  example: false
+                extended_attributes:
                   type: object
-                  properties:
-                    role:
-                      type: string
-                      description: The role of the user in the organization. Can only be one of the following types `"admin"`, and `"member"`. Default is `"member"`.
-                      example: member
+                  description: Set of key-value pairs containing up to 13 attributes defined externally in the user sync service.
+                  example:
+                    key1: one
+                    key2: two
+                    key3: three
+                    key4: four
+                    key5: five
+                    key6: six
+                    key7: seven
+                    key8: eight
+                    key9: nine
+                    key10: ten
+                    key11: eleven
+                    key12: twelve
+                    key13: thirteen
     MultipleUsersResponse:
       type: object
       description: The data associated with the resource.
@@ -572,7 +614,7 @@ components:
               format: int64
               description: Total number of users
               example: 1
-    DeleteUserResponse:
+    UpdateUserResponse:
       type: object
       description: The data associated with the resource.
       required:
@@ -596,14 +638,6 @@ components:
             attributes:
               type: object
               properties:
-                uid:
-                  type: string
-                  description: The user ID for the user, used across all HighBond instances.
-                  example: P2tuGWyTWxCAQgTd1XKx
-                is_root_user:
-                  type: boolean
-                  description: Returns true when the user is the root user in this HighBond instance.
-                  example: false
                 email:
                   type: string
                   description: The user's email address, defined when that user was created.
@@ -718,7 +752,14 @@ components:
                     key11: eleven
                     key12: twelve
                     key13: thirteen
-    UpdateUserResponse:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    DeleteUserResponse:
       type: object
       description: The data associated with the resource.
       required:
@@ -742,6 +783,14 @@ components:
             attributes:
               type: object
               properties:
+                uid:
+                  type: string
+                  description: The user ID for the user, used across all HighBond instances.
+                  example: P2tuGWyTWxCAQgTd1XKx
+                is_root_user:
+                  type: boolean
+                  description: Returns true when the user is the root user in this HighBond instance.
+                  example: false
                 email:
                   type: string
                   description: The user's email address, defined when that user was created.
@@ -1024,29 +1073,31 @@ components:
                     key11: eleven
                     key12: twelve
                     key13: thirteen
-    CreateUserResponse:
+    CreateUserRequest:
       type: object
-      description: The data associated with the resource.
+      description: The parameters required to create a new user.
       required:
       - data
       properties:
         data:
           type: object
+          description: The data associated with the new user.
           required:
-          - id
           - type
           - attributes
           properties:
-            id:
-              type: string
-              description: The user ID for the user, used across all HighBond instances.
-              example: P2tuGWyTWxCAQgTd1XKx
             type:
               type: string
               description: The classification of the object (`"users"`) for API schema serialization purposes.
               example: users
             attributes:
               type: object
+              description: The attributes associated with the new user.
+              required:
+              - name
+              - first_name
+              - last_name
+              - email
               properties:
                 email:
                   type: string
@@ -1106,69 +1157,18 @@ components:
                   description: The date and time when the user last signed in.
                   example: '2019-02-09T13:17:26Z'
                   format: date-time
-                name:
-                  type: string
-                  description: The user's full name. This value is system generated, based on `"first_name"` and `"last_name"`.
-                  example: John Smith
-                preferred_community_org:
-                  type: string
-                  description: The name of the user's preferred community instance.
-                  example: Organization A
                 preferred_community_org_id:
                   type: integer
                   format: int64
                   description: The id of the preferred HighBond instance for the user to access community.
                   example: 12345
-                user_type:
-                  type: string
-                  description: The type of user in the HighBond instance, one of `"user"`, `"system"` or `"root"`.
-                  example: user
-                enabled:
-                  type: boolean
-                  description: Shows if the user is enabled or not in the platform.
-                  example: true
-                subscription:
-                  type: string
-                  description: 'The type of user subscription in this HighBond instance. This field will be returned to provide information, currently it cannot be updated via APIs.
-
-                    Available codes are: `"grc_full"` for _Professional_, `"grc_lite"` for _Contributor_, `"grc_intermediate"` for _Oversight_,
-
-                    `"grc_results_cloud_admin"` for _Results Lite Professional_, `"grc_results_cloud_user"` for _Results Lite Contributor_, and `null` for _None_.
-
-                    '
-                  example: grc_full
-                is_system_admin:
-                  type: boolean
-                  description: Returns true when the user is a System Admin in this HighBond instance.
-                  example: false
-                is_external:
-                  type: boolean
-                  description: Returns true when the user is managed externally and synced into this HighBond instance.
-                  example: false
-                extended_attributes:
+                membership:
                   type: object
-                  description: Set of key-value pairs containing up to 13 attributes defined externally in the user sync service.
-                  example:
-                    key1: one
-                    key2: two
-                    key3: three
-                    key4: four
-                    key5: five
-                    key6: six
-                    key7: seven
-                    key8: eight
-                    key9: nine
-                    key10: ten
-                    key11: eleven
-                    key12: twelve
-                    key13: thirteen
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+                  properties:
+                    role:
+                      type: string
+                      description: The role of the user in the organization. Can only be one of the following types `"admin"`, and `"member"`. Default is `"member"`.
+                      example: member
     UpdateUserRequest:
       type: object
       description: The parameters required to update a user.

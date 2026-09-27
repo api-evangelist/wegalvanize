@@ -276,7 +276,79 @@ paths:
                   title: Invalid resource
                   detail: has existing projects
 components:
+  responses:
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NoContent:
+      description: No content.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
   parameters:
+    filterName:
+      in: query
+      name: filter[name]
+      description: Filter by name.  Response will include partial matches and ignore case.
+      required: false
+      schema:
+        type: string
+        example: LoremIpsum
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
     orgIdParam:
       in: path
       name: org_id
@@ -285,14 +357,6 @@ components:
       schema:
         type: string
         example: 1
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
     projectTypeSparseFieldsetParams:
       in: query
       name: fields[project_types]
@@ -309,23 +373,1739 @@ components:
       schema:
         type: string
         example: 9999
-    pageNumberEncodedParam:
+    pageSizeParam:
       in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
       required: false
       schema:
         type: string
-        example: Mg==
-    filterName:
-      in: query
-      name: filter[name]
-      description: Filter by name.  Response will include partial matches and ignore case.
-      required: false
-      schema:
-        type: string
-        example: LoremIpsum
+        example: 25
   schemas:
+    CreateProjectTypeRequest:
+      type: object
+      description: 'The data associated with the resource.
+
+
+        No terms are available when creating a project type because the workflow determines which terms will be created
+
+        along with the project type. These terms are not available until after the project type has been created.
+
+        '
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"project_types"`).
+              example: project_types
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              - workflow
+              - enable_creating_projects
+              properties:
+                name:
+                  type: string
+                  description: The name of the project type.
+                  maxLength: 255
+                  example: Project type name
+                description:
+                  type: string
+                  description: A detailed description of the project type.
+                  maxLength: 255
+                  example: Project type description.
+                workflow:
+                  type: string
+                  description: 'The type of workflow associated with the project type. The workflow can be Workplan (`procedure`) or Internal Control (`control`).
+
+
+                    `procedure` workflows are appropriate for straight-forward projects and frameworks, which consist of a set of steps or procedures that the assurance team will execute,
+
+                    and the documentation of the outcome of each step. The attributes `narrative_terms`, `control_test_terms`, and `test_plan_terms` are not available for this workflow.
+
+
+                    `control` workflows are appropriate for more complex types of projects and frameworks, where narratives are
+
+                    defined, walkthroughs are performed to verify control design, and tests are performed to verify the operating effectiveness of controls.
+
+
+                    For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a>.
+
+                    '
+                  example: control
+                enable_creating_projects:
+                  type: boolean
+                  description: 'Specifies if users with the appropriate permissions can create new projects and frameworks using this project type (`true`) or if they cannot (`false`).
+
+
+                    Typically, you specify `true` when you have finalized your project type settings and you are ready for others to use the project type. If you want the project type
+
+                    to remain in draft mode, and prevent others from using it, specify `false`.
+
+                    '
+                  default: true
+                  example: true
+            source_project_type_id:
+              type: string
+              description: The ID of the resource to copy.
+              example: '1'
+    UpdateProjectTypeRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"project_types"`).
+              example: project_types
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the project type.
+                  maxLength: 255
+                  example: Project type name
+                description:
+                  type: string
+                  description: A detailed description of the project type.
+                  maxLength: 255
+                  example: Project type description.
+                enable_creating_projects:
+                  type: boolean
+                  description: 'Specifies if users with the appropriate permissions can create new projects and frameworks using this project type (`true`) or if they cannot (`false`).
+
+
+                    Typically, you specify `true` when you have finalized your project type settings and you are ready for others to use the project type. If you want the project type
+
+                    to remain in draft mode, and prevent others from using it, specify `false`.
+
+                    '
+                  default: true
+                  example: true
+                project_terms:
+                  type: object
+                  description: The terms of the project.
+                  properties:
+                    term_for_project:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for the project.
+                      example: Project
+                    term_for_risk_control_matrix:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk Control Matrix.
+                      example: Risk Control Matrix
+                    term_for_risk_control_matrix_short:
+                      type:
+                      - string
+                      - 'null'
+                      description: The short term for Risk Control Matrix.
+                      example: RCM
+                    term_for_fieldwork:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for fieldwork.
+                      example: Fieldwork
+                    term_for_planned_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned start date.
+                      example: Planned start date
+                    term_for_planned_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned end date.
+                      example: Planned end date
+                    planned_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned dates enabled.
+                      example: true
+                    term_for_actual_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual start date.
+                      example: Actual start date
+                    term_for_actual_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual end date.
+                      example: Actual end date
+                    actual_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual dates enabled.
+                      example: true
+                    term_for_planned_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned milestone date.
+                      example: Planned milestone date
+                    planned_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned milestone date enabled.
+                      example: true
+                    term_for_actual_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Term for actual milestone date.
+                      example: Actual milestone date
+                    actual_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual milestone date enabled.
+                      example: true
+                objective_terms:
+                  type: object
+                  description: The terms of the objective.
+                  properties:
+                    term_for_objective:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Section.
+                      example: Section
+                    term_for_objectives:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Sections.
+                      example: Sections
+                    term_for_objective_reference:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Objective Reference
+                      example: Reference
+                    term_for_objective_location:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Objective Location
+                      example: Division/Department
+                    term_for_objective_owner:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Owner.
+                      example: Owner
+                    term_for_objective_executive_owner:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for executive owner.
+                      example: Executive Owner
+                    term_for_planned_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned start date.
+                      example: Planned start date
+                    term_for_planned_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned end date.
+                      example: Planned end date
+                    planned_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned dates enabled.
+                      example: true
+                    term_for_actual_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual start date.
+                      example: Actual start date
+                    term_for_actual_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual end date.
+                      example: Actual end date
+                    actual_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual dates enabled.
+                      example: true
+                    term_for_planned_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned milestone date.
+                      example: Planned milestone date
+                    planned_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned milestone date enabled.
+                      example: true
+                    term_for_actual_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Term for actual milestone date.
+                      example: Actual milestone date
+                    actual_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual milestone date enabled.
+                      example: true
+                process_walkthrough_terms:
+                  type: object
+                  description: The terms of process walkthrough.
+                  properties:
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                walkthrough_terms:
+                  type: object
+                  description: The terms of walkthrough. In a Workplan workflow project, a walkthrough is called an execute procedure.
+                  properties:
+                    term_for_walkthrough:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Walkthrough.
+                      example: Walkthrough
+                    term_for_walkthroughs:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Walkthroughs.
+                      example: walkthroughs
+                    term_for_walkthrough_walkthrough:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Walkthrough Results.
+                      example: Walkthrough Terms
+                    term_for_walkthrough_control_verified:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for is the Control designed appropriately.
+                      example: Is my control designed appropriately?
+                    control_verified_values_true:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term choices for Control Designed Appropriately. The exact values for this field (E.g. "Designed Appropriately" / "No Issues") depend on the <a href=" https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+                      example: Designed Appropriately
+                    control_verified_values_false:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term choices for Control Design Failure. The exact values for this field (E.g. "Design Failure" / "Issue(s) Noted") depend on the <a href=" https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+                      example: Designed Failure
+                    walkthrough_enabled:
+                      type: boolean
+                      description: Whether the walkthrough terms are enabled
+                      example: true
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    term_for_planned_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned milestone date.
+                      example: Planned milestone date
+                    planned_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned milestone date enabled.
+                      example: true
+                    term_for_actual_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Term for actual milestone date.
+                      example: Actual milestone date
+                    actual_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual milestone date enabled.
+                      example: true
+                control_terms:
+                  type: object
+                  description: The terms of control.
+                  properties:
+                    term_for_control:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control.
+                      example: Control
+                    term_for_controls:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control (plural).
+                      example: Controls
+                    term_for_control_id:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Id.
+                      example: Control ID
+                    term_for_control_owner:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Owner.
+                      example: Control Owner
+                    term_for_control_frequency:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Frequency.
+                      example: Frequency
+                    term_for_control_control_type:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Type.
+                      example: Type
+                    term_for_control_prevent_or_detect:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Prevent or Detect.
+                      example: Prevent or Detect?
+                    term_for_control_method:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Method.
+                      example: Method
+                    term_for_control_status:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Status.
+                      example: Status
+                    control_prevent_or_detects:
+                      type: array
+                      description: 'The term choices for Prevent or Detect.
+
+                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - prevent
+                      - detect
+                      - n_a
+                      items:
+                        type: string
+                    control_methods:
+                      type: array
+                      description: 'The term choices for Method.
+
+                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Authorization
+                      - Management Review
+                      - Reconciliation
+                      items:
+                        type: string
+                    control_states:
+                      type: array
+                      description: 'The term choices for Control Status.
+
+                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Key Control
+                      - Non Key Control
+                      - Obsolete
+                      items:
+                        type: string
+                    frequencies:
+                      type: array
+                      description: 'The term choices for Control Frequency.
+
+                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Continuous
+                      - Multiple Times Daily
+                      - Daily
+                      items:
+                        type: string
+                    control_types:
+                      type: array
+                      description: 'The term choices for Control Type.
+
+                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Manual Control
+                      - Application/System Control
+                      - IT Dependent Manual Control
+                      items:
+                        type: string
+                    frequency_enabled:
+                      type: boolean
+                      description: Whether frequency is enabled
+                      example: true
+                    type_enabled:
+                      type: boolean
+                      description: Whether control types are enabled
+                      example: true
+                    prevent_detect_enabled:
+                      type: boolean
+                      description: Whether control prevent or detect is enabled
+                      example: true
+                    control_method_enabled:
+                      type: boolean
+                      description: Whether control methods are enabled
+                      example: true
+                    control_status_enabled:
+                      type: boolean
+                      description: Whether control statuses are enabled
+                      example: true
+                risk_terms:
+                  type: object
+                  description: The terms of risks.
+                  properties:
+                    term_for_risk:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk.
+                      example: Risk
+                    term_for_risk_id:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk Id.
+                      example: Risk ID
+                    term_for_risk_title:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk Title.
+                      example: Risk Title
+                    term_for_risk_description:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk Description.
+                      example: Risk Description
+                    term_for_risk_impact:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk Impact.
+                      example: Impact
+                    term_for_risk_likelihood:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk Likelihood.
+                      example: Likelihood
+                    risk_impacts:
+                      type: array
+                      description: 'The options for Risk Impact.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Low
+                      - Medium
+                      - High
+                      items:
+                        type: string
+                    risk_likelihoods:
+                      type: array
+                      description: 'The options for Risk Likelihood.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Low
+                      - Medium
+                      - High
+                      items:
+                        type: string
+                risk_control_matrix_terms:
+                  type: object
+                  description: The terms of risk control matrix.
+                  properties:
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                planning_terms:
+                  type: object
+                  description: The terms of planning.
+                  properties:
+                    term_for_planning:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Planning.
+                      example: Planning
+                    term_for_planning_background:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Planning background.
+                      example: Background
+                    term_for_planning_scope:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Planning scope.
+                      example: Scope
+                    term_for_planning_purpose:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Planning purpose.
+                      example: Purpose
+                    term_for_planning_file:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Planning file.
+                      example: Planning File
+                    term_for_planning_files:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Planning files.
+                      example: Planning Files
+                    planning_enabled:
+                      type: boolean
+                      description: Whether planning is enabled
+                      example: true
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    term_for_planned_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned start date.
+                      example: Planned start date
+                    term_for_planned_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned end date.
+                      example: Planned end date
+                    planned_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned dates enabled.
+                      example: true
+                    term_for_actual_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual start date.
+                      example: Actual start date
+                    term_for_actual_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual end date.
+                      example: Actual end date
+                    actual_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual dates enabled.
+                      example: true
+                    term_for_planned_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned milestone date.
+                      example: Planned milestone date
+                    planned_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned milestone date enabled.
+                      example: true
+                    term_for_actual_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Term for actual milestone date.
+                      example: Actual milestone date
+                    actual_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual milestone date enabled.
+                      example: true
+                results_terms:
+                  type: object
+                  description: The terms of results.
+                  properties:
+                    term_for_results:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Results.
+                      example: Results
+                    term_for_results_conclusion:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Results Conclusion.
+                      example: Conclusion/Rating
+                    term_for_results_management_response:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Management Response.
+                      example: Management Response
+                    term_for_results_file:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Result File.
+                      example: Result File
+                    term_for_results_files:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Result Files.
+                      example: Result Files
+                    term_for_fieldwork_reports:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Fieldwork Reports.
+                      example: Fieldwork Reports
+                    term_for_supporting_workpapers:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Supporting Workpapers.
+                      example: Supporting Workpapers
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    term_for_planned_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned start date.
+                      example: Planned start date
+                    term_for_planned_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned end date.
+                      example: Planned end date
+                    planned_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned dates enabled.
+                      example: true
+                    term_for_actual_start_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual start date.
+                      example: Actual start date
+                    term_for_actual_end_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Actual end date.
+                      example: Actual end date
+                    actual_dates_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual dates enabled.
+                      example: true
+                    term_for_planned_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned milestone date.
+                      example: Planned milestone date
+                    planned_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned milestone date enabled.
+                      example: true
+                    term_for_actual_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Term for actual milestone date.
+                      example: Actual milestone date
+                    actual_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual milestone date enabled.
+                      example: true
+                    opinion_options:
+                      type: array
+                      description: The options for Opinions.
+                      example:
+                      - Excellent
+                      - Good
+                      - Satisfactory
+                      - Needs Improvement
+                      - Unsatisfactory
+                      items:
+                        type: string
+                finding_terms:
+                  type: object
+                  description: The terms of findings.  In a Workplan workflow project, a finding is called an action.
+                  properties:
+                    term_for_finding:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Issue.
+                      example: Issue
+                    term_for_finding_risk_impact:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Risk/Impact
+                      example: Risk/Impact
+                    term_for_finding_id:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Issue Id.
+                      example: Issue ID
+                    term_for_finding_type:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Type.
+                      example: Type
+                    term_for_finding_severity:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Severity.
+                      example: Severity
+                    term_for_finding_cost_impact:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Cost Impact.
+                      example: Cost Impact
+                    term_for_finding_tab:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Issues Tab.
+                      example: Issues
+                    term_for_finding_description:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Description.
+                      example: Description
+                    term_for_finding_cause:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Finding Cause.
+                      example: Cause
+                    term_for_finding_effect:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Effect.
+                      example: Effect
+                    term_for_finding_scope:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Scope.
+                      example: Scope
+                    term_for_finding_action_status:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Action Status.
+                      example: Action Status
+                    term_for_finding_action_priority:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Action Priority.
+                      example: Priority
+                    term_for_finding_recommendation:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Recommendation.
+                      example: Recommendation
+                    term_for_finding_executive_summary:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Executive Summary.
+                      example: Executive Summary
+                    term_for_finding_escalation_level:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Escalation Level.
+                      example: Escalation Level
+                    term_for_finding_actual_remediation_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Actual Remediation Date.
+                      example: Actual Remediation Date
+                    term_for_finding_retest_deadline_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Retest Deadline Date.
+                      example: Retest Deadline Date
+                    term_for_finding_actual_retest_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Actual Retest Date.
+                      example: Actual Retest Date
+                    term_for_finding_remediation_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Remediation Date.
+                      example: Remediation Deadline
+                    term_for_finding_title:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Title.
+                      example: Title
+                    term_for_finding_owner:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Owner.
+                      example: Owner
+                    term_for_finding_date_identified:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Date Identified.
+                      example: Date Identified
+                    term_for_finding_executive_owner:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Executive Owner.
+                      example: Executive Owner
+                    term_for_finding_project_owner:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Project Owner.
+                      example: Project Owner
+                    term_for_finding_overall_status:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Overall Status.
+                      example: Overall Status
+                    term_for_finding_remediation_plan:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Remediation Plan.
+                      example: Remediation Plan
+                    finding_types:
+                      type: array
+                      description: 'The options for Type.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Finding
+                      - Management Recommendation
+                      items:
+                        type: string
+                    severity_values:
+                      type: array
+                      description: 'The options for Type.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Low
+                      - Medium
+                      - High
+                      items:
+                        type: string
+                    scopes:
+                      type: array
+                      description: 'The options for scope.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Local
+                      - Global
+                      items:
+                        type: string
+                    escalation_levels:
+                      type: array
+                      description: 'The options for Escalation.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Owner
+                      - Executive
+                      - Board
+                      items:
+                        type: string
+                    remediation_statuses:
+                      type: array
+                      description: 'The options for Remediation Statuses.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Opened
+                      - Awaiting Management Response
+                      - Management Remediating
+                      items:
+                        type: string
+                    action_statuses:
+                      type: array
+                      description: 'The options for Action Status.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Opened
+                      - Awaiting Management Response
+                      - Management Remediating
+                      items:
+                        type: string
+                    action_priorities:
+                      type: array
+                      description: 'The options for Priority.
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - low
+                      - medium
+                      - high
+                      items:
+                        type: string
+                    recommendation_enabled:
+                      type: boolean
+                      description: Whether recommendations are enabled
+                      example: true
+                    severity_enabled:
+                      type: boolean
+                      description: Whether severity is enabled
+                      example: true
+                    id_enabled:
+                      type: boolean
+                      description: Whether risk ID is enabled
+                      example: true
+                    risk_impact_enabled:
+                      type: boolean
+                      description: Whether risk impact is enabled
+                      example: true
+                    scope_enabled:
+                      type: boolean
+                      description: Whether scope is enabled
+                      example: true
+                    escalation_enabled:
+                      type: boolean
+                      description: Whether escalation is enabled
+                      example: true
+                    cause_enabled:
+                      type: boolean
+                      description: Whether cause is enabled
+                      example: true
+                    effect_enabled:
+                      type: boolean
+                      description: Whether effect is enabled
+                      example: true
+                    cost_impact_enabled:
+                      type: boolean
+                      description: Whether cost impact is enabled
+                      example: true
+                    executive_summary_enabled:
+                      type: boolean
+                      description: Whether executive summary is enabled
+                      example: true
+                    executive_owner_enabled:
+                      type: boolean
+                      description: Whether executive owner enabled
+                      example: true
+                    project_owner_enabled:
+                      type: boolean
+                      description: Whether project owner is enabled
+                      example: true
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                finding_remediation_terms:
+                  type: object
+                  description: The terms of finding remediation.
+                  properties:
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                finding_retest_terms:
+                  type: object
+                  description: The terms of finding retest.
+                  properties:
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                certification_terms:
+                  type: object
+                  description: The terms of certifications.
+                  properties:
+                    term_for_certification:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for certification.
+                      example: Certification
+                    term_for_certifications:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for certifications.
+                      example: Certifications
+                narrative_terms:
+                  type: object
+                  description: The terms of narrative. This attribute and the associated terms are not available on a Workplan workflow project.
+                  properties:
+                    term_for_narrative:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Narrative.
+                      example: Narrative
+                    term_for_narratives:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Narratives.
+                      example: Narratives
+                    narrative_enabled:
+                      type: boolean
+                      description: Whether narratives are enabled
+                      example: true
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                test_plan_terms:
+                  type: object
+                  description: The terms of control test plan. This attribute and the associated terms are not available on a Workplan workflow project.
+                  properties:
+                    term_for_test_plan:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Test Plan.
+                      example: Test Plan
+                    term_for_control_test_plan_test_method:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Testing Method.
+                      example: Testing Method
+                    term_for_control_test_plan_sample_size:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Total Sample Size.
+                      example: Total Sample Size
+                    term_for_control_test_plan_test_steps:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Test Steps.
+                      example: Test Steps/Test Attributes
+                    test_methods:
+                      type: array
+                      description: 'The options for Test Methods
+
+                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+                        '
+                      example:
+                      - Inspection
+                      - Observation
+                      - Inquiry
+                      - Reperformance
+                      items:
+                        type: string
+                    test_plan_enabled:
+                      type: boolean
+                      description: Whether test plan is enabled
+                      example: true
+                    test_method_enabled:
+                      type: boolean
+                      description: Whether control testing method enabled
+                      example: true
+                    sample_size_enabled:
+                      type: boolean
+                      description: Whether total sample size enabled
+                      example: true
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                control_test_terms:
+                  type: object
+                  description: The terms of control test. This attribute and the associated terms are not available on a Workplan workflow project.
+                  properties:
+                    term_for_control_test_test_results:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Test Results.
+                      example: Test Results
+                    term_for_control_test_conclusion:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Test Conclusion.
+                      example: Did this control operate effectively?
+                    term_for_control_test_testing:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Control Test Testing
+                      example: Testing
+                    term_for_control_test_2_1:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Interim Test.
+                      example: Interim
+                    term_for_control_test_2_2:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Final Test.
+                      example: Final
+                    term_for_control_test_4_1:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Q1 Test.
+                      example: Q1
+                    term_for_control_test_4_2:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Q2 Test.
+                      example: Q2
+                    term_for_control_test_4_3:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Q3 Test.
+                      example: Q3
+                    term_for_control_test_4_4:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term for Q4 Test.
+                      example: Q4
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    preparer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    conclusion_values_true:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term choices for Operating Effectively. The exact values for this field (E.g. "Operating Effectively") depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+                      example: Operating Effectively
+                    conclusion_values_false:
+                      type:
+                      - string
+                      - 'null'
+                      description: The term choices for Exception(s) Noted. The exact values for this field (E.g. "Exception(s) Noted") depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+                      example: Exception(s) Noted
+                    conclusion_status_options_true:
+                      type: array
+                      description: The options for Conclusion Status (Passed). The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+                      example:
+                      - Operating Effectively
+                      items:
+                        type: string
+                    conclusion_status_options_false:
+                      type: array
+                      description: The options for Conclusion Status (Failing). The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+                      example:
+                      - Exception(s) Noted
+                      items:
+                        type: string
+                    term_for_planned_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Planned milestone date.
+                      example: Planned milestone date
+                    planned_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Planned milestone date enabled.
+                      example: true
+                    term_for_actual_milestone_date:
+                      type:
+                      - string
+                      - 'null'
+                      description: Term for actual milestone date.
+                      example: Actual milestone date
+                    actual_milestone_date_enabled:
+                      type:
+                      - boolean
+                      - 'null'
+                      description: Actual milestone date enabled.
+                      example: true
+                testing_round_terms:
+                  type: object
+                  description: The terms of finding retest.
+                  properties:
+                    term_for_preparer_signoff:
+                      type: string
+                      example: Preparer
+                    term_for_detail_reviewer_signoff:
+                      type: string
+                      example: Detail Reviewer
+                    term_for_general_reviewer_signoff:
+                      type: string
+                      example: General Reviewer
+                    term_for_supplemental_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Supplemental Reviewer
+                    term_for_specialty_reviewer_signoff:
+                      type:
+                      - string
+                      - 'null'
+                      example: Specialty Reviewer
+                    detail_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    general_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    supplemental_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
+                    specialty_reviewer_signoff_enabled:
+                      type: boolean
+                      example: true
     GetProjectTypeResponse:
       type: object
       required:
@@ -2029,1653 +3809,43 @@ components:
                             type: string
                             description: The classification of the object (`"users"`).
                             example: users
-    UpdateProjectTypeRequest:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
       type: object
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the resource.
+          description: Indicates which part of the request document caused the error.
           required:
-          - id
-          - type
-          - attributes
+          - pointer
           properties:
-            id:
+            pointer:
               type: string
-              description: The ID of the requested resource.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`"project_types"`).
-              example: project_types
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the project type.
-                  maxLength: 255
-                  example: Project type name
-                description:
-                  type: string
-                  description: A detailed description of the project type.
-                  maxLength: 255
-                  example: Project type description.
-                enable_creating_projects:
-                  type: boolean
-                  description: 'Specifies if users with the appropriate permissions can create new projects and frameworks using this project type (`true`) or if they cannot (`false`).
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
 
+                in the request document.
 
-                    Typically, you specify `true` when you have finalized your project type settings and you are ready for others to use the project type. If you want the project type
-
-                    to remain in draft mode, and prevent others from using it, specify `false`.
-
-                    '
-                  default: true
-                  example: true
-                project_terms:
-                  type: object
-                  description: The terms of the project.
-                  properties:
-                    term_for_project:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for the project.
-                      example: Project
-                    term_for_risk_control_matrix:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk Control Matrix.
-                      example: Risk Control Matrix
-                    term_for_risk_control_matrix_short:
-                      type:
-                      - string
-                      - 'null'
-                      description: The short term for Risk Control Matrix.
-                      example: RCM
-                    term_for_fieldwork:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for fieldwork.
-                      example: Fieldwork
-                    term_for_planned_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned start date.
-                      example: Planned start date
-                    term_for_planned_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned end date.
-                      example: Planned end date
-                    planned_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned dates enabled.
-                      example: true
-                    term_for_actual_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual start date.
-                      example: Actual start date
-                    term_for_actual_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual end date.
-                      example: Actual end date
-                    actual_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual dates enabled.
-                      example: true
-                    term_for_planned_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned milestone date.
-                      example: Planned milestone date
-                    planned_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned milestone date enabled.
-                      example: true
-                    term_for_actual_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Term for actual milestone date.
-                      example: Actual milestone date
-                    actual_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual milestone date enabled.
-                      example: true
-                objective_terms:
-                  type: object
-                  description: The terms of the objective.
-                  properties:
-                    term_for_objective:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Section.
-                      example: Section
-                    term_for_objectives:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Sections.
-                      example: Sections
-                    term_for_objective_reference:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Objective Reference
-                      example: Reference
-                    term_for_objective_location:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Objective Location
-                      example: Division/Department
-                    term_for_objective_owner:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Owner.
-                      example: Owner
-                    term_for_objective_executive_owner:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for executive owner.
-                      example: Executive Owner
-                    term_for_planned_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned start date.
-                      example: Planned start date
-                    term_for_planned_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned end date.
-                      example: Planned end date
-                    planned_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned dates enabled.
-                      example: true
-                    term_for_actual_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual start date.
-                      example: Actual start date
-                    term_for_actual_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual end date.
-                      example: Actual end date
-                    actual_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual dates enabled.
-                      example: true
-                    term_for_planned_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned milestone date.
-                      example: Planned milestone date
-                    planned_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned milestone date enabled.
-                      example: true
-                    term_for_actual_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Term for actual milestone date.
-                      example: Actual milestone date
-                    actual_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual milestone date enabled.
-                      example: true
-                process_walkthrough_terms:
-                  type: object
-                  description: The terms of process walkthrough.
-                  properties:
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                walkthrough_terms:
-                  type: object
-                  description: The terms of walkthrough. In a Workplan workflow project, a walkthrough is called an execute procedure.
-                  properties:
-                    term_for_walkthrough:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Walkthrough.
-                      example: Walkthrough
-                    term_for_walkthroughs:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Walkthroughs.
-                      example: walkthroughs
-                    term_for_walkthrough_walkthrough:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Walkthrough Results.
-                      example: Walkthrough Terms
-                    term_for_walkthrough_control_verified:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for is the Control designed appropriately.
-                      example: Is my control designed appropriately?
-                    control_verified_values_true:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term choices for Control Designed Appropriately. The exact values for this field (E.g. "Designed Appropriately" / "No Issues") depend on the <a href=" https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-                      example: Designed Appropriately
-                    control_verified_values_false:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term choices for Control Design Failure. The exact values for this field (E.g. "Design Failure" / "Issue(s) Noted") depend on the <a href=" https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-                      example: Designed Failure
-                    walkthrough_enabled:
-                      type: boolean
-                      description: Whether the walkthrough terms are enabled
-                      example: true
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    term_for_planned_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned milestone date.
-                      example: Planned milestone date
-                    planned_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned milestone date enabled.
-                      example: true
-                    term_for_actual_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Term for actual milestone date.
-                      example: Actual milestone date
-                    actual_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual milestone date enabled.
-                      example: true
-                control_terms:
-                  type: object
-                  description: The terms of control.
-                  properties:
-                    term_for_control:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control.
-                      example: Control
-                    term_for_controls:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control (plural).
-                      example: Controls
-                    term_for_control_id:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Id.
-                      example: Control ID
-                    term_for_control_owner:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Owner.
-                      example: Control Owner
-                    term_for_control_frequency:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Frequency.
-                      example: Frequency
-                    term_for_control_control_type:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Type.
-                      example: Type
-                    term_for_control_prevent_or_detect:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Prevent or Detect.
-                      example: Prevent or Detect?
-                    term_for_control_method:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Method.
-                      example: Method
-                    term_for_control_status:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Status.
-                      example: Status
-                    control_prevent_or_detects:
-                      type: array
-                      description: 'The term choices for Prevent or Detect.
-
-                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - prevent
-                      - detect
-                      - n_a
-                      items:
-                        type: string
-                    control_methods:
-                      type: array
-                      description: 'The term choices for Method.
-
-                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Authorization
-                      - Management Review
-                      - Reconciliation
-                      items:
-                        type: string
-                    control_states:
-                      type: array
-                      description: 'The term choices for Control Status.
-
-                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Key Control
-                      - Non Key Control
-                      - Obsolete
-                      items:
-                        type: string
-                    frequencies:
-                      type: array
-                      description: 'The term choices for Control Frequency.
-
-                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Continuous
-                      - Multiple Times Daily
-                      - Daily
-                      items:
-                        type: string
-                    control_types:
-                      type: array
-                      description: 'The term choices for Control Type.
-
-                        The options available depends on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Manual Control
-                      - Application/System Control
-                      - IT Dependent Manual Control
-                      items:
-                        type: string
-                    frequency_enabled:
-                      type: boolean
-                      description: Whether frequency is enabled
-                      example: true
-                    type_enabled:
-                      type: boolean
-                      description: Whether control types are enabled
-                      example: true
-                    prevent_detect_enabled:
-                      type: boolean
-                      description: Whether control prevent or detect is enabled
-                      example: true
-                    control_method_enabled:
-                      type: boolean
-                      description: Whether control methods are enabled
-                      example: true
-                    control_status_enabled:
-                      type: boolean
-                      description: Whether control statuses are enabled
-                      example: true
-                risk_terms:
-                  type: object
-                  description: The terms of risks.
-                  properties:
-                    term_for_risk:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk.
-                      example: Risk
-                    term_for_risk_id:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk Id.
-                      example: Risk ID
-                    term_for_risk_title:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk Title.
-                      example: Risk Title
-                    term_for_risk_description:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk Description.
-                      example: Risk Description
-                    term_for_risk_impact:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk Impact.
-                      example: Impact
-                    term_for_risk_likelihood:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk Likelihood.
-                      example: Likelihood
-                    risk_impacts:
-                      type: array
-                      description: 'The options for Risk Impact.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Low
-                      - Medium
-                      - High
-                      items:
-                        type: string
-                    risk_likelihoods:
-                      type: array
-                      description: 'The options for Risk Likelihood.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Low
-                      - Medium
-                      - High
-                      items:
-                        type: string
-                risk_control_matrix_terms:
-                  type: object
-                  description: The terms of risk control matrix.
-                  properties:
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                planning_terms:
-                  type: object
-                  description: The terms of planning.
-                  properties:
-                    term_for_planning:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Planning.
-                      example: Planning
-                    term_for_planning_background:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Planning background.
-                      example: Background
-                    term_for_planning_scope:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Planning scope.
-                      example: Scope
-                    term_for_planning_purpose:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Planning purpose.
-                      example: Purpose
-                    term_for_planning_file:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Planning file.
-                      example: Planning File
-                    term_for_planning_files:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Planning files.
-                      example: Planning Files
-                    planning_enabled:
-                      type: boolean
-                      description: Whether planning is enabled
-                      example: true
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    term_for_planned_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned start date.
-                      example: Planned start date
-                    term_for_planned_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned end date.
-                      example: Planned end date
-                    planned_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned dates enabled.
-                      example: true
-                    term_for_actual_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual start date.
-                      example: Actual start date
-                    term_for_actual_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual end date.
-                      example: Actual end date
-                    actual_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual dates enabled.
-                      example: true
-                    term_for_planned_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned milestone date.
-                      example: Planned milestone date
-                    planned_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned milestone date enabled.
-                      example: true
-                    term_for_actual_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Term for actual milestone date.
-                      example: Actual milestone date
-                    actual_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual milestone date enabled.
-                      example: true
-                results_terms:
-                  type: object
-                  description: The terms of results.
-                  properties:
-                    term_for_results:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Results.
-                      example: Results
-                    term_for_results_conclusion:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Results Conclusion.
-                      example: Conclusion/Rating
-                    term_for_results_management_response:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Management Response.
-                      example: Management Response
-                    term_for_results_file:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Result File.
-                      example: Result File
-                    term_for_results_files:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Result Files.
-                      example: Result Files
-                    term_for_fieldwork_reports:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Fieldwork Reports.
-                      example: Fieldwork Reports
-                    term_for_supporting_workpapers:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Supporting Workpapers.
-                      example: Supporting Workpapers
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    term_for_planned_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned start date.
-                      example: Planned start date
-                    term_for_planned_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned end date.
-                      example: Planned end date
-                    planned_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned dates enabled.
-                      example: true
-                    term_for_actual_start_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual start date.
-                      example: Actual start date
-                    term_for_actual_end_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Actual end date.
-                      example: Actual end date
-                    actual_dates_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual dates enabled.
-                      example: true
-                    term_for_planned_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned milestone date.
-                      example: Planned milestone date
-                    planned_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned milestone date enabled.
-                      example: true
-                    term_for_actual_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Term for actual milestone date.
-                      example: Actual milestone date
-                    actual_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual milestone date enabled.
-                      example: true
-                    opinion_options:
-                      type: array
-                      description: The options for Opinions.
-                      example:
-                      - Excellent
-                      - Good
-                      - Satisfactory
-                      - Needs Improvement
-                      - Unsatisfactory
-                      items:
-                        type: string
-                finding_terms:
-                  type: object
-                  description: The terms of findings.  In a Workplan workflow project, a finding is called an action.
-                  properties:
-                    term_for_finding:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Issue.
-                      example: Issue
-                    term_for_finding_risk_impact:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Risk/Impact
-                      example: Risk/Impact
-                    term_for_finding_id:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Issue Id.
-                      example: Issue ID
-                    term_for_finding_type:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Type.
-                      example: Type
-                    term_for_finding_severity:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Severity.
-                      example: Severity
-                    term_for_finding_cost_impact:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Cost Impact.
-                      example: Cost Impact
-                    term_for_finding_tab:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Issues Tab.
-                      example: Issues
-                    term_for_finding_description:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Description.
-                      example: Description
-                    term_for_finding_cause:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Finding Cause.
-                      example: Cause
-                    term_for_finding_effect:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Effect.
-                      example: Effect
-                    term_for_finding_scope:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Scope.
-                      example: Scope
-                    term_for_finding_action_status:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Action Status.
-                      example: Action Status
-                    term_for_finding_action_priority:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Action Priority.
-                      example: Priority
-                    term_for_finding_recommendation:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Recommendation.
-                      example: Recommendation
-                    term_for_finding_executive_summary:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Executive Summary.
-                      example: Executive Summary
-                    term_for_finding_escalation_level:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Escalation Level.
-                      example: Escalation Level
-                    term_for_finding_actual_remediation_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Actual Remediation Date.
-                      example: Actual Remediation Date
-                    term_for_finding_retest_deadline_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Retest Deadline Date.
-                      example: Retest Deadline Date
-                    term_for_finding_actual_retest_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Actual Retest Date.
-                      example: Actual Retest Date
-                    term_for_finding_remediation_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Remediation Date.
-                      example: Remediation Deadline
-                    term_for_finding_title:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Title.
-                      example: Title
-                    term_for_finding_owner:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Owner.
-                      example: Owner
-                    term_for_finding_date_identified:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Date Identified.
-                      example: Date Identified
-                    term_for_finding_executive_owner:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Executive Owner.
-                      example: Executive Owner
-                    term_for_finding_project_owner:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Project Owner.
-                      example: Project Owner
-                    term_for_finding_overall_status:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Overall Status.
-                      example: Overall Status
-                    term_for_finding_remediation_plan:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Remediation Plan.
-                      example: Remediation Plan
-                    finding_types:
-                      type: array
-                      description: 'The options for Type.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Finding
-                      - Management Recommendation
-                      items:
-                        type: string
-                    severity_values:
-                      type: array
-                      description: 'The options for Type.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Low
-                      - Medium
-                      - High
-                      items:
-                        type: string
-                    scopes:
-                      type: array
-                      description: 'The options for scope.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Local
-                      - Global
-                      items:
-                        type: string
-                    escalation_levels:
-                      type: array
-                      description: 'The options for Escalation.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Owner
-                      - Executive
-                      - Board
-                      items:
-                        type: string
-                    remediation_statuses:
-                      type: array
-                      description: 'The options for Remediation Statuses.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Opened
-                      - Awaiting Management Response
-                      - Management Remediating
-                      items:
-                        type: string
-                    action_statuses:
-                      type: array
-                      description: 'The options for Action Status.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Opened
-                      - Awaiting Management Response
-                      - Management Remediating
-                      items:
-                        type: string
-                    action_priorities:
-                      type: array
-                      description: 'The options for Priority.
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - low
-                      - medium
-                      - high
-                      items:
-                        type: string
-                    recommendation_enabled:
-                      type: boolean
-                      description: Whether recommendations are enabled
-                      example: true
-                    severity_enabled:
-                      type: boolean
-                      description: Whether severity is enabled
-                      example: true
-                    id_enabled:
-                      type: boolean
-                      description: Whether risk ID is enabled
-                      example: true
-                    risk_impact_enabled:
-                      type: boolean
-                      description: Whether risk impact is enabled
-                      example: true
-                    scope_enabled:
-                      type: boolean
-                      description: Whether scope is enabled
-                      example: true
-                    escalation_enabled:
-                      type: boolean
-                      description: Whether escalation is enabled
-                      example: true
-                    cause_enabled:
-                      type: boolean
-                      description: Whether cause is enabled
-                      example: true
-                    effect_enabled:
-                      type: boolean
-                      description: Whether effect is enabled
-                      example: true
-                    cost_impact_enabled:
-                      type: boolean
-                      description: Whether cost impact is enabled
-                      example: true
-                    executive_summary_enabled:
-                      type: boolean
-                      description: Whether executive summary is enabled
-                      example: true
-                    executive_owner_enabled:
-                      type: boolean
-                      description: Whether executive owner enabled
-                      example: true
-                    project_owner_enabled:
-                      type: boolean
-                      description: Whether project owner is enabled
-                      example: true
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                finding_remediation_terms:
-                  type: object
-                  description: The terms of finding remediation.
-                  properties:
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                finding_retest_terms:
-                  type: object
-                  description: The terms of finding retest.
-                  properties:
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                certification_terms:
-                  type: object
-                  description: The terms of certifications.
-                  properties:
-                    term_for_certification:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for certification.
-                      example: Certification
-                    term_for_certifications:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for certifications.
-                      example: Certifications
-                narrative_terms:
-                  type: object
-                  description: The terms of narrative. This attribute and the associated terms are not available on a Workplan workflow project.
-                  properties:
-                    term_for_narrative:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Narrative.
-                      example: Narrative
-                    term_for_narratives:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Narratives.
-                      example: Narratives
-                    narrative_enabled:
-                      type: boolean
-                      description: Whether narratives are enabled
-                      example: true
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                test_plan_terms:
-                  type: object
-                  description: The terms of control test plan. This attribute and the associated terms are not available on a Workplan workflow project.
-                  properties:
-                    term_for_test_plan:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Test Plan.
-                      example: Test Plan
-                    term_for_control_test_plan_test_method:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Testing Method.
-                      example: Testing Method
-                    term_for_control_test_plan_sample_size:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Total Sample Size.
-                      example: Total Sample Size
-                    term_for_control_test_plan_test_steps:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Test Steps.
-                      example: Test Steps/Test Attributes
-                    test_methods:
-                      type: array
-                      description: 'The options for Test Methods
-
-                        The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-                        '
-                      example:
-                      - Inspection
-                      - Observation
-                      - Inquiry
-                      - Reperformance
-                      items:
-                        type: string
-                    test_plan_enabled:
-                      type: boolean
-                      description: Whether test plan is enabled
-                      example: true
-                    test_method_enabled:
-                      type: boolean
-                      description: Whether control testing method enabled
-                      example: true
-                    sample_size_enabled:
-                      type: boolean
-                      description: Whether total sample size enabled
-                      example: true
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                control_test_terms:
-                  type: object
-                  description: The terms of control test. This attribute and the associated terms are not available on a Workplan workflow project.
-                  properties:
-                    term_for_control_test_test_results:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Test Results.
-                      example: Test Results
-                    term_for_control_test_conclusion:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Test Conclusion.
-                      example: Did this control operate effectively?
-                    term_for_control_test_testing:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Control Test Testing
-                      example: Testing
-                    term_for_control_test_2_1:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Interim Test.
-                      example: Interim
-                    term_for_control_test_2_2:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Final Test.
-                      example: Final
-                    term_for_control_test_4_1:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Q1 Test.
-                      example: Q1
-                    term_for_control_test_4_2:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Q2 Test.
-                      example: Q2
-                    term_for_control_test_4_3:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Q3 Test.
-                      example: Q3
-                    term_for_control_test_4_4:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term for Q4 Test.
-                      example: Q4
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    preparer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    conclusion_values_true:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term choices for Operating Effectively. The exact values for this field (E.g. "Operating Effectively") depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-                      example: Operating Effectively
-                    conclusion_values_false:
-                      type:
-                      - string
-                      - 'null'
-                      description: The term choices for Exception(s) Noted. The exact values for this field (E.g. "Exception(s) Noted") depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-                      example: Exception(s) Noted
-                    conclusion_status_options_true:
-                      type: array
-                      description: The options for Conclusion Status (Passed). The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-                      example:
-                      - Operating Effectively
-                      items:
-                        type: string
-                    conclusion_status_options_false:
-                      type: array
-                      description: The options for Conclusion Status (Failing). The options available depend on the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-                      example:
-                      - Exception(s) Noted
-                      items:
-                        type: string
-                    term_for_planned_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Planned milestone date.
-                      example: Planned milestone date
-                    planned_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Planned milestone date enabled.
-                      example: true
-                    term_for_actual_milestone_date:
-                      type:
-                      - string
-                      - 'null'
-                      description: Term for actual milestone date.
-                      example: Actual milestone date
-                    actual_milestone_date_enabled:
-                      type:
-                      - boolean
-                      - 'null'
-                      description: Actual milestone date enabled.
-                      example: true
-                testing_round_terms:
-                  type: object
-                  description: The terms of finding retest.
-                  properties:
-                    term_for_preparer_signoff:
-                      type: string
-                      example: Preparer
-                    term_for_detail_reviewer_signoff:
-                      type: string
-                      example: Detail Reviewer
-                    term_for_general_reviewer_signoff:
-                      type: string
-                      example: General Reviewer
-                    term_for_supplemental_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Supplemental Reviewer
-                    term_for_specialty_reviewer_signoff:
-                      type:
-                      - string
-                      - 'null'
-                      example: Specialty Reviewer
-                    detail_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    general_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    supplemental_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
-                    specialty_reviewer_signoff_enabled:
-                      type: boolean
-                      example: true
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     GetProjectTypesResponse:
       type: object
       required:
@@ -5401,176 +5571,6 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    CreateProjectTypeRequest:
-      type: object
-      description: 'The data associated with the resource.
-
-
-        No terms are available when creating a project type because the workflow determines which terms will be created
-
-        along with the project type. These terms are not available until after the project type has been created.
-
-        '
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"project_types"`).
-              example: project_types
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              - workflow
-              - enable_creating_projects
-              properties:
-                name:
-                  type: string
-                  description: The name of the project type.
-                  maxLength: 255
-                  example: Project type name
-                description:
-                  type: string
-                  description: A detailed description of the project type.
-                  maxLength: 255
-                  example: Project type description.
-                workflow:
-                  type: string
-                  description: 'The type of workflow associated with the project type. The workflow can be Workplan (`procedure`) or Internal Control (`control`).
-
-
-                    `procedure` workflows are appropriate for straight-forward projects and frameworks, which consist of a set of steps or procedures that the assurance team will execute,
-
-                    and the documentation of the outcome of each step. The attributes `narrative_terms`, `control_test_terms`, and `test_plan_terms` are not available for this workflow.
-
-
-                    `control` workflows are appropriate for more complex types of projects and frameworks, where narratives are
-
-                    defined, walkthroughs are performed to verify control design, and tests are performed to verify the operating effectiveness of controls.
-
-
-                    For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a>.
-
-                    '
-                  example: control
-                enable_creating_projects:
-                  type: boolean
-                  description: 'Specifies if users with the appropriate permissions can create new projects and frameworks using this project type (`true`) or if they cannot (`false`).
-
-
-                    Typically, you specify `true` when you have finalized your project type settings and you are ready for others to use the project type. If you want the project type
-
-                    to remain in draft mode, and prevent others from using it, specify `false`.
-
-                    '
-                  default: true
-                  example: true
-            source_project_type_id:
-              type: string
-              description: The ID of the resource to copy.
-              example: '1'
-  responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -196,72 +196,7 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
-  parameters:
-    robotIdParam:
-      in: path
-      name: robot_id
-      description: The ID of the robot.
-      required: true
-      schema:
-        type: string
-        example: 2
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    robotEnvParam:
-      in: query
-      name: env
-      description: The environment of an analytic script.
-      required: false
-      schema:
-        type: string
-        enum:
-        - development
-        - production
-        default: development
-      example: production
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   schemas:
-    RobotFile:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - id
-      - type
-      - attributes
-      properties:
-        id:
-          type: string
-          description: The ID of the robot.
-          example: 1
-        type:
-          type: string
-          description: The classification of the object (`"robot_files"`).
-          example: robot_files
-        attributes:
-          type: object
-          description: The attributes associated with the resource.
-          properties:
-            created_at:
-              type: string
-              description: The date the robot was created.
-              example: '2019-03-21T20:22:48.282Z'
-            filename:
-              type: string
-              description: The name of the related file.
-              example: Data_source.xls
     Error:
       type: object
       required:
@@ -292,31 +227,6 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    CreateRobotFileRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - file
-      properties:
-        file:
-          type: string
-          format: binary
-          description: A related file that you want to upload.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    GetRobotFileResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/RobotFile'
     RobotsError:
       type: object
       required:
@@ -348,6 +258,16 @@ components:
                 type: string
                 description: A descriptive statement of the error.
                 example: Name can't be blank
+    CreateRobotFileRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - file
+      properties:
+        file:
+          type: string
+          format: binary
+          description: A related file that you want to upload.
     GetRobotFilesResponse:
       type: object
       description: The data associated with the resource.
@@ -359,7 +279,61 @@ components:
           description: The data associated with the resource.
           items:
             $ref: '#/components/schemas/RobotFile'
+    GetRobotFileResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RobotFile'
+    RobotFile:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - id
+      - type
+      - attributes
+      properties:
+        id:
+          type: string
+          description: The ID of the robot.
+          example: 1
+        type:
+          type: string
+          description: The classification of the object (`"robot_files"`).
+          example: robot_files
+        attributes:
+          type: object
+          description: The attributes associated with the resource.
+          properties:
+            created_at:
+              type: string
+              description: The date the robot was created.
+              example: '2019-03-21T20:22:48.282Z'
+            filename:
+              type: string
+              description: The name of the related file.
+              example: Data_source.xls
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
     MissingOrgId:
       description: Bad request.
       content:
@@ -372,17 +346,8 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -399,20 +364,6 @@ components:
                 '
     Forbidden:
       description: Forbidden.
-    BadCredentials:
-      description: Bad credentials.
-    MissingRobotId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_id, is missing.
     MissingResourceId:
       description: Bad request.
       content:
@@ -425,6 +376,55 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
+    MissingRobotId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_id, is missing.
+  parameters:
+    robotEnvParam:
+      in: query
+      name: env
+      description: The environment of an analytic script.
+      required: false
+      schema:
+        type: string
+        enum:
+        - development
+        - production
+        default: development
+      example: production
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
+      required: true
+      schema:
+        type: string
+        example: 2
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -774,310 +774,188 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    complianceRequirementsSearchParam:
+      in: query
+      name: filter[search]
+      description: Filters the response list based on the search match in description or name.
+      required: false
+      schema:
+        type: string
+        example: risk
+    complianceRegulationIdParam:
+      in: path
+      name: compliance_regulation_id
+      description: The ID of the regulation.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    complianceRequirementSparseFieldsetParamsWithoutRelationships:
+      in: query
+      name: fields[compliance_requirements]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: identifier,name,description,created_at,updated_at,external_id,external_parent_id,tags,rationale,applicable,covered,coverage,compliance_regulation
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    relatedComplianceRequirementSparseFieldsetParamsGet:
+      in: query
+      name: fields[related_compliance_requirements]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: relationship_type,relationship_strength,status,compliance_requirement,related_compliance_requirement
+    complianceRegulationsParitalResultsParam:
+      in: query
+      name: show_parital_results
+      description: Show partial results for the compliance regulations.
+      required: false
+      schema:
+        type: boolean
+        example: true
+    complianceRequirementsFilterIdentifierParam:
+      in: query
+      name: filter[identifier]
+      description: Filters the response list based on the identifier match.
+      required: false
+      schema:
+        type: string
+        example: REQ-1
+    complianceRequirementsParentIdParam:
+      in: query
+      name: filter[parent_id]
+      description: Filters the response list based on the parent ID match. With filter[parent_id]=null we should get back the parent elements.
+      required: false
+      schema:
+        type: string
+        example: '2345355'
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    relatedComplianceRequirementSparseFieldsetParamsPost:
+      in: query
+      name: fields[related_compliance_requirements]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: relationship_type,relationship_strength,status,compliance_requirement,related_compliance_requirement
+    complianceRegulationSparseFieldsetParams:
+      in: query
+      name: fields[compliance_regulations]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,description,created_at,updated_at,external_id,source,disclaimer,report_disclaimer,requirement_disclaimer,available_tags,tags,locked,premium,subscription_types
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    complianceRequirementsFilterNameParam:
+      in: query
+      name: filter[name]
+      description: Filters the response list based on the name match.
+      required: false
+      schema:
+        type: string
+        example: My requirement
+    relatedComplianceRequirementSparseFieldsetParamsGetWithoutRequirement:
+      in: query
+      name: fields[related_compliance_requirements]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: relationship_type,relationship_strength,status,related_compliance_requirement
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    complianceRequirementIdParam:
+      in: path
+      name: compliance_requirement_id
+      description: The ID of the requirement.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    complianceRegulationsFilterExternalIdParam:
+      in: query
+      name: filter[external_id]
+      description: Filters the response list based on the external ID match.
+      required: false
+      schema:
+        type:
+        - string
+        - 'null'
+        example: RG-1
+    complianceRegulationsFilterNameParam:
+      in: query
+      name: filter[name]
+      description: Filters the response list based on the name match.
+      required: false
+      schema:
+        type: string
+        example: My regulation
+    complianceRegulationsSortParam:
+      in: query
+      name: sort
+      description: Sorts the response lists by created_at.
+      required: false
+      schema:
+        type: string
+        enum:
+        - -created_at
+        example: -created_at
+    complianceRequirementSparseFieldsetParams:
+      in: query
+      name: fields[compliance_requirements]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: applicable,breadcrumbs,children_count,compliance_mappings,compliance_regulation,controls,coverage,covered,created_at,description,external_id,external_parent_id,identifier,in_scope_children_count,name,parent,position,rationale,related_controls,related_requirements,tags,updated_at
+    complianceRegulationSparseFieldsetWithoutLicencedFields:
+      in: query
+      name: fields[compliance_regulations]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,description,created_at,updated_at,external_id,source,disclaimer,report_disclaimer,requirement_disclaimer,available_tags,tags,locked
+    complianceMappingSparseFieldsetParams:
+      in: query
+      name: fields[compliance_mappings]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: coverage,created_at,updated_at,compliance_requirement,control
   schemas:
-    CreateRelatedRequirementResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"related_compliance_requirements"`).
-              example: related_compliance_requirements
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - relationship_type
-              - relationship_strength
-              - status
-              properties:
-                relationship_type:
-                  type: string
-                  enum:
-                  - support
-                  - overlap
-                  description: The type of the relationship between the requirements.
-                  example: support
-                relationship_strength:
-                  type: string
-                  enum:
-                  - equivalent
-                  - strongly_related
-                  - moderately_related
-                  - weakly_related
-                  description: The strength of the relationship between the requirements.
-                  example: equivalent
-                status:
-                  type: string
-                  enum:
-                  - active
-                  - inactive
-                  description: The status of the related requirement.
-                  example: active
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - compliance_requirement
-              - related_compliance_requirement
-              properties:
-                compliance_requirement:
-                  type: object
-                  description: Requirement object.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '11'
-                        type:
-                          type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
-                related_compliance_requirement:
-                  type: object
-                  description: Requirement object.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '22'
-                        type:
-                          type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
-    UpdateComplianceMappingRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"compliance_mappings"`).
-              example: compliance_mappings
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                coverage:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: Coverage percentage.
-                  example: 75
-    UpdateComplianceRegulationRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"compliance_regulations"`).
-              example: compliance_regulations
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The unique name of the compliance regulation.
-                  maxLength: 255
-                  example: My regulation
-                description:
-                  type: string
-                  description: The detailed description of the regulation.
-                  maxLength: 524288
-                  example: Regulation details
-                external_id:
-                  type: string
-                  description: An optional identifier.
-                  example: RG-1
-                source:
-                  type: string
-                  description: Source of the regulation. Used for legal reasons.
-                  example: Federal Trade Commission
-                disclaimer:
-                  type: string
-                  description: Regulation disclaimer.
-                  example: Example of disclaimer.
-                report_disclaimer:
-                  type: string
-                  description: Report disclaimer.
-                  example: Example of disclaimer.
-                requirement_disclaimer:
-                  type: string
-                  description: Requirement disclaimer.
-                  example: Example of disclaimer.
-                available_tags:
-                  type: array
-                  description: List of available tags to be used inside the regulation.
-                  items:
-                    type: string
-                    description: Tag
-                    example: foo
-                tags:
-                  type: array
-                  description: List of applied tags. Must use elements from `available_tags`.
-                  items:
-                    type: string
-                    description: Tag
-                    example: foo
-                locked:
-                  type: boolean
-                  description: Defines whether regulation is editable or not.
-                  example: false
-                premium:
-                  type: boolean
-                  description: Indicates whether content is only available for users who have premium edition subscriptions.
-                  example: false
-                subscription_types:
-                  type: array
-                  description: Indicates the user's subscription type.
-                  items:
-                    type: string
-                    description: Tag
-                    example: foo
-    UpdateRelatedRequirementRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"related_compliance_requirements"`).
-              example: related_compliance_requirements
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                relationship_type:
-                  type: string
-                  enum:
-                  - support
-                  - overlap
-                  description: The type of the relationship between the requirements.
-                  example: support
-                relationship_strength:
-                  type: string
-                  enum:
-                  - equivalent
-                  - strongly_related
-                  - moderately_related
-                  - weakly_related
-                  description: The strength of the relationship between the requirements.
-                  example: equivalent
-                status:
-                  type: string
-                  enum:
-                  - active
-                  - inactive
-                  description: The status of the related requirement.
-                  example: active
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                compliance_requirement:
-                  type: object
-                  description: Requirement object.
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '11'
-                        type:
-                          type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
-                related_compliance_requirement:
-                  type: object
-                  description: Requirement object.
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '22'
-                        type:
-                          type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
     CreateComplianceRequirementRequest:
       type: object
       description: The data associated with the resource.
@@ -1179,112 +1057,6 @@ components:
                           type: string
                           description: The classification of the object (`"compliance_requirements"`).
                           example: compliance_requirements
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    CreateComplianceMappingRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - relationships
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"compliance_mappings"`).
-              example: compliance_mappings
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                coverage:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: Coverage percentage.
-                  example: 75
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - compliance_requirement
-              - control
-              properties:
-                compliance_requirement:
-                  type: object
-                  description: Requirement object.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
-                control:
-                  type: object
-                  description: Control object.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"controls"`).
-                          example: controls
     GetComplianceRegulationResponse:
       type: object
       description: The data associated with the resource.
@@ -1380,7 +1152,7 @@ components:
                     type: string
                     description: Tag
                     example: foo
-    GetComplianceMappingResponseWithIncludes:
+    CreateRelatedRequirementResponse:
       type: object
       description: The data associated with the resource.
       required:
@@ -1393,107 +1165,12 @@ components:
           - id
           - type
           - attributes
+          - relationships
           properties:
             id:
               type: string
               description: The ID of the requested resource.
               example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"compliance_mappings"`).
-              example: compliance_mappings
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - coverage
-              properties:
-                coverage:
-                  type: integer
-                  minimum: 1
-                  maximum: 100
-                  description: Coverage percentage.
-                  example: 75
-                created_at:
-                  type: string
-                  description: The timestamp specifying when the mapping was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp specifying when the mapping was updated.
-                  example: '2019-03-18T22:02:05Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                compliance_requirement:
-                  type: object
-                  description: Requirement object.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
-                control:
-                  type: object
-                  description: Control object.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the requested resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"controls"`).
-                          example: controls
-        included:
-          type: array
-          description: Included resources.
-          items:
-            type: object
-          example:
-          - id: 2
-            type: compliance_requirements
-            attributes:
-              name: My requirement
-    CreateRelatedRequirementRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          - relationships
-          properties:
             type:
               type: string
               description: The classification of the object (`"related_compliance_requirements"`).
@@ -1646,89 +1323,465 @@ components:
                   description: Rationale.
                   maxLength: 524288
                   example: Requirement rationale
-    CreateComplianceRegulationRequest:
+    GetComplianceRequirementsResponseWithIncludes:
       type: object
       description: The data associated with the resource.
       required:
       - data
+      - links
       properties:
         data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"compliance_regulations"`).
-              example: compliance_regulations
+          type: array
+          description: Array of compliance requirements
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The classification of the object (`"compliance_requirements"`).
+                example: compliance_requirements
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  name:
+                    type:
+                    - string
+                    - 'null'
+                    description: The name of the compliance requirement.
+                    maxLength: 510
+                    example: My requirement
+                  identifier:
+                    type: string
+                    description: The identifier of the compliance requirement.
+                    maxLength: 255
+                    example: REQ-1
+                  description:
+                    type: string
+                    description: The detailed description of the requirement.
+                    maxLength: 524288
+                    example: Requirement details
+                  created_at:
+                    type: string
+                    description: The timestamp specifying when the requirement was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp specifying when the requirement was updated.
+                    example: '2019-03-18T22:02:05Z'
+                    format: date-time
+                  external_id:
+                    type:
+                    - string
+                    - 'null'
+                    description: An optional identifier.
+                    example: EXT-1
+                  external_parent_id:
+                    type:
+                    - string
+                    - 'null'
+                    description: An optional identifier of parent.
+                    example: EXT-2
+                  tags:
+                    type: array
+                    description: List of applied tags. Must use elements from regulation's `available_tags`.
+                    items:
+                      type: string
+                      description: Tag
+                      example: foo
+                  rationale:
+                    type:
+                    - string
+                    - 'null'
+                    description: Rationale.
+                    maxLength: 524288
+                    example: Requirement rationale
+                  applicable:
+                    type: boolean
+                    description: Indicates whether requirement is covered/applicable.
+                    example: true
+                  covered:
+                    type: boolean
+                    description: Indicates whether requirement is covered/applicable.
+                    example: true
+                  coverage:
+                    type: integer
+                    description: Coverage percentage.
+                    example: 100
+                  position:
+                    type:
+                    - integer
+                    - 'null'
+                    format: int64
+                    description: Position optional integer indicates position of compliance requirement in UI
+                    example: 3
+                  in_scope_children_count:
+                    type: integer
+                    description: Number of child requirements that are in scope.
+                    example: 5
+                  children_count:
+                    type: integer
+                    description: Total number of child requirements.
+                    example: 10
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                properties:
+                  compliance_regulation:
+                    type: object
+                    description: Parent regulation object.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the requested resource.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"compliance_regulations"`).
+                            example: compliance_regulations
+                  parent:
+                    type: object
+                    description: Parent requirement object.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type:
+                        - object
+                        - 'null'
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the requested resource.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"compliance_requirements"`).
+                            example: compliance_requirements
+                  compliance_mappings:
+                    type: object
+                    description: Related control mappings.
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: array
+                        description: The data associated with the resource.
+                        items:
+                          type: object
+                          required:
+                          - id
+                          - type
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the requested resource.
+                              example: '1'
+                            type:
+                              type: string
+                              description: The classification of the object (`"compliance_mappings"`).
+                              example: compliance_mappings
+                  related_controls:
+                    type: object
+                    description: Related controls for this requirement.
+                    required:
+                    - meta
+                    properties:
+                      meta:
+                        type: object
+                        required:
+                        - count
+                        properties:
+                          count:
+                            type: integer
+                            description: The number of related controls.
+                            example: 0
+                  related_requirements:
+                    type: object
+                    description: Related requirements for this requirement.
+                    required:
+                    - meta
+                    properties:
+                      meta:
+                        type: object
+                        required:
+                        - count
+                        properties:
+                          count:
+                            type: integer
+                            description: The number of related requirements.
+                            example: 0
+                  controls:
+                    type: object
+                    description: Controls associated with this requirement.
+                    required:
+                    - meta
+                    properties:
+                      meta:
+                        type: object
+                        required:
+                        - count
+                        properties:
+                          count:
+                            type: integer
+                            description: The number of controls.
+                            example: 0
+              links:
+                type: object
+                description: Resource links.
+                properties:
+                  ui:
+                    type: string
+                    description: Link to the requirement in UI.
+                    example: https://test-org.compliance-maps.highbond.com/standard/1/requirement/2/edit
+        included:
+          type: array
+          description: Included resources.
+          items:
+            type: object
+            required:
+            - id
+            - type
+            - attributes
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                enum:
+                - compliance_regulations
+                - compliance_requirements
+                - compliance_mappings
+                description: The type of the included resource.
+              attributes:
+                type: object
+                description: The attributes of the included resource.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the regulation.
+                  description:
+                    type: string
+                    description: The description of the regulation.
+                  created_at:
+                    type: string
+                    format: date-time
+                    description: Creation timestamp.
+                  updated_at:
+                    type: string
+                    format: date-time
+                    description: Last update timestamp.
+                  external_id:
+                    type:
+                    - string
+                    - 'null'
+                    description: External identifier.
+                  source:
+                    type:
+                    - string
+                    - 'null'
+                    description: Source of the regulation.
+                  locked:
+                    type: boolean
+                    description: Whether the regulation is locked.
+                  available_tags:
+                    type: array
+                    items:
+                      type: string
+                    description: Available tags.
+                  tags:
+                    type: array
+                    items:
+                      type: string
+                    description: Applied tags.
+                  disclaimer:
+                    type:
+                    - string
+                    - 'null'
+                    description: Disclaimer text.
+                  report_disclaimer:
+                    type:
+                    - string
+                    - 'null'
+                    description: Report disclaimer text.
+                  requirement_disclaimer:
+                    type:
+                    - string
+                    - 'null'
+                    description: Requirement disclaimer text.
+                  identifier:
+                    type: string
+                    description: The identifier of the requirement.
+                  rationale:
+                    type:
+                    - string
+                    - 'null'
+                    description: Rationale text.
+                  applicable:
+                    type: boolean
+                    description: Whether the requirement is applicable.
+                  covered:
+                    type: boolean
+                    description: Whether the requirement is covered.
+                  coverage:
+                    type: integer
+                    description: Coverage percentage.
+                  position:
+                    type:
+                    - integer
+                    - 'null'
+                    description: Position in the list.
+                  in_scope_children_count:
+                    type: integer
+                    description: Number of in-scope child requirements.
+                  children_count:
+                    type: integer
+                    description: Total number of child requirements.
+              relationships:
+                type: object
+                description: The relationships of the included resource (when applicable).
+                properties:
+                  related_controls:
+                    type: object
+                    properties:
+                      meta:
+                        type: object
+                        properties:
+                          count:
+                            type: integer
+                  related_requirements:
+                    type: object
+                    properties:
+                      meta:
+                        type: object
+                        properties:
+                          count:
+                            type: integer
+                  controls:
+                    type: object
+                    properties:
+                      meta:
+                        type: object
+                        properties:
+                          count:
+                            type: integer
+                  control:
+                    type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            example: controls
+                          id:
+                            type: string
+              links:
+                type: object
+                description: Links related to the included resource (when applicable).
+                properties:
+                  ui:
+                    type: string
+                    description: UI link for the resource.
+          example:
+          - id: '232843'
+            type: compliance_regulations
             attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The unique name of the compliance regulation.
-                  maxLength: 255
-                  example: My regulation
-                description:
-                  type: string
-                  description: The detailed description of the regulation.
-                  maxLength: 524288
-                  example: Regulation details
-                external_id:
-                  type: string
-                  description: An optional identifier.
-                  example: RG-1
-                source:
-                  type: string
-                  description: Source of the regulation. Used for legal reasons.
-                  example: Federal Trade Commission
-                disclaimer:
-                  type: string
-                  description: Regulation disclaimer.
-                  example: Example of disclaimer.
-                report_disclaimer:
-                  type: string
-                  description: Report disclaimer.
-                  example: Example of disclaimer.
-                requirement_disclaimer:
-                  type: string
-                  description: Requirement disclaimer.
-                  example: Example of disclaimer.
-                available_tags:
-                  type: array
-                  description: List of available tags to be used inside the regulation.
-                  items:
-                    type: string
-                    description: Tag
-                    example: foo
-                tags:
-                  type: array
-                  description: List of applied tags. Must use elements from `available_tags`.
-                  items:
-                    type: string
-                    description: Tag
-                    example: foo
-                locked:
-                  type: boolean
-                  description: Defines whether regulation is editable or not.
-                  example: false
-                premium:
-                  type: boolean
-                  description: Indicates whether content is only available for users who have premium edition subscriptions.
-                  example: false
-                subscription_types:
-                  type: array
-                  description: Indicates the user's subscription type.
-                  items:
-                    type: string
-                    description: Tag
-                    example: foo
-    GetRelatedRequirementResponse:
+              name: Regulation 2
+              description: Regulation 2 description
+              created_at: '2025-05-28T11:54:19.853Z'
+              updated_at: '2025-08-04T22:29:08.386Z'
+              external_id: null
+              source: null
+              locked: false
+              available_tags: []
+              tags: []
+              disclaimer: null
+              report_disclaimer: This product includes COBIT® 5 Framework, used by permission of ISACA® ©2017 ISACA®. All rights reserved. COBIT® is a registered trademark of the Information Systems Audit and Control Association® (ISACA®).
+              requirement_disclaimer: Information Systems Audit and Control Association® (ISACA®). ©2017 ISACA®. All rights reserved.
+          - id: '3986962'
+            type: compliance_requirements
+            attributes:
+              identifier: REQ-2
+              name: Requirement 2
+              description: Requirement 2 description
+              created_at: '2025-08-04T22:26:53.882Z'
+              updated_at: '2025-08-08T14:38:27.940Z'
+              external_id: null
+              external_parent_id: null
+              tags: []
+              rationale: null
+              applicable: true
+              covered: false
+              coverage: 0
+              position: null
+              in_scope_children_count: 1
+              children_count: 1
+            relationships:
+              related_controls:
+                meta:
+                  count: 0
+              related_requirements:
+                meta:
+                  count: 0
+              controls:
+                meta:
+                  count: 0
+            links:
+              ui: https://tony.compliance-maps.highbond-s1.com/standard/232843/requirement/3986962/edit
+          - id: '356126'
+            type: compliance_mappings
+            attributes:
+              coverage: 100
+            relationships:
+              control:
+                data:
+                  type: controls
+                  id: '2890278'
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type:
+              - string
+              - 'null'
+              description: Next page url
+              example: /api/resource?page[number]=Mg==
+            prev:
+              type:
+              - string
+              - 'null'
+              description: Previous page url
+              example: null
+    GetComplianceMappingResponseWithIncludes:
       type: object
       description: The data associated with the resource.
       required:
@@ -1741,7 +1794,6 @@ components:
           - id
           - type
           - attributes
-          - relationships
           properties:
             id:
               type: string
@@ -1749,45 +1801,33 @@ components:
               example: '1'
             type:
               type: string
-              description: The classification of the object (`"related_compliance_requirements"`).
-              example: related_compliance_requirements
+              description: The classification of the object (`"compliance_mappings"`).
+              example: compliance_mappings
             attributes:
               type: object
               description: The attributes associated with the resource.
               required:
-              - relationship_type
-              - relationship_strength
-              - status
+              - coverage
               properties:
-                relationship_type:
+                coverage:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Coverage percentage.
+                  example: 75
+                created_at:
                   type: string
-                  enum:
-                  - support
-                  - overlap
-                  description: The type of the relationship between the requirements.
-                  example: support
-                relationship_strength:
+                  description: The timestamp specifying when the mapping was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
                   type: string
-                  enum:
-                  - equivalent
-                  - strongly_related
-                  - moderately_related
-                  - weakly_related
-                  description: The strength of the relationship between the requirements.
-                  example: equivalent
-                status:
-                  type: string
-                  enum:
-                  - active
-                  - inactive
-                  description: The status of the related requirement.
-                  example: active
+                  description: The timestamp specifying when the mapping was updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
             relationships:
               type: object
               description: The relationships associated with the resource.
-              required:
-              - compliance_requirement
-              - related_compliance_requirement
               properties:
                 compliance_requirement:
                   type: object
@@ -1805,14 +1845,14 @@ components:
                         id:
                           type: string
                           description: The ID of the requested resource.
-                          example: '11'
+                          example: '1'
                         type:
                           type: string
                           description: The classification of the object (`"compliance_requirements"`).
                           example: compliance_requirements
-                related_compliance_requirement:
+                control:
                   type: object
-                  description: Requirement object.
+                  description: Control object.
                   required:
                   - data
                   properties:
@@ -1826,11 +1866,21 @@ components:
                         id:
                           type: string
                           description: The ID of the requested resource.
-                          example: '22'
+                          example: '1'
                         type:
                           type: string
-                          description: The classification of the object (`"compliance_requirements"`).
-                          example: compliance_requirements
+                          description: The classification of the object (`"controls"`).
+                          example: controls
+        included:
+          type: array
+          description: Included resources.
+          items:
+            type: object
+          example:
+          - id: 2
+            type: compliance_requirements
+            attributes:
+              name: My requirement
     GetRelatedRequirementsResponse:
       type: object
       description: The data associated with the resource.
@@ -1960,13 +2010,164 @@ components:
               tags:
               - foo
               locked: false
-    Errors:
+    CreateComplianceRegulationRequest:
       type: object
+      description: The data associated with the resource.
+      required:
+      - data
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"compliance_regulations"`).
+              example: compliance_regulations
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The unique name of the compliance regulation.
+                  maxLength: 255
+                  example: My regulation
+                description:
+                  type: string
+                  description: The detailed description of the regulation.
+                  maxLength: 524288
+                  example: Regulation details
+                external_id:
+                  type: string
+                  description: An optional identifier.
+                  example: RG-1
+                source:
+                  type: string
+                  description: Source of the regulation. Used for legal reasons.
+                  example: Federal Trade Commission
+                disclaimer:
+                  type: string
+                  description: Regulation disclaimer.
+                  example: Example of disclaimer.
+                report_disclaimer:
+                  type: string
+                  description: Report disclaimer.
+                  example: Example of disclaimer.
+                requirement_disclaimer:
+                  type: string
+                  description: Requirement disclaimer.
+                  example: Example of disclaimer.
+                available_tags:
+                  type: array
+                  description: List of available tags to be used inside the regulation.
+                  items:
+                    type: string
+                    description: Tag
+                    example: foo
+                tags:
+                  type: array
+                  description: List of applied tags. Must use elements from `available_tags`.
+                  items:
+                    type: string
+                    description: Tag
+                    example: foo
+                locked:
+                  type: boolean
+                  description: Defines whether regulation is editable or not.
+                  example: false
+                premium:
+                  type: boolean
+                  description: Indicates whether content is only available for users who have premium edition subscriptions.
+                  example: false
+                subscription_types:
+                  type: array
+                  description: Indicates the user's subscription type.
+                  items:
+                    type: string
+                    description: Tag
+                    example: foo
+    CreateComplianceMappingRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - relationships
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"compliance_mappings"`).
+              example: compliance_mappings
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                coverage:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Coverage percentage.
+                  example: 75
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - compliance_requirement
+              - control
+              properties:
+                compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+                control:
+                  type: object
+                  description: Control object.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"controls"`).
+                          example: controls
     GetComplianceRequirementResponseWithIncludes:
       type: object
       description: The data associated with the resource.
@@ -2461,6 +2662,444 @@ components:
                 data:
                   type: controls
                   id: '2890278'
+    CreateRelatedRequirementRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          - relationships
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"related_compliance_requirements"`).
+              example: related_compliance_requirements
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - relationship_type
+              - relationship_strength
+              - status
+              properties:
+                relationship_type:
+                  type: string
+                  enum:
+                  - support
+                  - overlap
+                  description: The type of the relationship between the requirements.
+                  example: support
+                relationship_strength:
+                  type: string
+                  enum:
+                  - equivalent
+                  - strongly_related
+                  - moderately_related
+                  - weakly_related
+                  description: The strength of the relationship between the requirements.
+                  example: equivalent
+                status:
+                  type: string
+                  enum:
+                  - active
+                  - inactive
+                  description: The status of the related requirement.
+                  example: active
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - compliance_requirement
+              - related_compliance_requirement
+              properties:
+                compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '11'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+                related_compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '22'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+    GetRelatedRequirementResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"related_compliance_requirements"`).
+              example: related_compliance_requirements
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - relationship_type
+              - relationship_strength
+              - status
+              properties:
+                relationship_type:
+                  type: string
+                  enum:
+                  - support
+                  - overlap
+                  description: The type of the relationship between the requirements.
+                  example: support
+                relationship_strength:
+                  type: string
+                  enum:
+                  - equivalent
+                  - strongly_related
+                  - moderately_related
+                  - weakly_related
+                  description: The strength of the relationship between the requirements.
+                  example: equivalent
+                status:
+                  type: string
+                  enum:
+                  - active
+                  - inactive
+                  description: The status of the related requirement.
+                  example: active
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - compliance_requirement
+              - related_compliance_requirement
+              properties:
+                compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '11'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+                related_compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '22'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+    UpdateRelatedRequirementRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"related_compliance_requirements"`).
+              example: related_compliance_requirements
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                relationship_type:
+                  type: string
+                  enum:
+                  - support
+                  - overlap
+                  description: The type of the relationship between the requirements.
+                  example: support
+                relationship_strength:
+                  type: string
+                  enum:
+                  - equivalent
+                  - strongly_related
+                  - moderately_related
+                  - weakly_related
+                  description: The strength of the relationship between the requirements.
+                  example: equivalent
+                status:
+                  type: string
+                  enum:
+                  - active
+                  - inactive
+                  description: The status of the related requirement.
+                  example: active
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '11'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+                related_compliance_requirement:
+                  type: object
+                  description: Requirement object.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the requested resource.
+                          example: '22'
+                        type:
+                          type: string
+                          description: The classification of the object (`"compliance_requirements"`).
+                          example: compliance_requirements
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    UpdateComplianceMappingRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"compliance_mappings"`).
+              example: compliance_mappings
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                coverage:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Coverage percentage.
+                  example: 75
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    UpdateComplianceRegulationRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"compliance_regulations"`).
+              example: compliance_regulations
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The unique name of the compliance regulation.
+                  maxLength: 255
+                  example: My regulation
+                description:
+                  type: string
+                  description: The detailed description of the regulation.
+                  maxLength: 524288
+                  example: Regulation details
+                external_id:
+                  type: string
+                  description: An optional identifier.
+                  example: RG-1
+                source:
+                  type: string
+                  description: Source of the regulation. Used for legal reasons.
+                  example: Federal Trade Commission
+                disclaimer:
+                  type: string
+                  description: Regulation disclaimer.
+                  example: Example of disclaimer.
+                report_disclaimer:
+                  type: string
+                  description: Report disclaimer.
+                  example: Example of disclaimer.
+                requirement_disclaimer:
+                  type: string
+                  description: Requirement disclaimer.
+                  example: Example of disclaimer.
+                available_tags:
+                  type: array
+                  description: List of available tags to be used inside the regulation.
+                  items:
+                    type: string
+                    description: Tag
+                    example: foo
+                tags:
+                  type: array
+                  description: List of applied tags. Must use elements from `available_tags`.
+                  items:
+                    type: string
+                    description: Tag
+                    example: foo
+                locked:
+                  type: boolean
+                  description: Defines whether regulation is editable or not.
+                  example: false
+                premium:
+                  type: boolean
+                  description: Indicates whether content is only available for users who have premium edition subscriptions.
+                  example: false
+                subscription_types:
+                  type: array
+                  description: Indicates the user's subscription type.
+                  items:
+                    type: string
+                    description: Tag
+                    example: foo
     GetComplianceRegulationsResponse:
       type: object
       description: The data associated with the resource.
@@ -2578,645 +3217,6 @@ components:
               - 'null'
               description: Previous page URL.
               example: null
-    GetComplianceRequirementsResponseWithIncludes:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      - links
-      properties:
-        data:
-          type: array
-          description: Array of compliance requirements
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '1'
-              type:
-                type: string
-                description: The classification of the object (`"compliance_requirements"`).
-                example: compliance_requirements
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  name:
-                    type:
-                    - string
-                    - 'null'
-                    description: The name of the compliance requirement.
-                    maxLength: 510
-                    example: My requirement
-                  identifier:
-                    type: string
-                    description: The identifier of the compliance requirement.
-                    maxLength: 255
-                    example: REQ-1
-                  description:
-                    type: string
-                    description: The detailed description of the requirement.
-                    maxLength: 524288
-                    example: Requirement details
-                  created_at:
-                    type: string
-                    description: The timestamp specifying when the requirement was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The timestamp specifying when the requirement was updated.
-                    example: '2019-03-18T22:02:05Z'
-                    format: date-time
-                  external_id:
-                    type:
-                    - string
-                    - 'null'
-                    description: An optional identifier.
-                    example: EXT-1
-                  external_parent_id:
-                    type:
-                    - string
-                    - 'null'
-                    description: An optional identifier of parent.
-                    example: EXT-2
-                  tags:
-                    type: array
-                    description: List of applied tags. Must use elements from regulation's `available_tags`.
-                    items:
-                      type: string
-                      description: Tag
-                      example: foo
-                  rationale:
-                    type:
-                    - string
-                    - 'null'
-                    description: Rationale.
-                    maxLength: 524288
-                    example: Requirement rationale
-                  applicable:
-                    type: boolean
-                    description: Indicates whether requirement is covered/applicable.
-                    example: true
-                  covered:
-                    type: boolean
-                    description: Indicates whether requirement is covered/applicable.
-                    example: true
-                  coverage:
-                    type: integer
-                    description: Coverage percentage.
-                    example: 100
-                  position:
-                    type:
-                    - integer
-                    - 'null'
-                    format: int64
-                    description: Position optional integer indicates position of compliance requirement in UI
-                    example: 3
-                  in_scope_children_count:
-                    type: integer
-                    description: Number of child requirements that are in scope.
-                    example: 5
-                  children_count:
-                    type: integer
-                    description: Total number of child requirements.
-                    example: 10
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                properties:
-                  compliance_regulation:
-                    type: object
-                    description: Parent regulation object.
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the requested resource.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"compliance_regulations"`).
-                            example: compliance_regulations
-                  parent:
-                    type: object
-                    description: Parent requirement object.
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type:
-                        - object
-                        - 'null'
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the requested resource.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"compliance_requirements"`).
-                            example: compliance_requirements
-                  compliance_mappings:
-                    type: object
-                    description: Related control mappings.
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: array
-                        description: The data associated with the resource.
-                        items:
-                          type: object
-                          required:
-                          - id
-                          - type
-                          properties:
-                            id:
-                              type: string
-                              description: The ID of the requested resource.
-                              example: '1'
-                            type:
-                              type: string
-                              description: The classification of the object (`"compliance_mappings"`).
-                              example: compliance_mappings
-                  related_controls:
-                    type: object
-                    description: Related controls for this requirement.
-                    required:
-                    - meta
-                    properties:
-                      meta:
-                        type: object
-                        required:
-                        - count
-                        properties:
-                          count:
-                            type: integer
-                            description: The number of related controls.
-                            example: 0
-                  related_requirements:
-                    type: object
-                    description: Related requirements for this requirement.
-                    required:
-                    - meta
-                    properties:
-                      meta:
-                        type: object
-                        required:
-                        - count
-                        properties:
-                          count:
-                            type: integer
-                            description: The number of related requirements.
-                            example: 0
-                  controls:
-                    type: object
-                    description: Controls associated with this requirement.
-                    required:
-                    - meta
-                    properties:
-                      meta:
-                        type: object
-                        required:
-                        - count
-                        properties:
-                          count:
-                            type: integer
-                            description: The number of controls.
-                            example: 0
-              links:
-                type: object
-                description: Resource links.
-                properties:
-                  ui:
-                    type: string
-                    description: Link to the requirement in UI.
-                    example: https://test-org.compliance-maps.highbond.com/standard/1/requirement/2/edit
-        included:
-          type: array
-          description: Included resources.
-          items:
-            type: object
-            required:
-            - id
-            - type
-            - attributes
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '1'
-              type:
-                type: string
-                enum:
-                - compliance_regulations
-                - compliance_requirements
-                - compliance_mappings
-                description: The type of the included resource.
-              attributes:
-                type: object
-                description: The attributes of the included resource.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the regulation.
-                  description:
-                    type: string
-                    description: The description of the regulation.
-                  created_at:
-                    type: string
-                    format: date-time
-                    description: Creation timestamp.
-                  updated_at:
-                    type: string
-                    format: date-time
-                    description: Last update timestamp.
-                  external_id:
-                    type:
-                    - string
-                    - 'null'
-                    description: External identifier.
-                  source:
-                    type:
-                    - string
-                    - 'null'
-                    description: Source of the regulation.
-                  locked:
-                    type: boolean
-                    description: Whether the regulation is locked.
-                  available_tags:
-                    type: array
-                    items:
-                      type: string
-                    description: Available tags.
-                  tags:
-                    type: array
-                    items:
-                      type: string
-                    description: Applied tags.
-                  disclaimer:
-                    type:
-                    - string
-                    - 'null'
-                    description: Disclaimer text.
-                  report_disclaimer:
-                    type:
-                    - string
-                    - 'null'
-                    description: Report disclaimer text.
-                  requirement_disclaimer:
-                    type:
-                    - string
-                    - 'null'
-                    description: Requirement disclaimer text.
-                  identifier:
-                    type: string
-                    description: The identifier of the requirement.
-                  rationale:
-                    type:
-                    - string
-                    - 'null'
-                    description: Rationale text.
-                  applicable:
-                    type: boolean
-                    description: Whether the requirement is applicable.
-                  covered:
-                    type: boolean
-                    description: Whether the requirement is covered.
-                  coverage:
-                    type: integer
-                    description: Coverage percentage.
-                  position:
-                    type:
-                    - integer
-                    - 'null'
-                    description: Position in the list.
-                  in_scope_children_count:
-                    type: integer
-                    description: Number of in-scope child requirements.
-                  children_count:
-                    type: integer
-                    description: Total number of child requirements.
-              relationships:
-                type: object
-                description: The relationships of the included resource (when applicable).
-                properties:
-                  related_controls:
-                    type: object
-                    properties:
-                      meta:
-                        type: object
-                        properties:
-                          count:
-                            type: integer
-                  related_requirements:
-                    type: object
-                    properties:
-                      meta:
-                        type: object
-                        properties:
-                          count:
-                            type: integer
-                  controls:
-                    type: object
-                    properties:
-                      meta:
-                        type: object
-                        properties:
-                          count:
-                            type: integer
-                  control:
-                    type: object
-                    properties:
-                      data:
-                        type: object
-                        properties:
-                          type:
-                            type: string
-                            example: controls
-                          id:
-                            type: string
-              links:
-                type: object
-                description: Links related to the included resource (when applicable).
-                properties:
-                  ui:
-                    type: string
-                    description: UI link for the resource.
-          example:
-          - id: '232843'
-            type: compliance_regulations
-            attributes:
-              name: Regulation 2
-              description: Regulation 2 description
-              created_at: '2025-05-28T11:54:19.853Z'
-              updated_at: '2025-08-04T22:29:08.386Z'
-              external_id: null
-              source: null
-              locked: false
-              available_tags: []
-              tags: []
-              disclaimer: null
-              report_disclaimer: This product includes COBIT® 5 Framework, used by permission of ISACA® ©2017 ISACA®. All rights reserved. COBIT® is a registered trademark of the Information Systems Audit and Control Association® (ISACA®).
-              requirement_disclaimer: Information Systems Audit and Control Association® (ISACA®). ©2017 ISACA®. All rights reserved.
-          - id: '3986962'
-            type: compliance_requirements
-            attributes:
-              identifier: REQ-2
-              name: Requirement 2
-              description: Requirement 2 description
-              created_at: '2025-08-04T22:26:53.882Z'
-              updated_at: '2025-08-08T14:38:27.940Z'
-              external_id: null
-              external_parent_id: null
-              tags: []
-              rationale: null
-              applicable: true
-              covered: false
-              coverage: 0
-              position: null
-              in_scope_children_count: 1
-              children_count: 1
-            relationships:
-              related_controls:
-                meta:
-                  count: 0
-              related_requirements:
-                meta:
-                  count: 0
-              controls:
-                meta:
-                  count: 0
-            links:
-              ui: https://tony.compliance-maps.highbond-s1.com/standard/232843/requirement/3986962/edit
-          - id: '356126'
-            type: compliance_mappings
-            attributes:
-              coverage: 100
-            relationships:
-              control:
-                data:
-                  type: controls
-                  id: '2890278'
-        links:
-          type: object
-          required:
-          - next
-          - prev
-          properties:
-            next:
-              type:
-              - string
-              - 'null'
-              description: Next page url
-              example: /api/resource?page[number]=Mg==
-            prev:
-              type:
-              - string
-              - 'null'
-              description: Previous page url
-              example: null
-  parameters:
-    complianceRegulationSparseFieldsetWithoutLicencedFields:
-      in: query
-      name: fields[compliance_regulations]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: name,description,created_at,updated_at,external_id,source,disclaimer,report_disclaimer,requirement_disclaimer,available_tags,tags,locked
-    complianceRegulationSparseFieldsetParams:
-      in: query
-      name: fields[compliance_regulations]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: name,description,created_at,updated_at,external_id,source,disclaimer,report_disclaimer,requirement_disclaimer,available_tags,tags,locked,premium,subscription_types
-    relatedComplianceRequirementSparseFieldsetParamsGet:
-      in: query
-      name: fields[related_compliance_requirements]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: relationship_type,relationship_strength,status,compliance_requirement,related_compliance_requirement
-    relatedComplianceRequirementSparseFieldsetParamsGetWithoutRequirement:
-      in: query
-      name: fields[related_compliance_requirements]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: relationship_type,relationship_strength,status,related_compliance_requirement
-    complianceRequirementIdParam:
-      in: path
-      name: compliance_requirement_id
-      description: The ID of the requirement.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    complianceRequirementsFilterIdentifierParam:
-      in: query
-      name: filter[identifier]
-      description: Filters the response list based on the identifier match.
-      required: false
-      schema:
-        type: string
-        example: REQ-1
-    complianceRequirementsSearchParam:
-      in: query
-      name: filter[search]
-      description: Filters the response list based on the search match in description or name.
-      required: false
-      schema:
-        type: string
-        example: risk
-    complianceRequirementSparseFieldsetParams:
-      in: query
-      name: fields[compliance_requirements]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: applicable,breadcrumbs,children_count,compliance_mappings,compliance_regulation,controls,coverage,covered,created_at,description,external_id,external_parent_id,identifier,in_scope_children_count,name,parent,position,rationale,related_controls,related_requirements,tags,updated_at
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    complianceRequirementSparseFieldsetParamsWithoutRelationships:
-      in: query
-      name: fields[compliance_requirements]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: identifier,name,description,created_at,updated_at,external_id,external_parent_id,tags,rationale,applicable,covered,coverage,compliance_regulation
-    complianceRegulationsFilterNameParam:
-      in: query
-      name: filter[name]
-      description: Filters the response list based on the name match.
-      required: false
-      schema:
-        type: string
-        example: My regulation
-    complianceRegulationsParitalResultsParam:
-      in: query
-      name: show_parital_results
-      description: Show partial results for the compliance regulations.
-      required: false
-      schema:
-        type: boolean
-        example: true
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    complianceMappingSparseFieldsetParams:
-      in: query
-      name: fields[compliance_mappings]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: coverage,created_at,updated_at,compliance_requirement,control
-    complianceRequirementsFilterNameParam:
-      in: query
-      name: filter[name]
-      description: Filters the response list based on the name match.
-      required: false
-      schema:
-        type: string
-        example: My requirement
-    relatedComplianceRequirementSparseFieldsetParamsPost:
-      in: query
-      name: fields[related_compliance_requirements]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: relationship_type,relationship_strength,status,compliance_requirement,related_compliance_requirement
-    complianceRegulationsFilterExternalIdParam:
-      in: query
-      name: filter[external_id]
-      description: Filters the response list based on the external ID match.
-      required: false
-      schema:
-        type:
-        - string
-        - 'null'
-        example: RG-1
-    complianceRequirementsParentIdParam:
-      in: query
-      name: filter[parent_id]
-      description: Filters the response list based on the parent ID match. With filter[parent_id]=null we should get back the parent elements.
-      required: false
-      schema:
-        type: string
-        example: '2345355'
-    complianceRegulationIdParam:
-      in: path
-      name: compliance_regulation_id
-      description: The ID of the regulation.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    complianceRegulationsSortParam:
-      in: query
-      name: sort
-      description: Sorts the response lists by created_at.
-      required: false
-      schema:
-        type: string
-        enum:
-        - -created_at
-        example: -created_at
   responses:
     MissingOrgId:
       description: Bad request.
@@ -3230,10 +3230,31 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ContentTooLargeError:
+      description: Content Too Large.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 413
+              title: Content Too Large
+              detail: '''Response payload too large. Try to reduce the page size and the page number.'' or ''Response payload too large. Try to reduce the number of fields in the response.'''
+    NoContent:
+      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -3259,31 +3280,10 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
-    ContentTooLargeError:
-      description: Content Too Large.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 413
-              title: Content Too Large
-              detail: '''Response payload too large. Try to reduce the page size and the page number.'' or ''Response payload too large. Try to reduce the number of fields in the response.'''
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
     ResourceTypeMismatch:
       description: Bad request.
       content:

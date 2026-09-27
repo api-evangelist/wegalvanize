@@ -396,7 +396,223 @@ paths:
                   detail: Cannot delete an inherited Entity.
 components:
   schemas:
-    CreateObjectiveEntityRequest:
+    CreateObjectiveRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          - relationships
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"objectives"`).
+              example: objectives
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              - reference
+              properties:
+                title:
+                  type: string
+                  description: The title of the objective.
+                  maxLength: 60
+                  example: Objective Title
+                reference:
+                  type: string
+                  description: The reference number or code for the objective.
+                  maxLength: 8
+                  example: ITC
+                description:
+                  type: string
+                  description: A detailed description of the objective.
+                  example: Objective description
+                division_department:
+                  type: string
+                  description: The division or department responsible for the objective.
+                  example: Finance
+                owner:
+                  type: string
+                  description: 'The person responsible for the objective. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the objective. If you want this field to take effect when creating or updating an objective,
+
+                    omit the `owner_user` field of the `relationships` section in the request data.
+
+                    '
+                  example: thomas@sodor.ca
+                executive_owner:
+                  type: string
+                  description: 'The executive owner of the objective. Specifying a person''s name or email does not automatically send them
+
+                    an email notification about the objective. If you want this field to take effect when creating or updating an objective,
+
+                    omit the `executive_owner_user` field of the `relationships` section in the request data.
+
+                    '
+                  example: henry@sodor.com
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this objective is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Objective Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - assigned_user
+              properties:
+                assigned_user:
+                  type: object
+                  description: 'The person assigned to the objective. Only users assigned the Professional Manager or Professional User role in the project can be specified.
+
+                    The user specified receives an email notification with a link to the objective, is able to view the objective on the project dashboard,
+
+                    and has full read and write access to the objective.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                framework_origin:
+                  type: object
+                  description: 'In the Projects app, a project `objective` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `objective` in a project with its related counterpart in a framework. Can be set only when `parent_resource_type` is `projects`.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parent objective.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"objectives"`).
+                          example: objectives
+                owner_user:
+                  type: object
+                  description: 'Allows you to assign a licensed or non-licensed user as an owner of the objective for tracking and reporting purposes. This is an optional field.
+
+                    Typically this is the key person accountable for the process/risk/control (often the manager of the function).
+
+                    Managers responsible for an entire objective that have been assigned the Contributor Tester or Contributor User or Contributor Manager role are assigned as an owner of an objective.
+
+                    Once a person is assigned as an owner of an objective, they receive an email notification with a link to the objective, granting them write access to controls and read access to risks and the objective overview.
+
+                    If you provide this field when creating or updating an objective, the `owner` field will be ignored.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                executive_owner_user:
+                  type: object
+                  description: 'Allows you to assign a licensed or non-licensed user as an executive owner of the objective for tracking and reporting purposes. This is an optional field.
+
+                    Typically this is a sponsor/leader accountable for the process/risk/control (often the VP/C-Suite of the owner).
+
+                    This may be board or executive members that are responsible for an entire objective and have been assigned the Contributor Tester or Contributor User or Contributor Manager role are assigned as an executive owner of an objective.
+
+                    After a person has been assigned as executive owner, they receive an email notification with a link to the objective, granting them write access to controls and read access to risks and the objective overview.
+
+                    If you provide this field when creating or updating an objective, the `executive_owner` field will be ignored.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+    UpdateObjectiveRequest:
       type: object
       description: The data associated with the resource.
       required:
@@ -408,29 +624,7 @@ components:
           required:
           - id
           - type
-          properties:
-            id:
-              type: string
-              description: The ID of the objective.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"entities"`).
-              example: entities
-    GetObjectiveResponseWithIncludes:
-      type: object
-      description: The data included in the response.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
           - attributes
-          - relationships
           properties:
             id:
               type: string
@@ -492,50 +686,28 @@ components:
 
                     '
                   example: 1
-                risk_control_matrix_id:
-                  type: string
-                  description: The id of the risk control matrix.
-                  example: '100'
-                walkthrough_summary_id:
-                  type:
-                  - string
-                  - 'null'
-                  description: The id of the walkthrough summary.
-                  example: '200'
-                testing_round_1_id:
-                  type:
-                  - string
-                  - 'null'
-                  description: The id of testing round 1 (if applicable).
-                  example: '301'
-                testing_round_2_id:
-                  type:
-                  - string
-                  - 'null'
-                  description: The id of testing round 2 (if applicable).
-                  example: '302'
-                testing_round_3_id:
-                  type:
-                  - string
-                  - 'null'
-                  description: The id of testing round 3 (if applicable).
-                  example: '303'
-                testing_round_4_id:
-                  type:
-                  - string
-                  - 'null'
-                  description: The id of testing round 4 (if applicable).
-                  example: '304'
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the objective was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the objective was last updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this objective is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Objective Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
                 planned_start_date:
                   type:
                   - string
@@ -578,133 +750,10 @@ components:
                   description: Planned milestone date.
                   example: '2019-02-09'
                   format: date
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this objective is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Objective Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-                risk_assurance_data:
-                  type: object
-                  description: 'Fields that determines assurance values. Assurance is an expression of confidence that risk is effectively mitigated. Returns `null` if Risk Assurance feature is disabled.
-
-                    '
-                  properties:
-                    inherent_risk:
-                      type: number
-                      format: float
-                      description: 'The risk that an activity would pose if no controls or other mitigating factors were in place. Can also be referred to as the gross risk, or risks before controls, and can act as the baseline for your organization''s risk tolerance or appetite.
-
-                        '
-                      example: 1.1
-                    residual_risk:
-                      type: number
-                      format: float
-                      description: 'The risk that remains after controls are taken into account. Can also be referred to as the net risk or risk after controls.
-
-                        '
-                      example: 1.1
-                    assurance:
-                      type: number
-                      description: 'The level of assurance that the controls in place effectively mitigate risk to the business.
-
-                        '
-                      example: 0
             relationships:
               type: object
               description: The relationships associated with the resource.
-              required:
-              - assigned_user
               properties:
-                project:
-                  type: object
-                  description: 'Each objective has an associated project or framework. Project/framework is a management system that allows you to define and compile information
-
-                    for reporting purposes.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the project.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"projects"`).
-                          example: projects
-                framework:
-                  type: object
-                  description: 'Each objective has an associated project or framework. Project/framework is a management system that allows you to define and compile information
-
-                    for reporting purposes.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the framework.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"frameworks"`).
-                          example: frameworks
-                framework_origin:
-                  type: object
-                  description: 'In the Projects app, a project `objective` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `objective` in a project with its related counterpart in a framework. Can be set only when `parent_resource_type` is `projects`.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the parent objective.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"objectives"`).
-                          example: objectives
                 assigned_user:
                   type: object
                   description: 'The person assigned to the objective. Only users assigned the Professional Manager or Professional User role in the project can be specified.
@@ -738,18 +787,25 @@ components:
                           example: users
                 entities:
                   type: object
-                  description: Each objective has an associated objective entities.
-                  required:
-                  - data
+                  description: 'The passed entities list should match the following conditions:
+
+                    1. It should be the full exact list of entities you would like to be linked to the resource.
+
+
+                    2. The passed entities should consist of valid sub-trees with all ancestor entities as well as descendent entities.
+
+
+                    3. Inherited entities should be included too.
+
+
+                    Otherwise, the whole request will be rejected with the corresponding error.
+
+                    '
                   properties:
                     data:
                       type: array
-                      description: The data associated with the resource.
                       items:
                         type: object
-                        required:
-                        - id
-                        - type
                         properties:
                           id:
                             type: string
@@ -759,6 +815,29 @@ components:
                             type: string
                             description: The classification of the object (`"entities"`).
                             example: entities
+                framework_origin:
+                  type: object
+                  description: 'In the Projects app, a project `objective` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `objective` in a project with its related counterpart in a framework. Can be set only when `parent_resource_type` is `projects`.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parent objective.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"objectives"`).
+                          example: objectives
                 owner_user:
                   type: object
                   description: 'Allows you to assign a licensed or non-licensed user as an owner of the objective for tracking and reporting purposes. This is an optional field.
@@ -1231,9 +1310,9 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
-    UpdateObjectiveRequest:
+    GetObjectiveResponseWithIncludes:
       type: object
-      description: The data associated with the resource.
+      description: The data included in the response.
       required:
       - data
       properties:
@@ -1244,6 +1323,7 @@ components:
           - id
           - type
           - attributes
+          - relationships
           properties:
             id:
               type: string
@@ -1305,28 +1385,50 @@ components:
 
                     '
                   example: 1
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this objective is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Objective Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
+                risk_control_matrix_id:
+                  type: string
+                  description: The id of the risk control matrix.
+                  example: '100'
+                walkthrough_summary_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: The id of the walkthrough summary.
+                  example: '200'
+                testing_round_1_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: The id of testing round 1 (if applicable).
+                  example: '301'
+                testing_round_2_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: The id of testing round 2 (if applicable).
+                  example: '302'
+                testing_round_3_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: The id of testing round 3 (if applicable).
+                  example: '303'
+                testing_round_4_id:
+                  type:
+                  - string
+                  - 'null'
+                  description: The id of testing round 4 (if applicable).
+                  example: '304'
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the objective was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the objective was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
                 planned_start_date:
                   type:
                   - string
@@ -1369,10 +1471,133 @@ components:
                   description: Planned milestone date.
                   example: '2019-02-09'
                   format: date
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this objective is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Objective Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+                risk_assurance_data:
+                  type: object
+                  description: 'Fields that determines assurance values. Assurance is an expression of confidence that risk is effectively mitigated. Returns `null` if Risk Assurance feature is disabled.
+
+                    '
+                  properties:
+                    inherent_risk:
+                      type: number
+                      format: float
+                      description: 'The risk that an activity would pose if no controls or other mitigating factors were in place. Can also be referred to as the gross risk, or risks before controls, and can act as the baseline for your organization''s risk tolerance or appetite.
+
+                        '
+                      example: 1.1
+                    residual_risk:
+                      type: number
+                      format: float
+                      description: 'The risk that remains after controls are taken into account. Can also be referred to as the net risk or risk after controls.
+
+                        '
+                      example: 1.1
+                    assurance:
+                      type: number
+                      description: 'The level of assurance that the controls in place effectively mitigate risk to the business.
+
+                        '
+                      example: 0
             relationships:
               type: object
               description: The relationships associated with the resource.
+              required:
+              - assigned_user
               properties:
+                project:
+                  type: object
+                  description: 'Each objective has an associated project or framework. Project/framework is a management system that allows you to define and compile information
+
+                    for reporting purposes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"projects"`).
+                          example: projects
+                framework:
+                  type: object
+                  description: 'Each objective has an associated project or framework. Project/framework is a management system that allows you to define and compile information
+
+                    for reporting purposes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the framework.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"frameworks"`).
+                          example: frameworks
+                framework_origin:
+                  type: object
+                  description: 'In the Projects app, a project `objective` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `objective` in a project with its related counterpart in a framework. Can be set only when `parent_resource_type` is `projects`.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parent objective.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"objectives"`).
+                          example: objectives
                 assigned_user:
                   type: object
                   description: 'The person assigned to the objective. Only users assigned the Professional Manager or Professional User role in the project can be specified.
@@ -1406,25 +1631,18 @@ components:
                           example: users
                 entities:
                   type: object
-                  description: 'The passed entities list should match the following conditions:
-
-                    1. It should be the full exact list of entities you would like to be linked to the resource.
-
-
-                    2. The passed entities should consist of valid sub-trees with all ancestor entities as well as descendent entities.
-
-
-                    3. Inherited entities should be included too.
-
-
-                    Otherwise, the whole request will be rejected with the corresponding error.
-
-                    '
+                  description: Each objective has an associated objective entities.
+                  required:
+                  - data
                   properties:
                     data:
                       type: array
+                      description: The data associated with the resource.
                       items:
                         type: object
+                        required:
+                        - id
+                        - type
                         properties:
                           id:
                             type: string
@@ -1434,29 +1652,6 @@ components:
                             type: string
                             description: The classification of the object (`"entities"`).
                             example: entities
-                framework_origin:
-                  type: object
-                  description: 'In the Projects app, a project `objective` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `objective` in a project with its related counterpart in a framework. Can be set only when `parent_resource_type` is `projects`.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the parent objective.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"objectives"`).
-                          example: objectives
                 owner_user:
                   type: object
                   description: 'Allows you to assign a licensed or non-licensed user as an owner of the objective for tracking and reporting purposes. This is an optional field.
@@ -1521,7 +1716,7 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
-    CreateObjectiveRequest:
+    CreateObjectiveEntityRequest:
       type: object
       description: The data associated with the resource.
       required:
@@ -1531,242 +1726,17 @@ components:
           type: object
           description: The data associated with the resource.
           required:
+          - id
           - type
-          - attributes
-          - relationships
           properties:
+            id:
+              type: string
+              description: The ID of the objective.
+              example: '1'
             type:
               type: string
-              description: The classification of the object (`"objectives"`).
-              example: objectives
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              - reference
-              properties:
-                title:
-                  type: string
-                  description: The title of the objective.
-                  maxLength: 60
-                  example: Objective Title
-                reference:
-                  type: string
-                  description: The reference number or code for the objective.
-                  maxLength: 8
-                  example: ITC
-                description:
-                  type: string
-                  description: A detailed description of the objective.
-                  example: Objective description
-                division_department:
-                  type: string
-                  description: The division or department responsible for the objective.
-                  example: Finance
-                owner:
-                  type: string
-                  description: 'The person responsible for the objective. Specifying a person''s name or email does not automatically send them
-
-                    an email notification about the objective. If you want this field to take effect when creating or updating an objective,
-
-                    omit the `owner_user` field of the `relationships` section in the request data.
-
-                    '
-                  example: thomas@sodor.ca
-                executive_owner:
-                  type: string
-                  description: 'The executive owner of the objective. Specifying a person''s name or email does not automatically send them
-
-                    an email notification about the objective. If you want this field to take effect when creating or updating an objective,
-
-                    omit the `executive_owner_user` field of the `relationships` section in the request data.
-
-                    '
-                  example: henry@sodor.com
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this objective is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Objective Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - assigned_user
-              properties:
-                assigned_user:
-                  type: object
-                  description: 'The person assigned to the objective. Only users assigned the Professional Manager or Professional User role in the project can be specified.
-
-                    The user specified receives an email notification with a link to the objective, is able to view the objective on the project dashboard,
-
-                    and has full read and write access to the objective.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-                framework_origin:
-                  type: object
-                  description: 'In the Projects app, a project `objective` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `objective` in a project with its related counterpart in a framework. Can be set only when `parent_resource_type` is `projects`.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the parent objective.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"objectives"`).
-                          example: objectives
-                owner_user:
-                  type: object
-                  description: 'Allows you to assign a licensed or non-licensed user as an owner of the objective for tracking and reporting purposes. This is an optional field.
-
-                    Typically this is the key person accountable for the process/risk/control (often the manager of the function).
-
-                    Managers responsible for an entire objective that have been assigned the Contributor Tester or Contributor User or Contributor Manager role are assigned as an owner of an objective.
-
-                    Once a person is assigned as an owner of an objective, they receive an email notification with a link to the objective, granting them write access to controls and read access to risks and the objective overview.
-
-                    If you provide this field when creating or updating an objective, the `owner` field will be ignored.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-                executive_owner_user:
-                  type: object
-                  description: 'Allows you to assign a licensed or non-licensed user as an executive owner of the objective for tracking and reporting purposes. This is an optional field.
-
-                    Typically this is a sponsor/leader accountable for the process/risk/control (often the VP/C-Suite of the owner).
-
-                    This may be board or executive members that are responsible for an entire objective and have been assigned the Contributor Tester or Contributor User or Contributor Manager role are assigned as an executive owner of an objective.
-
-                    After a person has been assigned as executive owner, they receive an email notification with a link to the objective, granting them write access to controls and read access to risks and the objective overview.
-
-                    If you provide this field when creating or updating an objective, the `executive_owner` field will be ignored.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the assigned user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+              description: The classification of the object (`"entities"`).
+              example: entities
     GetObjectivesResponse:
       type: object
       description: The data associated with the resource.
@@ -2194,6 +2164,43 @@ components:
               - 'null'
               description: Previous page url
               example: null
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     CreateObjectiveEntityResponse:
       type: object
       required:
@@ -2214,81 +2221,6 @@ components:
               type: string
               description: The classification of the object (`"entities"`).
               example: entities
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-  parameters:
-    objectiveIdParam:
-      in: path
-      name: objective_id
-      description: The ID of the objective.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    parentResourceTypeParam:
-      in: path
-      name: parent_resource_type
-      description: The type of the parent resource.
-      required: true
-      schema:
-        type: string
-        enum:
-        - projects
-        - frameworks
-        default: projects
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    parentResourceIdParam:
-      in: path
-      name: parent_resource_id
-      description: The ID of the parent resource.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    objectiveSparseFieldsetParams:
-      in: query
-      name: fields[objectives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
   responses:
     MissingOrgId:
       description: Bad request.
@@ -2302,10 +2234,20 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NoContent:
+      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -2331,20 +2273,10 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -2359,6 +2291,74 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
+  parameters:
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    parentResourceTypeParam:
+      in: path
+      name: parent_resource_type
+      description: The type of the parent resource.
+      required: true
+      schema:
+        type: string
+        enum:
+        - projects
+        - frameworks
+        default: projects
+    objectiveIdParam:
+      in: path
+      name: objective_id
+      description: The ID of the objective.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    objectiveSparseFieldsetParams:
+      in: query
+      name: fields[objectives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    parentResourceIdParam:
+      in: path
+      name: parent_resource_id
+      description: The ID of the parent resource.
+      required: true
+      schema:
+        type: integer
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

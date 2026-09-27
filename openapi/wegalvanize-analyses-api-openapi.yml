@@ -249,8 +249,30 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   responses:
-    Accepted:
-      description: Accepted.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
     ResourceIdConflict:
       description: Bad request.
       content:
@@ -267,22 +289,6 @@ components:
                 the id specified in the path, 101.
 
                 '
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
     NotFound:
       description: Not found.
       content:
@@ -294,6 +300,18 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
+    MissingCollectionId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, collection_id, is missing.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -308,30 +326,12 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    MissingCollectionId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, collection_id, is missing.
+    Forbidden:
+      description: Forbidden.
+    Accepted:
+      description: Accepted.
+    BadCredentials:
+      description: Bad credentials.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -346,89 +346,7 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-  parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    collectionIdParam:
-      in: path
-      name: collection_id
-      description: The ID of the collection.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
   schemas:
-    SingleAnalysisResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
-            type:
-              type: string
-              description: The classification of the object (`"analyses"`).
-              example: analyses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the analysis.
-                  maxLength: 255
-                  example: My first Analysis
-                description:
-                  type: string
-                  description: The description of the analysis.
-                  example: Description of My first Analysis
-                created_at:
-                  type: string
-                  description: The date the analysis was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The date the analysis was updated.
-                  example: '2019-03-18T22:02:05Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                collection:
-                  $ref: '#/components/schemas/RelationshipObject'
-              example:
-                collection:
-                  data:
-                    id: '1'
-                    type: collections
     MultiAnalysesResponse:
       type: object
       description: The data associated with the resource.
@@ -526,64 +444,6 @@ components:
                   type: string
                   description: The description of the analysis.
                   example: Description of My first Analysis
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    RelationshipObject:
-      type: object
-      description: The object related to the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the related object.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
     CreateAnalysisPayload:
       type: object
       description: The data associated with the resource.
@@ -616,6 +476,146 @@ components:
                   type: string
                   description: The description of the analysis.
                   example: Description of My first Analysis
+    RelationshipObject:
+      type: object
+      description: The object related to the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the related object.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the related object.
+              example: 1
+            type:
+              type: string
+              description: The classification of the related object.
+              example: collection
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    SingleAnalysisResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"analyses"`).
+              example: analyses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the analysis.
+                  maxLength: 255
+                  example: My first Analysis
+                description:
+                  type: string
+                  description: The description of the analysis.
+                  example: Description of My first Analysis
+                created_at:
+                  type: string
+                  description: The date the analysis was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the analysis was updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                collection:
+                  $ref: '#/components/schemas/RelationshipObject'
+              example:
+                collection:
+                  data:
+                    id: '1'
+                    type: collections
+  parameters:
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    collectionIdParam:
+      in: path
+      name: collection_id
+      description: The ID of the collection.
+      required: true
+      schema:
+        type: integer
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

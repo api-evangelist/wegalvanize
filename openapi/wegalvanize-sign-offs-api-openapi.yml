@@ -72,209 +72,7 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
-  parameters:
-    signoffIncludeParam:
-      in: query
-      name: include
-      description: Requesting the API to return related resources.
-      required: false
-      schema:
-        type: string
-        enum:
-        - preparer
-        - detail_reviewer
-        - general_reviewer
-        - supplemental_reviewer
-        - specialty_reviewer
-        - next_reviewer
-        - target
-        - project
-      example: preparer,project
-    signoffDetailReviewerFilterParams:
-      in: query
-      name: filter[detail_reviewer.id]
-      description: Requesting the API to filter results by detail reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 3NQ6XzAUxqJMnAQ7n4KF
-    signoffGeneralReviewerFilterParams:
-      in: query
-      name: filter[general_reviewer.id]
-      description: Requesting the API to filter results by general reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 3NQ6XzAUxqJMnAQ7n4KF
-    signoffProjectStateFilterParams:
-      in: query
-      name: filter[project.state]
-      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    signoffNextReviewerFilterParams:
-      in: query
-      name: filter[next_reviewer.id]
-      description: Requesting the API to filter results by next reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 3NQ6XzAUxqJMnAQ7n4KF
-    signoffTargetIdFilterParams:
-      in: query
-      name: filter[target.id]
-      description: Requesting the API to filter results by target ID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '1'
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    signoffTargetTypeFilterParams:
-      in: query
-      name: filter[target.type]
-      description: Requesting the API to filter results by target type. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: narratives
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    signoffProjectIdFilterParams:
-      in: query
-      name: filter[project.id]
-      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '1'
-    signoffSupplementalReviewerFilterParams:
-      in: query
-      name: filter[supplemental_reviewer.id]
-      description: Requesting the API to filter results by supplemental reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 3NQ6XzAUxqJMnAQ7n4KF
-    signoffPrearerFilterParams:
-      in: query
-      name: filter[preparer.id]
-      description: Requesting the API to filter results by preparer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 3NQ6XzAUxqJMnAQ7n4KF
-    signoffSpecialtyReviewerFilterParams:
-      in: query
-      name: filter[specialty_reviewer.id]
-      description: Requesting the API to filter results by specialty reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 3NQ6XzAUxqJMnAQ7n4KF
-    signoffSparseFieldsetParams:
-      in: query
-      name: fields[signoffs]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: created_at,updated_at,prepared_at,detail_reviewed_at,general_reviewed_at,supplemental_reviewed_at,specialty_reviewed_at,project,target,preparer,detail_reviewer,general_reviewer,supplemental_reviewer,specialty_reviewer,next_reviewer
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
   schemas:
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     GetSignoffsResponse:
       type: object
       description: The data associated with the resource.
@@ -585,6 +383,208 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+  parameters:
+    signoffNextReviewerFilterParams:
+      in: query
+      name: filter[next_reviewer.id]
+      description: Requesting the API to filter results by next reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 3NQ6XzAUxqJMnAQ7n4KF
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    signoffTargetTypeFilterParams:
+      in: query
+      name: filter[target.type]
+      description: Requesting the API to filter results by target type. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: narratives
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    signoffProjectIdFilterParams:
+      in: query
+      name: filter[project.id]
+      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '1'
+    signoffDetailReviewerFilterParams:
+      in: query
+      name: filter[detail_reviewer.id]
+      description: Requesting the API to filter results by detail reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 3NQ6XzAUxqJMnAQ7n4KF
+    signoffSupplementalReviewerFilterParams:
+      in: query
+      name: filter[supplemental_reviewer.id]
+      description: Requesting the API to filter results by supplemental reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 3NQ6XzAUxqJMnAQ7n4KF
+    signoffIncludeParam:
+      in: query
+      name: include
+      description: Requesting the API to return related resources.
+      required: false
+      schema:
+        type: string
+        enum:
+        - preparer
+        - detail_reviewer
+        - general_reviewer
+        - supplemental_reviewer
+        - specialty_reviewer
+        - next_reviewer
+        - target
+        - project
+      example: preparer,project
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    signoffSparseFieldsetParams:
+      in: query
+      name: fields[signoffs]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: created_at,updated_at,prepared_at,detail_reviewed_at,general_reviewed_at,supplemental_reviewed_at,specialty_reviewed_at,project,target,preparer,detail_reviewer,general_reviewer,supplemental_reviewer,specialty_reviewer,next_reviewer
+    signoffGeneralReviewerFilterParams:
+      in: query
+      name: filter[general_reviewer.id]
+      description: Requesting the API to filter results by general reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 3NQ6XzAUxqJMnAQ7n4KF
+    signoffTargetIdFilterParams:
+      in: query
+      name: filter[target.id]
+      description: Requesting the API to filter results by target ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '1'
+    signoffPrearerFilterParams:
+      in: query
+      name: filter[preparer.id]
+      description: Requesting the API to filter results by preparer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 3NQ6XzAUxqJMnAQ7n4KF
+    signoffSpecialtyReviewerFilterParams:
+      in: query
+      name: filter[specialty_reviewer.id]
+      description: Requesting the API to filter results by specialty reviewer UID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 3NQ6XzAUxqJMnAQ7n4KF
+    signoffProjectStateFilterParams:
+      in: query
+      name: filter[project.state]
+      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

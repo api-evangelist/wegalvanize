@@ -168,6 +168,14 @@ paths:
                   detail: can't be blank
 components:
   parameters:
+    controlTestPlanProjectStateFilterParams:
+      in: query
+      name: filter[project.state]
+      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
     controlTestPlanIncludeParams:
       in: query
       name: include
@@ -176,6 +184,46 @@ components:
       schema:
         type: string
         example: control,control.objective
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    controlTestPlanProjectStatusFilterParams:
+      in: query
+      name: filter[project.status]
+      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    controlTestPlanProjectIdFilterParams:
+      in: query
+      name: filter[project.id]
+      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '1'
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
     controlTestPlanProjectNameFilterParams:
       in: query
       name: filter[project.name]
@@ -192,22 +240,6 @@ components:
       schema:
         type: string
         example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    controlTestPlanSparseFieldsetParams:
-      in: query
-      name: fields[control_test_plans]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: testing_method,total_sample_size,test_steps,created_at,updated_at,custom_attributes,control,framework_origin,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer
     pageSizeParam:
       in: query
       name: page[size]
@@ -231,46 +263,6 @@ components:
         - created_at
         - updated_at
         default: id
-    controlTestPlanProjectStatusFilterParams:
-      in: query
-      name: filter[project.status]
-      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    objectiveSparseFieldsetParams:
-      in: query
-      name: fields[objectives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
-    controlTestPlanProjectStateFilterParams:
-      in: query
-      name: filter[project.state]
-      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
     controlTestPlanControlIDFilterParams:
       in: query
       name: filter[control.id]
@@ -279,19 +271,35 @@ components:
       schema:
         type: string
         example: 1,2,3
-    controlTestPlanProjectIdFilterParams:
+    objectiveSparseFieldsetParams:
       in: query
-      name: filter[project.id]
-      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      name: fields[objectives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: '1'
+        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    controlTestPlanSparseFieldsetParams:
+      in: query
+      name: fields[control_test_plans]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: testing_method,total_sample_size,test_steps,created_at,updated_at,custom_attributes,control,framework_origin,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer
   responses:
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
     NotFound:
       description: Not found.
       content:
@@ -317,18 +325,10 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
   schemas:
     UpdateControlTestPlanRequest:
       type: object
@@ -413,6 +413,13 @@ components:
                         - Custom Select Option Text
                         items:
                           type: string
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     GetControlTestPlansResponse:
       type: object
       required:
@@ -677,36 +684,6 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     GetControlTestPlanResponse:
       type: object
       required:
@@ -847,13 +824,36 @@ components:
                           type: string
                           description: The classification of the object (`"control_test_plans"`).
                           example: control_test_plans
-    Errors:
+    Error:
       type: object
+      required:
+      - status
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -219,19 +219,89 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
+  responses:
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NoContent:
+      description: No content.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
   parameters:
-    projectIdParam:
-      in: path
-      name: project_id
-      description: The ID of the project.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    orgRequestItemsTargetIdFilterParams:
+    pageNumberEncodedParam:
       in: query
-      name: filter[target.id]
-      description: Requesting the API to filter results by target ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    orgRequestItemsProjectIdFilterParams:
+      in: query
+      name: filter[project.id]
+      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
@@ -244,6 +314,64 @@ components:
       schema:
         type: string
         example: 1
+    orgRequestItemsProjectStatusFilterParams:
+      in: query
+      name: filter[project.status]
+      description: Requesting the API to filter results by project status. Draft, Proposed, Active, Completed (these values are customizable by customers) For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    orgRequestItemsProjectNameFilterParams:
+      in: query
+      name: filter[project.name]
+      description: Requesting the API to filter results by project name. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: some project name
+    orgRequestItemsReceivedFilterParams:
+      in: query
+      name: filter[received]
+      description: Requesting the API to filter results by received state. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        enum:
+        - 'true'
+        - 'false'
+    orgRequestItemsTargetTypeFilterParams:
+      in: query
+      name: filter[target.type]
+      description: Requesting the API to filter results by target type. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: test_plans
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    projectIdParam:
+      in: path
+      name: project_id
+      description: The ID of the project.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
     orgRequestItemsSortParams:
       in: query
       name: sort
@@ -266,64 +394,14 @@ components:
         - email_message
         - position
         default: id
-    orgRequestItemsReceivedFilterParams:
+    orgRequestItemsTargetIdFilterParams:
       in: query
-      name: filter[received]
-      description: Requesting the API to filter results by received state. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        enum:
-        - 'true'
-        - 'false'
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    orgRequestItemsProjectIdFilterParams:
-      in: query
-      name: filter[project.id]
-      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      name: filter[target.id]
+      description: Requesting the API to filter results by target ID. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
         example: '1'
-    orgRequestItemsProjectStatusFilterParams:
-      in: query
-      name: filter[project.status]
-      description: Requesting the API to filter results by project status. Draft, Proposed, Active, Completed (these values are customizable by customers) For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    orgRequestItemsProjectNameFilterParams:
-      in: query
-      name: filter[project.name]
-      description: Requesting the API to filter results by project name. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: some project name
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
     organizationRequestItemsFieldsetParams:
       in: query
       name: fields[request_items]
@@ -332,672 +410,7 @@ components:
       schema:
         type: string
       example: created_at,updated_at,description,owner,owner_email,received,request_item_status,requestor,due_date,send_recurrent_notifications,email_subject,email_message,position,project_type,owner,project,owner_user,requestor_user,cc_users,cc_contacts,contact_reference_name,contact_reference_email,contact_reference_table_id,contact_reference_record_id,target
-    orgRequestItemsTargetTypeFilterParams:
-      in: query
-      name: filter[target.type]
-      description: Requesting the API to filter results by target type. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: test_plans
   schemas:
-    GetRequestItemResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"request_items"`).
-              example: request_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                description:
-                  type: string
-                  description: Describes the requested information, such as the document name, version number, or department where you might expect to find the information.
-                  maxLength: 524288
-                  example: <h1>Description heading</h1><p>Request item description.</p>
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the request item was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the request item was last updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                owner:
-                  type: string
-                  description: 'Specifies the name of the person responsible for fulfilling the request.
-
-                    If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
-
-                    This field becomes required if the `owner_user` relationship is not provided.
-
-                    '
-                  example: Owner name
-                owner_email:
-                  type: string
-                  format: email
-                  description: 'Specifies the email of the person responsible for fulfilling the request.
-
-                    If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
-
-                    '
-                  example: owner_email@example.com
-                received:
-                  type: boolean
-                  description: 'Specifies if the request item has been received (`true`) or if it is still open (`false`). The default is `false`.
-
-
-                    >**Note**: Deprecated, please us the `request_item_status` instead of this.
-
-                    '
-                  example: false
-                request_item_status:
-                  type: string
-                  description: 'Specifies the status of the request item.
-
-                    '
-                  example: Open
-                requestor:
-                  type: string
-                  description: 'Specifies the name of the person requesting the documentation.
-
-                    '
-                  example: Requestor name
-                due_date:
-                  type: string
-                  description: Specifies when the request should be fulfilled by.
-                  example: '2020-06-01'
-                  format: date
-                send_recurrent_notifications:
-                  type: boolean
-                  description: 'Sends an email to the request owner and CC''ed persons on a specified recurring schedule.
-
-                    For more information about recurring reminders, see
-
-                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/requests/sending_recurring_request_reminders.htm"
-
-                    target="_blank">Sending recurring request reminders</a>.
-
-                    '
-                  example: false
-                email_subject:
-                  type: string
-                  description: Provides the ability to customize the email subject line.
-                  example: Email subject
-                email_message:
-                  type: string
-                  description: Provides the ability to customize the body of the email.
-                  example: Email message
-                position:
-                  type: integer
-                  description: 'The value that determines the order in which it is displayed. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                cc_contacts:
-                  type:
-                  - array
-                  - 'null'
-                  description: 'Specifies one or more people that can contribute to the request. A comma separated list of email addresses.
-
-                    '
-                  example:
-                  - email_1@example.com
-                  - email_2@example.com
-                  items:
-                    type: string
-                    format: email
-                contact_reference_name:
-                  type: string
-                  description: 'Specifies the name of the contact reference for fulfilling the request.
-
-                    Should be provided together with other contact reference fields.
-
-                    Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
-
-                    '
-                  example: Contact User Name
-                contact_reference_email:
-                  type: string
-                  description: 'Specifies the email of the contact reference for fulfilling the request.
-
-                    Should be provided together with other contact reference fields.
-
-                    Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
-
-                    '
-                  example: email_1@example.com
-                contact_reference_table_id:
-                  type: string
-                  description: 'Specifies the table_id of the contact reference for fulfilling the request.
-
-                    Should be provided together with other contact reference fields.
-
-                    Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
-
-                    '
-                  example: '13517676342454'
-                contact_reference_record_id:
-                  type: string
-                  description: "Specifies the record_id of the contact reference for fulfilling the request.\nShould be provided together with other contact reference fields. \nValues in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.\n"
-                  example: '512356'
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                project:
-                  type: object
-                  description: Specifies the project that the request item is associated with.
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with a project.
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the project.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"projects"`).
-                          example: projects
-                target:
-                  type:
-                  - object
-                  - 'null'
-                  description: Specifies the resource that the request item is associated with.
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with a project.
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: 'The classification of the object.
-
-
-                            A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
-
-                            `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
-
-                            `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
-
-                            `"testing_rounds"`, `"walkthroughs"`.
-
-                            '
-                          example: objectives
-                owner_user:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Specifies the user responsible for fulfilling the request.
-
-                    A value in this field will override any values provided in the `owner` and `owner_email` attributes or contact reference fields.
-
-                    This field becomes required if the `owner` attribute is not provided.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-                requestor_user:
-                  type: object
-                  description: 'Specifies the user requesting the documentation.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                            <a href="#section/Making-requests">Making requests</a>.
-
-                            '
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-                cc_users:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Specifies one or more users in a HighBond instance that can contribute to the request.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-    GetOrgRequestItemsResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            - relationships
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '1'
-              type:
-                type: string
-                description: The classification of the object (`"request_items"`).
-                example: request_items
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  description:
-                    type: string
-                    description: Describes the requested information, such as the document name, version number, or department where you might expect to find the information.
-                    maxLength: 524288
-                    example: <h1>Description heading</h1><p>Request item description.</p>
-                  created_at:
-                    type: string
-                    description: The timestamp identifying when the request item was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The timestamp identifying when the request item was last updated.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  owner:
-                    type: string
-                    description: 'Specifies the name of the person responsible for fulfilling the request.
-
-                      If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
-
-                      This field becomes required if the `owner_user` relationship is not provided.
-
-                      '
-                    example: Owner name
-                  owner_email:
-                    type: string
-                    format: email
-                    description: 'Specifies the email of the person responsible for fulfilling the request.
-
-                      If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
-
-                      '
-                    example: owner_email@example.com
-                  received:
-                    type: boolean
-                    description: 'Specifies if the request item has been received (`true`) or if it is still open (`false`). The default is `false`.
-
-
-                      >**Note**: Deprecated, please us the `request_item_status` instead of this.
-
-                      '
-                    example: false
-                  request_item_status:
-                    type: string
-                    description: 'Specifies the status of the request item.
-
-                      '
-                    example: Open
-                  requestor:
-                    type: string
-                    description: 'Specifies the name of the person requesting the documentation.
-
-                      '
-                    example: Requestor name
-                  due_date:
-                    type: string
-                    description: Specifies when the request should be fulfilled by.
-                    example: '2020-06-01'
-                    format: date
-                  send_recurrent_notifications:
-                    type: boolean
-                    description: 'Sends an email to the request owner and CC''ed persons on a specified recurring schedule.
-
-                      For more information about recurring reminders, see
-
-                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/requests/sending_recurring_request_reminders.htm"
-
-                      target="_blank">Sending recurring request reminders</a>.
-
-                      '
-                    example: false
-                  email_subject:
-                    type: string
-                    description: Provides the ability to customize the email subject line.
-                    example: Email subject
-                  email_message:
-                    type: string
-                    description: Provides the ability to customize the body of the email.
-                    example: Email message
-                  position:
-                    type: integer
-                    description: 'The value that determines the order in which it is displayed. `position` must be a value between `1` and `2147483647`.
-
-                      '
-                    example: 1
-                  cc_contacts:
-                    type:
-                    - array
-                    - 'null'
-                    description: 'Specifies one or more people that can contribute to the request. A comma separated list of email addresses.
-
-                      '
-                    example:
-                    - email_1@example.com
-                    - email_2@example.com
-                    items:
-                      type: string
-                      format: email
-                  contact_reference_name:
-                    type: string
-                    description: 'Specifies the name of the contact reference for fulfilling the request.
-
-                      Should be provided together with other contact reference fields.
-
-                      Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
-
-                      '
-                    example: Contact User Name
-                  contact_reference_email:
-                    type: string
-                    description: 'Specifies the email of the contact reference for fulfilling the request.
-
-                      Should be provided together with other contact reference fields.
-
-                      Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
-
-                      '
-                    example: email_1@example.com
-                  contact_reference_table_id:
-                    type: string
-                    description: 'Specifies the table_id of the contact reference for fulfilling the request.
-
-                      Should be provided together with other contact reference fields.
-
-                      Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
-
-                      '
-                    example: '13517676342454'
-                  contact_reference_record_id:
-                    type: string
-                    description: "Specifies the record_id of the contact reference for fulfilling the request.\nShould be provided together with other contact reference fields. \nValues in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.\n"
-                    example: '512356'
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                properties:
-                  project:
-                    type: object
-                    description: Specifies the project that the request item is associated with.
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with a project.
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the project.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"projects"`).
-                            example: projects
-                  target:
-                    type:
-                    - object
-                    - 'null'
-                    description: Specifies the resource that the request item is associated with.
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with a project.
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the resource.
-                            example: '1'
-                          type:
-                            type: string
-                            description: 'The classification of the object.
-
-
-                              A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
-
-                              `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
-
-                              `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
-
-                              `"testing_rounds"`, `"walkthroughs"`.
-
-                              '
-                            example: objectives
-                  owner_user:
-                    type:
-                    - object
-                    - 'null'
-                    description: 'Specifies the user responsible for fulfilling the request.
-
-                      A value in this field will override any values provided in the `owner` and `owner_email` attributes or contact reference fields.
-
-                      This field becomes required if the `owner` attribute is not provided.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-                  requestor_user:
-                    type: object
-                    description: 'Specifies the user requesting the documentation.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                              <a href="#section/Making-requests">Making requests</a>.
-
-                              '
-                            example: 3NQ6XzAUxqJMnAQ7n4KF
-                          type:
-                            type: string
-                            description: The classification of the object (`"users"`).
-                            example: users
-                  cc_users:
-                    type:
-                    - object
-                    - 'null'
-                    description: 'Specifies one or more users in a HighBond instance that can contribute to the request.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          description: The data associated with the resource.
-                          required:
-                          - id
-                          - type
-                          properties:
-                            id:
-                              type: string
-                              description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
-
-                                <a href="#section/Making-requests">Making requests</a>.
-
-                                '
-                              example: 3NQ6XzAUxqJMnAQ7n4KF
-                            type:
-                              type: string
-                              description: The classification of the object (`"users"`).
-                              example: users
-        links:
-          type: object
-          required:
-          - next
-          - prev
-          properties:
-            next:
-              type:
-              - string
-              - 'null'
-              description: Next page url
-              example: /api/resource?page[number]=Mw==
-            prev:
-              type:
-              - string
-              - 'null'
-              description: Previous page url
-              example: null
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     CreateRequestItemRequest:
       type: object
       description: The data associated with the resource.
@@ -1536,76 +949,663 @@ components:
                             type: string
                             description: The classification of the object (`"users"`).
                             example: users
-  responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+    GetOrgRequestItemsResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The classification of the object (`"request_items"`).
+                example: request_items
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  description:
+                    type: string
+                    description: Describes the requested information, such as the document name, version number, or department where you might expect to find the information.
+                    maxLength: 524288
+                    example: <h1>Description heading</h1><p>Request item description.</p>
+                  created_at:
+                    type: string
+                    description: The timestamp identifying when the request item was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp identifying when the request item was last updated.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  owner:
+                    type: string
+                    description: 'Specifies the name of the person responsible for fulfilling the request.
+
+                      If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
+
+                      This field becomes required if the `owner_user` relationship is not provided.
+
+                      '
+                    example: Owner name
+                  owner_email:
+                    type: string
+                    format: email
+                    description: 'Specifies the email of the person responsible for fulfilling the request.
+
+                      If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
+
+                      '
+                    example: owner_email@example.com
+                  received:
+                    type: boolean
+                    description: 'Specifies if the request item has been received (`true`) or if it is still open (`false`). The default is `false`.
+
+
+                      >**Note**: Deprecated, please us the `request_item_status` instead of this.
+
+                      '
+                    example: false
+                  request_item_status:
+                    type: string
+                    description: 'Specifies the status of the request item.
+
+                      '
+                    example: Open
+                  requestor:
+                    type: string
+                    description: 'Specifies the name of the person requesting the documentation.
+
+                      '
+                    example: Requestor name
+                  due_date:
+                    type: string
+                    description: Specifies when the request should be fulfilled by.
+                    example: '2020-06-01'
+                    format: date
+                  send_recurrent_notifications:
+                    type: boolean
+                    description: 'Sends an email to the request owner and CC''ed persons on a specified recurring schedule.
+
+                      For more information about recurring reminders, see
+
+                      <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/requests/sending_recurring_request_reminders.htm"
+
+                      target="_blank">Sending recurring request reminders</a>.
+
+                      '
+                    example: false
+                  email_subject:
+                    type: string
+                    description: Provides the ability to customize the email subject line.
+                    example: Email subject
+                  email_message:
+                    type: string
+                    description: Provides the ability to customize the body of the email.
+                    example: Email message
+                  position:
+                    type: integer
+                    description: 'The value that determines the order in which it is displayed. `position` must be a value between `1` and `2147483647`.
+
+                      '
+                    example: 1
+                  cc_contacts:
+                    type:
+                    - array
+                    - 'null'
+                    description: 'Specifies one or more people that can contribute to the request. A comma separated list of email addresses.
+
+                      '
+                    example:
+                    - email_1@example.com
+                    - email_2@example.com
+                    items:
+                      type: string
+                      format: email
+                  contact_reference_name:
+                    type: string
+                    description: 'Specifies the name of the contact reference for fulfilling the request.
+
+                      Should be provided together with other contact reference fields.
+
+                      Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
+
+                      '
+                    example: Contact User Name
+                  contact_reference_email:
+                    type: string
+                    description: 'Specifies the email of the contact reference for fulfilling the request.
+
+                      Should be provided together with other contact reference fields.
+
+                      Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
+
+                      '
+                    example: email_1@example.com
+                  contact_reference_table_id:
+                    type: string
+                    description: 'Specifies the table_id of the contact reference for fulfilling the request.
+
+                      Should be provided together with other contact reference fields.
+
+                      Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
+
+                      '
+                    example: '13517676342454'
+                  contact_reference_record_id:
+                    type: string
+                    description: "Specifies the record_id of the contact reference for fulfilling the request.\nShould be provided together with other contact reference fields. \nValues in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.\n"
+                    example: '512356'
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                properties:
+                  project:
+                    type: object
+                    description: Specifies the project that the request item is associated with.
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with a project.
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the project.
+                            example: '1'
+                          type:
+                            type: string
+                            description: The classification of the object (`"projects"`).
+                            example: projects
+                  target:
+                    type:
+                    - object
+                    - 'null'
+                    description: Specifies the resource that the request item is associated with.
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with a project.
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the resource.
+                            example: '1'
+                          type:
+                            type: string
+                            description: 'The classification of the object.
+
+
+                              A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
+
+                              `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
+
+                              `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
+
+                              `"testing_rounds"`, `"walkthroughs"`.
+
+                              '
+                            example: objectives
+                  owner_user:
+                    type:
+                    - object
+                    - 'null'
+                    description: 'Specifies the user responsible for fulfilling the request.
+
+                      A value in this field will override any values provided in the `owner` and `owner_email` attributes or contact reference fields.
+
+                      This field becomes required if the `owner` attribute is not provided.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  requestor_user:
+                    type: object
+                    description: 'Specifies the user requesting the documentation.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+                  cc_users:
+                    type:
+                    - object
+                    - 'null'
+                    description: 'Specifies one or more users in a HighBond instance that can contribute to the request.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: The data associated with the resource.
+                          required:
+                          - id
+                          - type
+                          properties:
+                            id:
+                              type: string
+                              description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                                <a href="#section/Making-requests">Making requests</a>.
+
+                                '
+                              example: 3NQ6XzAUxqJMnAQ7n4KF
+                            type:
+                              type: string
+                              description: The classification of the object (`"users"`).
+                              example: users
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type:
+              - string
+              - 'null'
+              description: Next page url
+              example: /api/resource?page[number]=Mw==
+            prev:
+              type:
+              - string
+              - 'null'
+              description: Previous page url
+              example: null
+    GetRequestItemResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"request_items"`).
+              example: request_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                description:
+                  type: string
+                  description: Describes the requested information, such as the document name, version number, or department where you might expect to find the information.
+                  maxLength: 524288
+                  example: <h1>Description heading</h1><p>Request item description.</p>
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the request item was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the request item was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                owner:
+                  type: string
+                  description: 'Specifies the name of the person responsible for fulfilling the request.
+
+                    If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
+
+                    This field becomes required if the `owner_user` relationship is not provided.
+
+                    '
+                  example: Owner name
+                owner_email:
+                  type: string
+                  format: email
+                  description: 'Specifies the email of the person responsible for fulfilling the request.
+
+                    If the person is not a user or contact in a HighBond instance, you can provide a value in this field on create or update.
+
+                    '
+                  example: owner_email@example.com
+                received:
+                  type: boolean
+                  description: 'Specifies if the request item has been received (`true`) or if it is still open (`false`). The default is `false`.
+
+
+                    >**Note**: Deprecated, please us the `request_item_status` instead of this.
+
+                    '
+                  example: false
+                request_item_status:
+                  type: string
+                  description: 'Specifies the status of the request item.
+
+                    '
+                  example: Open
+                requestor:
+                  type: string
+                  description: 'Specifies the name of the person requesting the documentation.
+
+                    '
+                  example: Requestor name
+                due_date:
+                  type: string
+                  description: Specifies when the request should be fulfilled by.
+                  example: '2020-06-01'
+                  format: date
+                send_recurrent_notifications:
+                  type: boolean
+                  description: 'Sends an email to the request owner and CC''ed persons on a specified recurring schedule.
+
+                    For more information about recurring reminders, see
+
+                    <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/projects/fieldwork/requests/sending_recurring_request_reminders.htm"
+
+                    target="_blank">Sending recurring request reminders</a>.
+
+                    '
+                  example: false
+                email_subject:
+                  type: string
+                  description: Provides the ability to customize the email subject line.
+                  example: Email subject
+                email_message:
+                  type: string
+                  description: Provides the ability to customize the body of the email.
+                  example: Email message
+                position:
+                  type: integer
+                  description: 'The value that determines the order in which it is displayed. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                cc_contacts:
+                  type:
+                  - array
+                  - 'null'
+                  description: 'Specifies one or more people that can contribute to the request. A comma separated list of email addresses.
+
+                    '
+                  example:
+                  - email_1@example.com
+                  - email_2@example.com
+                  items:
+                    type: string
+                    format: email
+                contact_reference_name:
+                  type: string
+                  description: 'Specifies the name of the contact reference for fulfilling the request.
+
+                    Should be provided together with other contact reference fields.
+
+                    Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
+
+                    '
+                  example: Contact User Name
+                contact_reference_email:
+                  type: string
+                  description: 'Specifies the email of the contact reference for fulfilling the request.
+
+                    Should be provided together with other contact reference fields.
+
+                    Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
+
+                    '
+                  example: email_1@example.com
+                contact_reference_table_id:
+                  type: string
+                  description: 'Specifies the table_id of the contact reference for fulfilling the request.
+
+                    Should be provided together with other contact reference fields.
+
+                    Values in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.
+
+                    '
+                  example: '13517676342454'
+                contact_reference_record_id:
+                  type: string
+                  description: "Specifies the record_id of the contact reference for fulfilling the request.\nShould be provided together with other contact reference fields. \nValues in contact reference fields will override any values provided in the `owner` and `owner_email`, but will not override owner relationship.\n"
+                  example: '512356'
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                project:
+                  type: object
+                  description: Specifies the project that the request item is associated with.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"projects"`).
+                          example: projects
+                target:
+                  type:
+                  - object
+                  - 'null'
+                  description: Specifies the resource that the request item is associated with.
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a project.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects"`, `"controls"`, `"control_tests"`,
+
+                            `"control_test_plans"`, `"issues"`, `"narratives"`, `"objectives"`, `"walkthrough_summaries"`,
+
+                            `"project_files"`, `"project_plannings"`, `"project_results"`, `"risks"`, `"risk_control_matrices"`,
+
+                            `"testing_rounds"`, `"walkthroughs"`.
+
+                            '
+                          example: objectives
+                owner_user:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Specifies the user responsible for fulfilling the request.
+
+                    A value in this field will override any values provided in the `owner` and `owner_email` attributes or contact reference fields.
+
+                    This field becomes required if the `owner` attribute is not provided.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                requestor_user:
+                  type: object
+                  description: 'Specifies the user requesting the documentation.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                            <a href="#section/Making-requests">Making requests</a>.
+
+                            '
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+                cc_users:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Specifies one or more users in a HighBond instance that can contribute to the request.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: 'The unique identifier (UID) of the user. For more information on obtaining this value, see
+
+                              <a href="#section/Making-requests">Making requests</a>.
+
+                              '
+                            example: 3NQ6XzAUxqJMnAQ7n4KF
+                          type:
+                            type: string
+                            description: The classification of the object (`"users"`).
+                            example: users
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
 
                 '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

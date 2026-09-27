@@ -94,6 +94,22 @@ components:
       schema:
         type: string
         example: '2024-03-01T00:00:00'
+    activitiesExportEndDateFilterParams:
+      in: query
+      name: filter[date][end]
+      description: Requesting the API to filter results by end date. This parameter is required. The maximum date range supported is 31 days. The exact time can be specified using the ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (see example). Please note that all times are UTC by default.
+      required: true
+      schema:
+        type: string
+        example: '2024-03-01T00:00:00'
+    activitiesResourceIdParams:
+      in: query
+      name: filter[resource_id]
+      description: The ID of the specific resource. It is used to filter activities by the resource ID. Either both`resource_id` and `resource_type` should be provided or both should not be provided, only with one of these filters should not be requested.
+      required: false
+      schema:
+        type: string
+        example: 1
     activitiesResourceTypeParams:
       in: query
       name: filter[resource_type]
@@ -110,14 +126,6 @@ components:
       schema:
         type: string
         example: 1
-    activitiesExportEndDateFilterParams:
-      in: query
-      name: filter[date][end]
-      description: Requesting the API to filter results by end date. This parameter is required. The maximum date range supported is 31 days. The exact time can be specified using the ISO 8601 format `YYYY-MM-DDTHH:MM:SS` (see example). Please note that all times are UTC by default.
-      required: true
-      schema:
-        type: string
-        example: '2024-03-01T00:00:00'
     activitiesExportEventOriginFilterParam:
       in: query
       name: filter[event_origin]
@@ -134,15 +142,37 @@ components:
         - launchpad
         - service-notifications
         example: assets-inventory
-    activitiesResourceIdParams:
-      in: query
-      name: filter[resource_id]
-      description: The ID of the specific resource. It is used to filter activities by the resource ID. Either both`resource_id` and `resource_type` should be provided or both should not be provided, only with one of these filters should not be requested.
-      required: false
-      schema:
-        type: string
-        example: 1
   schemas:
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     ActivitiesResponse:
       type: object
       description: Paginated list of activities.
@@ -224,36 +254,6 @@ components:
           type: string
           description: Path URL to the next page of activities.
           example: /activities?<next_page_query_string>
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     Errors:
       type: object
       properties:
@@ -262,10 +262,6 @@ components:
           items:
             $ref: '#/components/schemas/Error'
   responses:
-    Forbidden:
-      description: Forbidden.
-    Unauthorized:
-      description: Unauthorized.
     AuthValidationError:
       description: Bad request.
       content:
@@ -277,6 +273,10 @@ components:
             - status: 400
               title: Bad Request
               detail: event_origin missing
+    Forbidden:
+      description: Forbidden.
+    Unauthorized:
+      description: Unauthorized.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

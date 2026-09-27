@@ -219,115 +219,6 @@ paths:
                   detail: can't be blank
 components:
   schemas:
-    MultiRecordStatusResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            properties:
-              id:
-                type: integer
-                description: The ID of the record status
-                example: '20'
-              type:
-                type: string
-                description: The classification of the object (`"record_statuses"`)
-                example: record_statuses
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the record status.
-                    maxLength: 255
-                    example: Open
-                  active:
-                    type: boolean
-                    description: Indicates whether the record status is active or not.
-                    example: true
-                    default: true
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    SingleRecordStatusResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: integer
-              description: The ID of the record status
-              example: '20'
-            type:
-              type: string
-              description: The classification of the object (`"record_statuses"`)
-              example: record_statuses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the record status.
-                  maxLength: 255
-                  example: Open
-                active:
-                  type: boolean
-                  description: Indicates whether the record status is active or not.
-                  example: true
-                  default: true
     UpdateRecordStatusPayload:
       type: object
       description: The data associated with the resource.
@@ -405,6 +296,115 @@ components:
                   type: integer
                   description: Specifies the order of statuses.
                   example: 5
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    MultiRecordStatusResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            properties:
+              id:
+                type: integer
+                description: The ID of the record status
+                example: '20'
+              type:
+                type: string
+                description: The classification of the object (`"record_statuses"`)
+                example: record_statuses
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the record status.
+                    maxLength: 255
+                    example: Open
+                  active:
+                    type: boolean
+                    description: Indicates whether the record status is active or not.
+                    example: true
+                    default: true
+    SingleRecordStatusResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: integer
+              description: The ID of the record status
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"record_statuses"`)
+              example: record_statuses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the record status.
+                  maxLength: 255
+                  example: Open
+                active:
+                  type: boolean
+                  description: Indicates whether the record status is active or not.
+                  example: true
+                  default: true
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   responses:
     NotFound:
       description: Not found.
@@ -429,6 +429,8 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -443,6 +445,20 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
+    Forbidden:
+      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
     ResourceIdConflict:
       description: Bad request.
       content:
@@ -459,31 +475,7 @@ components:
                 the id specified in the path, 101.
 
                 '
-    Forbidden:
-      description: Forbidden.
-    BadCredentials:
-      description: Bad credentials.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
   parameters:
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
     orgIdParam:
       in: path
       name: org_id
@@ -492,6 +484,14 @@ components:
       schema:
         type: string
         example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

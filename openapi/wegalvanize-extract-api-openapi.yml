@@ -1003,138 +1003,36 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    outputFormatParam:
+      name: output_format
+      description: The output_format to extract.
+      schema:
+        type: string
+        enum:
+        - tf
+        - json
+        - yml
+        default: tf
+      in: query
+      required: false
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    sessionIdPathParam:
+      name: session_id
+      description: The session_id of the extract.
+      schema:
+        type: string
+        example: 183dabb4-cf04-480e-94d7-8bc94f957ef6
+      in: path
+      required: true
   schemas:
-    CreateExtractRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`extract`).
-              example: extract
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - resources
-              properties:
-                resources:
-                  type: object
-                  description: The resources associated to extract.
-                  $ref: '#/components/schemas/ExtractionType'
-    RobotIdConfiguration:
-      oneOf:
-      - title: robotId
-        type: object
-        required:
-        - robotId
-        properties:
-          robotId:
-            type: string
-      - title: robotIdTaskId
-        type: object
-        required:
-        - robotId
-        - taskId
-        properties:
-          robotId:
-            type: string
-          taskId:
-            type: string
-      - title: robotIdVersion
-        type: object
-        required:
-        - robotId
-        - taskId
-        properties:
-          robotId:
-            type: string
-          version:
-            type: string
-    CreateExtractResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The session ID of the extraction.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`extract`).
-              example: extract
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - created_at
-              - status
-              properties:
-                created_at:
-                  type: string
-                  description: The timestamp specifying when the extract was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                status:
-                  type: string
-                  description: The status of the extract.
-                  example: processing
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     ExtractionType:
       anyOf:
       - type: object
@@ -3468,6 +3366,36 @@ components:
                   minLength: 1
                   type: string
             description: Impact Report Targets to be extracted. Report Target type or Report Target Ids are required.
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     ImpactReportTargetConfiguration:
       oneOf:
       - title: Target type & id
@@ -3492,6 +3420,66 @@ components:
             minLength: 1
             type: string
           targetType:
+            minLength: 1
+            type: string
+    CreateExtractRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - resources
+              properties:
+                resources:
+                  type: object
+                  description: The resources associated to extract.
+                  $ref: '#/components/schemas/ExtractionType'
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    RobotAppConfiguration:
+      oneOf:
+      - title: Robot Id
+        type: object
+        properties:
+          robotId:
+            minLength: 1
+            type: string
+      - title: Robot Id & Task Id
+        type: object
+        properties:
+          robotId:
+            minLength: 1
+            type: string
+          taskId:
+            minLength: 1
+            type: string
+      - title: Robot Id & Version
+        type: object
+        properties:
+          robotId:
+            minLength: 1
+            type: string
+          version:
             minLength: 1
             type: string
     GetExtractResponse:
@@ -3536,44 +3524,74 @@ components:
                   type: string
                   description: The signed URL of the generated Terraform / JSON / YML scripts.
                   example: https://sdk-services-us-west-2-bucket.s3.us-west-2.amazonaws.com/17d16331-4c31-4068-a306-92d6802cf53c/output.zip?AWSAccessKeyId=XXXXXXXXXXXX&Expires=604800&Signature=XXXXXXXXXXXXX
-    RobotAppConfiguration:
+    RobotIdConfiguration:
       oneOf:
-      - title: Robot Id
+      - title: robotId
         type: object
+        required:
+        - robotId
         properties:
           robotId:
-            minLength: 1
             type: string
-      - title: Robot Id & Task Id
+      - title: robotIdTaskId
         type: object
+        required:
+        - robotId
+        - taskId
         properties:
           robotId:
-            minLength: 1
             type: string
           taskId:
-            minLength: 1
             type: string
-      - title: Robot Id & Version
+      - title: robotIdVersion
         type: object
+        required:
+        - robotId
+        - taskId
         properties:
           robotId:
-            minLength: 1
             type: string
           version:
-            minLength: 1
             type: string
+    CreateExtractResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The session ID of the extraction.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - created_at
+              - status
+              properties:
+                created_at:
+                  type: string
+                  description: The timestamp specifying when the extract was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                status:
+                  type: string
+                  description: The status of the extract.
+                  example: processing
   responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
     MissingOrgId:
       description: Bad request.
       content:
@@ -3586,37 +3604,19 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
     BadCredentials:
       description: Bad credentials.
-  parameters:
-    sessionIdPathParam:
-      name: session_id
-      description: The session_id of the extract.
-      schema:
-        type: string
-        example: 183dabb4-cf04-480e-94d7-8bc94f957ef6
-      in: path
-      required: true
-    outputFormatParam:
-      name: output_format
-      description: The output_format to extract.
-      schema:
-        type: string
-        enum:
-        - tf
-        - json
-        - yml
-        default: tf
-      in: query
-      required: false
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

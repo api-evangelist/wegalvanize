@@ -192,6 +192,38 @@ paths:
                   detail: This field cannot be updated because it is currently being automated by an assessment driver.
 components:
   parameters:
+    walkthroughControlTypeFilterParams:
+      in: query
+      name: filter[control.control_type]
+      description: Requesting the API to filter results by control type. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: Application/System Control
+    walkthroughControlIDFilterParams:
+      in: query
+      name: filter[control.id]
+      description: Requesting the API to filter results by control IDs. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 1,2,3
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    walkthroughControlStatusFilterParams:
+      in: query
+      name: filter[control.status]
+      description: Requesting the API to filter results by control status. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: Key Control
     walkthroughControlControlTestSecondAssigneeFilterParams:
       in: query
       name: filter[control.control_tests.2.assigned_user.id]
@@ -200,14 +232,14 @@ components:
       schema:
         type: string
         example: uid1
-    walkthroughObjectiveTitleFilterParams:
-      in: query
-      name: filter[objective.title]
-      description: Requesting the API to filter results by objective title. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
       schema:
         type: string
-        example: some objective title
+        example: 1
     walkthroughsSortParams:
       in: query
       name: sort
@@ -230,46 +262,25 @@ components:
       schema:
         type: string
         example: ITC
-    walkthroughProjectIdFilterParams:
+    walkthroughControlDesignFilterParams:
       in: query
-      name: filter[project.id]
-      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      name: filter[control_design]
+      description: Requesting the API to filter results to only include walkthroughs that were marked as designed appropriately. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: '1'
-    controlSparseFieldsetParams:
+        enum:
+        - 'true'
+        - 'false'
+        - ''
+    walkthroughControlControlTestThirdAssigneeFilterParams:
       in: query
-      name: fields[controls]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
-    walkthroughControlControlTestFirstAssigneeFilterParams:
-      in: query
-      name: filter[control.control_tests.1.assigned_user.id]
-      description: Requesting the API to filter results by the user assigned to the first testing round in the related control. For more information, see <a href="#section/Making-requests">Making requests</a>
+      name: filter[control.control_tests.3.assigned_user.id]
+      description: Requesting the API to filter results by the user assigned to the third testing round in the related control. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
         example: uid1
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    walkthroughProjectStatusFilterParams:
-      in: query
-      name: filter[project.status]
-      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
     walkthroughIncludeParams:
       in: query
       name: include
@@ -278,46 +289,14 @@ components:
       schema:
         type: string
         example: control,control.objective
-    walkthroughControlQueryFilterParams:
+    walkthroughObjectiveTitleFilterParams:
       in: query
-      name: filter[control.query]
-      description: Requesting the API to filter results by control title or description. For more information, see <a href="#section/Making-requests">Making requests</a>
+      name: filter[objective.title]
+      description: Requesting the API to filter results by objective title. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: some control title or description
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    walkthroughControlFrequencyFilterParams:
-      in: query
-      name: filter[control.frequency]
-      description: Requesting the API to filter results by control frequency. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: Multiple Times Daily
-    walkthroughControlTitleFilterParams:
-      in: query
-      name: filter[control.title]
-      description: Requesting the API to filter results by control title. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: some control title
-    walkthroughControlTypeFilterParams:
-      in: query
-      name: filter[control.control_type]
-      description: Requesting the API to filter results by control type. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: Application/System Control
+        example: some objective title
     resourceIdParam:
       in: path
       name: id
@@ -326,6 +305,46 @@ components:
       schema:
         type: string
         example: 9999
+    walkthroughControlTitleFilterParams:
+      in: query
+      name: filter[control.title]
+      description: Requesting the API to filter results by control title. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: some control title
+    controlSparseFieldsetParams:
+      in: query
+      name: fields[controls]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
+    walkthroughControlFrequencyFilterParams:
+      in: query
+      name: filter[control.frequency]
+      description: Requesting the API to filter results by control frequency. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: Multiple Times Daily
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    walkthroughControlOwnerFilterParams:
+      in: query
+      name: filter[control.owner]
+      description: Requesting the API to filter results by control owner. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: some@example.com
     walkthroughControlControlTestFourthAssigneeFilterParams:
       in: query
       name: filter[control.control_tests.4.assigned_user.id]
@@ -334,14 +353,62 @@ components:
       schema:
         type: string
         example: uid1
-    pageNumberEncodedParam:
+    walkthroughProjectStateFilterParams:
       in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
+      name: filter[project.state]
+      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
       required: false
       schema:
         type: string
-        example: Mg==
+        example: active
+    walkthroughControlQueryFilterParams:
+      in: query
+      name: filter[control.query]
+      description: Requesting the API to filter results by control title or description. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: some control title or description
+    walkthroughProjectStatusFilterParams:
+      in: query
+      name: filter[project.status]
+      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    walkthroughProjectNameFilterParams:
+      in: query
+      name: filter[project.name]
+      description: Requesting the API to filter results by project name. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: some project name
+    walkthroughProjectIdFilterParams:
+      in: query
+      name: filter[project.id]
+      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '1'
+    objectiveSparseFieldsetParams:
+      in: query
+      name: fields[objectives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    walkthroughControlControlTestFirstAssigneeFilterParams:
+      in: query
+      name: filter[control.control_tests.1.assigned_user.id]
+      description: Requesting the API to filter results by the user assigned to the first testing round in the related control. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: uid1
     organizationWalkthroughsFieldsetParams:
       in: query
       name: fields[walkthroughs]
@@ -358,74 +425,270 @@ components:
       schema:
         type: string
         example: 001,002,003
-    walkthroughControlDesignFilterParams:
-      in: query
-      name: filter[control_design]
-      description: Requesting the API to filter results to only include walkthroughs that were marked as designed appropriately. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        enum:
-        - 'true'
-        - 'false'
-        - ''
-    objectiveSparseFieldsetParams:
-      in: query
-      name: fields[objectives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
-    walkthroughControlIDFilterParams:
-      in: query
-      name: filter[control.id]
-      description: Requesting the API to filter results by control IDs. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 1,2,3
-    walkthroughControlControlTestThirdAssigneeFilterParams:
-      in: query
-      name: filter[control.control_tests.3.assigned_user.id]
-      description: Requesting the API to filter results by the user assigned to the third testing round in the related control. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: uid1
-    walkthroughProjectNameFilterParams:
-      in: query
-      name: filter[project.name]
-      description: Requesting the API to filter results by project name. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: some project name
-    walkthroughControlOwnerFilterParams:
-      in: query
-      name: filter[control.owner]
-      description: Requesting the API to filter results by control owner. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: some@example.com
-    walkthroughControlStatusFilterParams:
-      in: query
-      name: filter[control.status]
-      description: Requesting the API to filter results by control status. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: Key Control
-    walkthroughProjectStateFilterParams:
-      in: query
-      name: filter[project.state]
-      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
   schemas:
+    UpdateWalkthroughRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"walkthroughs"`).
+              example: walkthroughs
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                walkthrough_results:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'A description that captures the results of performing the walkthrough.
+
+                    '
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Walkthrough results description.</p>
+                control_design:
+                  type:
+                  - boolean
+                  - 'null'
+                  description: 'A rating that specifies whether the control design passes (`true`) or fails (`false`).
+
+
+                    The exact values for this field (E.g. "Designed Appropriately" / "No Issues" and "Design Failure" / "Issue(s) Noted") depend on the <a href="
+
+                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+
+                    `true` maps to the first customizable value (E.g. "Designed Appropriately" / "No Issues") and `false` maps to the second customizable value (E.g.
+
+                    "Design Failure" / "Issue(s) Noted") in the project type.
+
+                    '
+                  example: true
+                actual_milestone_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Actual milestone date.
+                  example: '2019-02-10'
+                  format: date
+                planned_milestone_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Planned milestone date.
+                  example: '2019-02-09'
+                  format: date
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this walkthrough is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Walkthrough Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+    GetWalkthroughResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"walkthroughs"`).
+              example: walkthroughs
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                walkthrough_results:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'A description that captures the results of performing the walkthrough.
+
+                    '
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Walkthrough results description.</p>
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the walkthrough was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the walkthrough was updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                actual_milestone_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Actual milestone date.
+                  example: '2019-02-10'
+                  format: date
+                planned_milestone_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Planned milestone date.
+                  example: '2019-02-09'
+                  format: date
+                control_design:
+                  type:
+                  - boolean
+                  - 'null'
+                  description: 'A rating that specifies whether the control design passes (`true`) or fails (`false`).
+
+
+                    The exact values for this field (E.g. "Designed Appropriately" / "No Issues" and "Design Failure" / "Issue(s) Noted") depend on the <a href="
+
+                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+
+                    `true` maps to the first customizable value (E.g. "Designed Appropriately" / "No Issues") and `false` maps to the second customizable value (E.g.
+
+                    "Design Failure" / "Issue(s) Noted") in the project type.
+
+                    '
+                  example: true
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this walkthrough is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Walkthrough Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - control
+              properties:
+                control:
+                  type: object
+                  description: The attributes associated with the resource.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the control.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"controls"`).
+                          example: controls
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     GetWalkthroughsResponse:
       type: object
       required:
@@ -671,95 +934,6 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    UpdateWalkthroughRequest:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`"walkthroughs"`).
-              example: walkthroughs
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                walkthrough_results:
-                  type:
-                  - string
-                  - 'null'
-                  description: 'A description that captures the results of performing the walkthrough.
-
-                    '
-                  maxLength: 524288
-                  example: <h1>Heading</h1><p>Walkthrough results description.</p>
-                control_design:
-                  type:
-                  - boolean
-                  - 'null'
-                  description: 'A rating that specifies whether the control design passes (`true`) or fails (`false`).
-
-
-                    The exact values for this field (E.g. "Designed Appropriately" / "No Issues" and "Design Failure" / "Issue(s) Noted") depend on the <a href="
-
-                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-
-                    `true` maps to the first customizable value (E.g. "Designed Appropriately" / "No Issues") and `false` maps to the second customizable value (E.g.
-
-                    "Design Failure" / "Issue(s) Noted") in the project type.
-
-                    '
-                  example: true
-                actual_milestone_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Actual milestone date.
-                  example: '2019-02-10'
-                  format: date
-                planned_milestone_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Planned milestone date.
-                  example: '2019-02-09'
-                  format: date
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this walkthrough is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Walkthrough Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
     Error:
       type: object
       required:
@@ -790,180 +964,6 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    GetWalkthroughResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`"walkthroughs"`).
-              example: walkthroughs
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                walkthrough_results:
-                  type:
-                  - string
-                  - 'null'
-                  description: 'A description that captures the results of performing the walkthrough.
-
-                    '
-                  maxLength: 524288
-                  example: <h1>Heading</h1><p>Walkthrough results description.</p>
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the walkthrough was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the walkthrough was updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                actual_milestone_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Actual milestone date.
-                  example: '2019-02-10'
-                  format: date
-                planned_milestone_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Planned milestone date.
-                  example: '2019-02-09'
-                  format: date
-                control_design:
-                  type:
-                  - boolean
-                  - 'null'
-                  description: 'A rating that specifies whether the control design passes (`true`) or fails (`false`).
-
-
-                    The exact values for this field (E.g. "Designed Appropriately" / "No Issues" and "Design Failure" / "Issue(s) Noted") depend on the <a href="
-
-                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-
-                    `true` maps to the first customizable value (E.g. "Designed Appropriately" / "No Issues") and `false` maps to the second customizable value (E.g.
-
-                    "Design Failure" / "Issue(s) Noted") in the project type.
-
-                    '
-                  example: true
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this walkthrough is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Walkthrough Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - control
-              properties:
-                control:
-                  type: object
-                  description: The attributes associated with the resource.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the control.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"controls"`).
-                          example: controls
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

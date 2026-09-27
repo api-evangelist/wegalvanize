@@ -138,6 +138,27 @@ components:
               type: string
               description: The full request url to fetch the next set of users
               example: https://apis.highbond.com/v1/orgs/15/robots/users?cursor=MTU=
+    UpdateRobotUserRequest:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            attributes:
+              type: object
+              properties:
+                robots_role:
+                  description: The role of the user in the Robots module
+                  type: string
+                  enum:
+                  - admin
+                  - user
+                agent_manager:
+                  type: boolean
+                  description: Whether the user can access the agent manager page
+              required:
+              - robots_role
+              - agent_manager
     Error:
       type: object
       required:
@@ -168,34 +189,6 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    UpdateRobotUserRequest:
-      type: object
-      properties:
-        data:
-          type: object
-          properties:
-            attributes:
-              type: object
-              properties:
-                robots_role:
-                  description: The role of the user in the Robots module
-                  type: string
-                  enum:
-                  - admin
-                  - user
-                agent_manager:
-                  type: boolean
-                  description: Whether the user can access the agent manager page
-              required:
-              - robots_role
-              - agent_manager
     UpdateRobotUserResponse:
       type: object
       description: The data associated with the resource.
@@ -236,7 +229,41 @@ components:
                 agent_manager:
                   type: boolean
                   description: Whether the user can access the agent manager page
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+  parameters:
+    robotUserCursorParam:
+      in: query
+      name: cursor
+      description: Pagination cursor.
+      required: false
+      schema:
+        type: string
+        example: MTU=
+    robotUserIdParam:
+      in: path
+      name: user_id
+      description: The ID of the user.
+      required: true
+      schema:
+        type: number
+        example: 2
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   responses:
+    BadCredentials:
+      description: Bad credentials.
     SchemaValidationFailed:
       description: Bad Request
       content:
@@ -249,35 +276,8 @@ components:
               title: Bad Request
               code: bad_request
               detail: params.org_id should NOT be shorter than 1 characters
-    BadCredentials:
-      description: Bad credentials.
     Forbidden:
       description: Forbidden.
-  parameters:
-    robotUserIdParam:
-      in: path
-      name: user_id
-      description: The ID of the user.
-      required: true
-      schema:
-        type: number
-        example: 2
-    robotUserCursorParam:
-      in: query
-      name: cursor
-      description: Pagination cursor.
-      required: false
-      schema:
-        type: string
-        example: MTU=
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

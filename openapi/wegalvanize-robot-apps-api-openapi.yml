@@ -156,97 +156,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/RobotsError'
 components:
-  parameters:
-    robotIdParam:
-      in: path
-      name: robot_id
-      description: The ID of the robot.
-      required: true
-      schema:
-        type: string
-        example: 2
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-  responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    MissingRobotId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_id, is missing.
   schemas:
-    CreateRobotAppRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - file
-      properties:
-        code_page:
-          type: integer
-          example: 1250
-          description: The character encoding of the uploaded .acl file.
-        comment:
-          type: string
-          description: An informative statement in the version history of the script.
-          example: Galvanize rocks!
-        is_unicode:
-          type: boolean
-          description: Specifies whether the Robots Agent is working with Unicode character encoding of data.
-          example: true
-        file:
-          type: string
-          format: binary
-          description: The .acl file containing the analytic script in binary format.
-    GetRobotAppsResponse:
-      type: object
-      description: The data associated with the resource.
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            $ref: '#/components/schemas/RobotApp'
     Error:
       type: object
       required:
@@ -277,21 +187,6 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    GetRobotAppResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/RobotApp'
     RobotsError:
       type: object
       required:
@@ -359,6 +254,111 @@ components:
               type: boolean
               description: Specifies whether the Robots Agent is working with Unicode character encoding of data.
               example: true
+    CreateRobotAppRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - file
+      properties:
+        code_page:
+          type: integer
+          example: 1250
+          description: The character encoding of the uploaded .acl file.
+        comment:
+          type: string
+          description: An informative statement in the version history of the script.
+          example: Galvanize rocks!
+        is_unicode:
+          type: boolean
+          description: Specifies whether the Robots Agent is working with Unicode character encoding of data.
+          example: true
+        file:
+          type: string
+          format: binary
+          description: The .acl file containing the analytic script in binary format.
+    GetRobotAppsResponse:
+      type: object
+      description: The data associated with the resource.
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            $ref: '#/components/schemas/RobotApp'
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    GetRobotAppResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RobotApp'
+  responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    MissingRobotId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_id, is missing.
+  parameters:
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
+      required: true
+      schema:
+        type: string
+        example: 2
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
