@@ -241,32 +241,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -292,10 +266,36 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    Forbidden:
-      description: Forbidden.
     BadCredentials:
       description: Bad credentials.
+    NoContent:
+      description: No content.
+    Forbidden:
+      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -311,6 +311,13 @@ components:
 
                 '
   schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     CreateNarrativeRequest:
       type: object
       description: The data associated with the resource.
@@ -324,6 +331,78 @@ components:
           - type
           - attributes
           properties:
+            type:
+              type: string
+              description: The type of narrative (`"narratives"`).
+              example: narratives
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: The title of the narrative.
+                  maxLength: 60
+                  example: Narrative title
+                description:
+                  type: string
+                  description: A detailed description of the narrative.
+                  maxLength: 524288
+                  example: Narrative description
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+            relationships:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                framework_origin:
+                  type: object
+                  description: 'In the Projects app, a project `narrative` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `narrative` in a project with its related counterpart in a framework.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parent control.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"narratives"`).
+                          example: narratives
+    UpdateNarrativeRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
             type:
               type: string
               description: The type of narrative (`"narratives"`).
@@ -618,85 +697,6 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    UpdateNarrativeRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The type of narrative (`"narratives"`).
-              example: narratives
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              properties:
-                title:
-                  type: string
-                  description: The title of the narrative.
-                  maxLength: 60
-                  example: Narrative title
-                description:
-                  type: string
-                  description: A detailed description of the narrative.
-                  maxLength: 524288
-                  example: Narrative description
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-            relationships:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                framework_origin:
-                  type: object
-                  description: 'In the Projects app, a project `narrative` can have a related counterpart in an associated framework. The `framework_origin` attribute allows you to associate an `narrative` in a project with its related counterpart in a framework.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the parent control.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"narratives"`).
-                          example: narratives
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       required:
@@ -728,22 +728,6 @@ components:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
   parameters:
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     narrativeSparseFieldsetParams:
       in: query
       name: fields[narratives]
@@ -752,22 +736,6 @@ components:
       schema:
         type: string
         example: title,description,created_at,updated_at,objective,framework_origin
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    objectiveIdParam:
-      in: path
-      name: objective_id
-      description: The ID of the objective.
-      required: true
-      schema:
-        type: integer
-        example: 1
     pageSizeParam:
       in: query
       name: page[size]
@@ -776,6 +744,38 @@ components:
       schema:
         type: string
         example: 25
+    objectiveIdParam:
+      in: path
+      name: objective_id
+      description: The ID of the objective.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

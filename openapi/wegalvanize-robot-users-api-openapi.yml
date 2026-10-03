@@ -86,6 +86,23 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
+  responses:
+    BadCredentials:
+      description: Bad credentials.
+    SchemaValidationFailed:
+      description: Bad Request
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              title: Bad Request
+              code: bad_request
+              detail: params.org_id should NOT be shorter than 1 characters
+    Forbidden:
+      description: Forbidden.
   schemas:
     ListRobotUsersResponse:
       type: object
@@ -138,6 +155,13 @@ components:
               type: string
               description: The full request url to fetch the next set of users
               example: https://apis.highbond.com/v1/orgs/15/robots/users?cursor=MTU=
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     UpdateRobotUserRequest:
       type: object
       properties:
@@ -159,36 +183,6 @@ components:
               required:
               - robots_role
               - agent_manager
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     UpdateRobotUserResponse:
       type: object
       description: The data associated with the resource.
@@ -229,22 +223,37 @@ components:
                 agent_manager:
                   type: boolean
                   description: Whether the user can access the agent manager page
-    Errors:
+    Error:
       type: object
+      required:
+      - status
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   parameters:
-    robotUserCursorParam:
-      in: query
-      name: cursor
-      description: Pagination cursor.
-      required: false
-      schema:
-        type: string
-        example: MTU=
     robotUserIdParam:
       in: path
       name: user_id
@@ -261,23 +270,14 @@ components:
       schema:
         type: string
         example: 1
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    SchemaValidationFailed:
-      description: Bad Request
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              title: Bad Request
-              code: bad_request
-              detail: params.org_id should NOT be shorter than 1 characters
-    Forbidden:
-      description: Forbidden.
+    robotUserCursorParam:
+      in: query
+      name: cursor
+      description: Pagination cursor.
+      required: false
+      schema:
+        type: string
+        example: MTU=
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

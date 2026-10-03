@@ -183,36 +183,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     CreateStoryboardPayload:
       type: object
       description: The data associated with the resource.
@@ -250,6 +220,55 @@ components:
 
                     '
                   example: "{\n    \"globalFilters\": [\n        {\n            \"display_name\": \"City\",\n            \"field_format\": {},\n            \"field_type\": \"character\",\n            \"fields\": [\n                {\n                    \"name\": \"City\",\n                    \"table_id\": 300\n                }\n            ],\n            \"id\": \"cd80\",\n            \"is_active\": true,\n            \"type\": \"multiSelect\",\n            \"values\": [\n                \"ALHAMBRA\",\n                \"APPLE VALLEY\"\n            ]\n        }\n    ],\n    \"panels\": [\n        {\n            \"id\": \"dbbe\",\n            \"text\": \"first story description\",\n            \"title\": \"first story title\",\n            \"type\": \"text\"\n        },\n        {\n            \"controlTestId\": 300,\n            \"id\": \"cf63\",\n            \"interpretation_id\": 4001,\n            \"type\": \"visualization\",\n            \"visualization_id\": \"453d\"\n        },\n        {\n            \"controlId\": 20,\n            \"controlTestId\": 300,\n            \"id\": \"bdb5\",\n            \"metricId\": 5001,\n            \"projectid\": 1,\n            \"type\": \"metric\"\n        }\n    ],\n    \"positions\": [\n        {\n            \"col\": 0,\n            \"id\": \"ddbe\",\n            \"row\": 0\n        },\n        {\n            \"col\": 0,\n            \"id\": \"cf63\",\n            \"row\": 1\n        },\n        {\n            \"col\": 1,\n            \"id\": \"bdb5\",\n            \"row\": 1\n        }\n    ],\n    \"rowConfigs\": {\n        \"1\": {\n            \"height\": 535\n        }\n    }\n}\n"
+    UpdateStoryboardPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the storyboard.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"storyboards"`).
+              example: storyboards
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the storyboard.
+                  maxLength: 255
+                  example: My first storyboard
+                config:
+                  type: string
+                  description: 'A JSON string storing the configurations of a storyboard.
+
+
+                    See the request sample for details.
+
+                    '
+                  example: "{\n    \"globalFilters\": [\n        {\n            \"display_name\": \"City\",\n            \"field_format\": {},\n            \"field_type\": \"character\",\n            \"fields\": [\n                {\n                    \"name\": \"City\",\n                    \"table_id\": 300\n                }\n            ],\n            \"id\": \"cd80\",\n            \"is_active\": true,\n            \"type\": \"multiSelect\",\n            \"values\": [\n                \"ALHAMBRA\",\n                \"APPLE VALLEY\"\n            ]\n        }\n    ],\n    \"panels\": [\n        {\n            \"id\": \"dbbe\",\n            \"text\": \"first story description\",\n            \"title\": \"first story title\",\n            \"type\": \"text\"\n        },\n        {\n            \"controlTestId\": 300,\n            \"id\": \"cf63\",\n            \"interpretation_id\": 4001,\n            \"type\": \"visualization\",\n            \"visualization_id\": \"453d\"\n        },\n        {\n            \"controlId\": 20,\n            \"controlTestId\": 300,\n            \"id\": \"bdb5\",\n            \"metricId\": 5001,\n            \"projectid\": 1,\n            \"type\": \"metric\"\n        }\n    ],\n    \"positions\": [\n        {\n            \"col\": 0,\n            \"id\": \"ddbe\",\n            \"row\": 0\n        },\n        {\n            \"col\": 0,\n            \"id\": \"cf63\",\n            \"row\": 1\n        },\n        {\n            \"col\": 1,\n            \"id\": \"bdb5\",\n            \"row\": 1\n        }\n    ],\n    \"rowConfigs\": {\n        \"1\": {\n            \"height\": 535\n        }\n    }\n}\n"
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     SingleStoryboardResponse:
       type: object
       description: The data associated with the resource.
@@ -300,69 +319,41 @@ components:
                   description: The date when the storyboard was updated.
                   example: '2019-03-18T22:02:05Z'
                   format: date-time
-    UpdateStoryboardPayload:
+    Error:
       type: object
-      description: The data associated with the resource.
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the resource.
+          description: Indicates which part of the request document caused the error.
           required:
-          - id
-          - type
-          - attributes
+          - pointer
           properties:
-            id:
+            pointer:
               type: string
-              description: The ID of the storyboard.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"storyboards"`).
-              example: storyboards
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the storyboard.
-                  maxLength: 255
-                  example: My first storyboard
-                config:
-                  type: string
-                  description: 'A JSON string storing the configurations of a storyboard.
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
 
+                in the request document.
 
-                    See the request sample for details.
-
-                    '
-                  example: "{\n    \"globalFilters\": [\n        {\n            \"display_name\": \"City\",\n            \"field_format\": {},\n            \"field_type\": \"character\",\n            \"fields\": [\n                {\n                    \"name\": \"City\",\n                    \"table_id\": 300\n                }\n            ],\n            \"id\": \"cd80\",\n            \"is_active\": true,\n            \"type\": \"multiSelect\",\n            \"values\": [\n                \"ALHAMBRA\",\n                \"APPLE VALLEY\"\n            ]\n        }\n    ],\n    \"panels\": [\n        {\n            \"id\": \"dbbe\",\n            \"text\": \"first story description\",\n            \"title\": \"first story title\",\n            \"type\": \"text\"\n        },\n        {\n            \"controlTestId\": 300,\n            \"id\": \"cf63\",\n            \"interpretation_id\": 4001,\n            \"type\": \"visualization\",\n            \"visualization_id\": \"453d\"\n        },\n        {\n            \"controlId\": 20,\n            \"controlTestId\": 300,\n            \"id\": \"bdb5\",\n            \"metricId\": 5001,\n            \"projectid\": 1,\n            \"type\": \"metric\"\n        }\n    ],\n    \"positions\": [\n        {\n            \"col\": 0,\n            \"id\": \"ddbe\",\n            \"row\": 0\n        },\n        {\n            \"col\": 0,\n            \"id\": \"cf63\",\n            \"row\": 1\n        },\n        {\n            \"col\": 1,\n            \"id\": \"bdb5\",\n            \"row\": 1\n        }\n    ],\n    \"rowConfigs\": {\n        \"1\": {\n            \"height\": 535\n        }\n    }\n}\n"
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NoContent:
-      description: No content.
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
     MissingOrgId:
       description: Bad request.
       content:
@@ -375,8 +366,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -391,8 +380,35 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    Forbidden:
-      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NoContent:
+      description: No content.
+    ResourceIdConflict:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_id_conflict
+              title: Resource ID conflict
+              detail: 'The id specified in the request body, 1, conflicts with
+
+                the id specified in the path, 101.
+
+                '
     MissingResourceId:
       description: Bad request.
       content:
@@ -419,31 +435,7 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-    ResourceIdConflict:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_id_conflict
-              title: Resource ID conflict
-              detail: 'The id specified in the request body, 1, conflicts with
-
-                the id specified in the path, 101.
-
-                '
   parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     resourceIdParam:
       in: path
       name: id
@@ -452,6 +444,14 @@ components:
       schema:
         type: string
         example: 9999
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

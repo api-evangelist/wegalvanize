@@ -774,26 +774,7 @@ paths:
         '422':
           $ref: '#/components/responses/ImporterRetryInvalidSessionStatus'
 components:
-  parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    sessionIdParam:
-      in: path
-      name: session_id
-      description: The unique identifier for an import.
-      required: true
-      schema:
-        type: string
-        example: 58e559b1-31bf-4341-b761-c30364376adf
   responses:
-    BadCredentials:
-      description: Bad credentials.
     ImportForbidden:
       description: Forbidden.
       content:
@@ -805,17 +786,32 @@ components:
             - status: 403
               title: Forbidden
               detail: System Admin permissions are required to execute this action.
-    ImporterRetryInvalidSessionStatus:
-      description: Unprocessable Entity.
+    BadCredentials:
+      description: Bad credentials.
+    ImportProcessing:
+      description: Request already submitted.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 422
-              title: Unprocessable Entity
-              detail: 'Retry is not allowed for a session in status ''Successful'', ''Incomplete'' or ''Not Successful''.
+            - status: 208
+              title: Request already submitted.
+              detail: 'There is already an import in-progress for this session_id
+
+                '
+    ImporterRetryInvalidSession:
+      description: Precondition Failed.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 412
+              title: Precondition Failed
+              detail: 'Inappropriate session type. You have selected a web session for retry, please select an API session.
 
                 '
     InvalidImportData:
@@ -831,17 +827,43 @@ components:
               detail: 'Required data/attributes property missing.
 
                 '
-    ImportProcessing:
-      description: Request already submitted.
+    ImportErrorLogsNotFound:
+      description: Not Found.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 208
-              title: Request already submitted.
-              detail: 'There is already an import in-progress for this session_id
+            - status: 404
+              title: Not found
+              detail: 'Unable to find error log for sessionId: {id}.
+
+                '
+    ImporterRetryInvalidSessionStatus:
+      description: Unprocessable Entity.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 422
+              title: Unprocessable Entity
+              detail: 'Retry is not allowed for a session in status ''Successful'', ''Incomplete'' or ''Not Successful''.
+
+                '
+    SessionNotFound:
+      description: Not Found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 404
+              title: Not found
+              detail: 'sessionId: {id} not found.
 
                 '
     ResourceTypeMismatch:
@@ -858,46 +880,87 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-    ImportErrorLogsNotFound:
-      description: Not Found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 404
-              title: Not found
-              detail: 'Unable to find error log for sessionId: {id}.
-
-                '
-    SessionNotFound:
-      description: Not Found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 404
-              title: Not found
-              detail: 'sessionId: {id} not found.
-
-                '
-    ImporterRetryInvalidSession:
-      description: Precondition Failed.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 412
-              title: Precondition Failed
-              detail: 'Inappropriate session type. You have selected a web session for retry, please select an API session.
-
-                '
   schemas:
+    CreateImporterPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: 'The data associated with the resource.
+
+
+            The payload must match the columns in the Excel template of the importer. The columns in the template are based on the type of resource you want to import. For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/administration/bulk_importer/bulk_uploading_requests.htm" target="_blank">Bulk importing HighBond resources</a>.
+
+            '
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"importer"`).
+              example: importer
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    ImporterResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - session_id
+            properties:
+              session_id:
+                type: string
+                description: The Unique identifier for an import.
+                example: 58e559b1-31bf-4341-b761-c30364376adf
+              attributes:
+                type: string
+                description: Unique identifier for the resource.
+                example: 58e559b1-31bf-4341-b761-c30364376adf
+    UpdateImporterPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: 'The data associated with the resource.
+
+
+            The payload must match the columns in the Excel template of the importer. The columns in the template are based on the type of resource you want to import. For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/administration/bulk_importer/bulk_uploading_requests.htm" target="_blank">Bulk importing HighBond resources</a>.
+
+            '
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"importer"`).
+              example: importer
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
     Error:
       type: object
       required:
@@ -928,86 +991,23 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    CreateImporterPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: 'The data associated with the resource.
-
-
-            The payload must match the columns in the Excel template of the importer. The columns in the template are based on the type of resource you want to import. For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/administration/bulk_importer/bulk_uploading_requests.htm" target="_blank">Bulk importing HighBond resources</a>.
-
-            '
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"importer"`).
-              example: importer
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-    UpdateImporterPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: 'The data associated with the resource.
-
-
-            The payload must match the columns in the Excel template of the importer. The columns in the template are based on the type of resource you want to import. For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Content/administration/bulk_importer/bulk_uploading_requests.htm" target="_blank">Bulk importing HighBond resources</a>.
-
-            '
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"importer"`).
-              example: importer
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-    ImporterResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - session_id
-            properties:
-              session_id:
-                type: string
-                description: The Unique identifier for an import.
-                example: 58e559b1-31bf-4341-b761-c30364376adf
-              attributes:
-                type: string
-                description: Unique identifier for the resource.
-                example: 58e559b1-31bf-4341-b761-c30364376adf
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+  parameters:
+    sessionIdParam:
+      in: path
+      name: session_id
+      description: The unique identifier for an import.
+      required: true
+      schema:
+        type: string
+        example: 58e559b1-31bf-4341-b761-c30364376adf
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

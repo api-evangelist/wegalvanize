@@ -373,99 +373,6 @@ components:
                   type: integer
                   description: The ID of the workflow associated with the collection.
                   example: 42
-    CreateCollectionPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"collections"`).
-              example: collections
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the collection.
-                  maxLength: 255
-                  example: My first Collection
-                description:
-                  type: string
-                  description: The description of the collection.
-                  example: Description of My first Collection
-                workflow_id:
-                  type: integer
-                  description: The ID of the workflow associated with the collection.
-                  example: 42
-                collection_type:
-                  type: string
-                  description: The type of a collection
-                  enum:
-                  - RegularProject
-                  - AssessmentProject
-                  example: RegularProject
-                  default: RegularProject
-    CollectionMemberRequest:
-      type: object
-      description: The data required to add a member to a collection.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          - relationships
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"collection_members"`).
-              example: collection_members
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - user_id
-              - role
-              properties:
-                user_id:
-                  type: integer
-                  description: The ID of the user to add to the collection.
-                  example: 123
-                role:
-                  type: string
-                  description: 'Specifies the level of access, or permissions, each member has within individual Collections.
-
-
-                    **Note:**
-
-                    Organization System Administrators and Results Administrators automatically get a Professional Manager role in all collections.
-
-                    '
-                  enum:
-                  - Professional Manager
-                  - Professional User
-                  - Contributor User
-                  - Oversight Executive
-                  - Oversight Reviewer
-                  example: Professional Manager
-              example:
-                user_id: 123
-                role: Professional Manager
     SingleCollectionResponse:
       type: object
       description: The data associated with the resource.
@@ -533,46 +440,9 @@ components:
                   - ReferenceProject
                   - AssessmentProject
                   example: RegularProject
-    Errors:
+    CollectionMemberRequest:
       type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    CreateCollectionResponse:
-      type: object
-      description: The data associated with the resource.
+      description: The data required to add a member to a collection.
       required:
       - data
       properties:
@@ -580,61 +450,52 @@ components:
           type: object
           description: The data associated with the resource.
           required:
-          - id
           - type
           - attributes
+          - relationships
           properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
             type:
               type: string
-              description: The classification of the object (`"collections"`).
-              example: collections
+              description: The classification of the object (`"collection_members"`).
+              example: collection_members
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - user_id
+              - role
               properties:
-                name:
-                  type: string
-                  description: The name of the collection.
-                  maxLength: 255
-                  example: My first Collection
-                description:
-                  type: string
-                  description: The description of the collection.
-                  example: Description of My first Collection
-                workflow_id:
+                user_id:
                   type: integer
-                  description: The ID of the workflow associated with the collection.
-                  example: 42
-                collection_type:
+                  description: The ID of the user to add to the collection.
+                  example: 123
+                role:
                   type: string
-                  description: The type of a collection
+                  description: 'Specifies the level of access, or permissions, each member has within individual Collections.
+
+
+                    **Note:**
+
+                    Organization System Administrators and Results Administrators automatically get a Professional Manager role in all collections.
+
+                    '
                   enum:
-                  - RegularProject
-                  - AssessmentProject
-                  example: RegularProject
-                  default: RegularProject
-                default:
-                  type: boolean
-                  description: Specifies if the collection is a default (system created) collection.
-                  example: false
-                archived:
-                  type: boolean
-                  description: Specifies if the collection is archived (in a read-only state).
-                  example: false
-                created_at:
-                  type: string
-                  description: The date the collection was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The date the collection was updated.
-                  example: '2019-03-18T22:02:05Z'
-                  format: date-time
+                  - Professional Manager
+                  - Professional User
+                  - Contributor User
+                  - Oversight Executive
+                  - Oversight Reviewer
+                  example: Professional Manager
+              example:
+                user_id: 123
+                role: Professional Manager
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     MultiCollectionsResponse:
       type: object
       description: The data associated with the resource.
@@ -705,31 +566,206 @@ components:
                     - ReferenceProject
                     - AssessmentProject
                     example: RegularProject
+    CreateCollectionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"collections"`).
+              example: collections
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the collection.
+                  maxLength: 255
+                  example: My first Collection
+                description:
+                  type: string
+                  description: The description of the collection.
+                  example: Description of My first Collection
+                workflow_id:
+                  type: integer
+                  description: The ID of the workflow associated with the collection.
+                  example: 42
+                collection_type:
+                  type: string
+                  description: The type of a collection
+                  enum:
+                  - RegularProject
+                  - AssessmentProject
+                  example: RegularProject
+                  default: RegularProject
+    CreateCollectionResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"collections"`).
+              example: collections
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the collection.
+                  maxLength: 255
+                  example: My first Collection
+                description:
+                  type: string
+                  description: The description of the collection.
+                  example: Description of My first Collection
+                workflow_id:
+                  type: integer
+                  description: The ID of the workflow associated with the collection.
+                  example: 42
+                collection_type:
+                  type: string
+                  description: The type of a collection
+                  enum:
+                  - RegularProject
+                  - AssessmentProject
+                  example: RegularProject
+                  default: RegularProject
+                default:
+                  type: boolean
+                  description: Specifies if the collection is a default (system created) collection.
+                  example: false
+                archived:
+                  type: boolean
+                  description: Specifies if the collection is archived (in a read-only state).
+                  example: false
+                created_at:
+                  type: string
+                  description: The date the collection was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the collection was updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+  parameters:
+    collectionIdParam:
+      in: path
+      name: collection_id
+      description: The ID of the collection.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    collectionMemberIdParam:
+      in: path
+      name: collection_member_id
+      description: The ID of the collection member.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   responses:
-    MissingOrgId:
-      description: Bad request.
+    NotFound:
+      description: Not found.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    MissingResourceId:
-      description: Bad request.
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    BadCredentials:
+      description: Bad credentials.
     NoContent:
       description: No content.
     ResourceIdConflict:
@@ -748,17 +784,8 @@ components:
                 the id specified in the path, 101.
 
                 '
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
+    Forbidden:
+      description: Forbidden.
     MissingCollectionId:
       description: Bad request.
       content:
@@ -771,24 +798,30 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, collection_id, is missing.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
+    MissingResourceId:
+      description: Bad request.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    Forbidden:
-      description: Forbidden.
-    BadCredentials:
-      description: Bad credentials.
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -803,39 +836,6 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-  parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    collectionIdParam:
-      in: path
-      name: collection_id
-      description: The ID of the collection.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    collectionMemberIdParam:
-      in: path
-      name: collection_member_id
-      description: The ID of the collection member.
-      required: true
-      schema:
-        type: integer
-        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

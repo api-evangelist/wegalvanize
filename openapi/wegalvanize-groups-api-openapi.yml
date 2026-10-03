@@ -142,169 +142,37 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    groupIdPathParam:
-      name: group_id
-      description: The ID of the group.
-      schema:
-        type: string
-        example: 10
-      in: path
-      required: true
+  responses:
+    UnprocessableEntity:
+      description: Unprocessable entity.
+    BadCredentials:
+      description: Bad credentials.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    TooManyRequests:
+      description: Too many requests.
   schemas:
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    CreateGroupRequest:
-      type: object
-      description: The data required to create a new group.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the new group.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"groups"`) for API schema serialization purposes.
-              example: groups
-            attributes:
-              type: object
-              description: The attributes associated with the new group.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the group. The character limit is 255.
-                  example: My Group
-                purpose:
-                  type: string
-                  description: The purpose of the group. The character limit is 500.
-                  example: To group users with the same access level together
-                owners:
-                  type: array
-                  description: The users that are to be assigned as owners of the group. If omitted, defaults to the user who initiates the request.
-                  items:
-                    type: object
-                    properties:
-                      user_uid:
-                        type: string
-                        description: The user_uid
-                  example:
-                  - user_uid: P2tuGWyTWxCAQgTd1XKx
-                members:
-                  type: array
-                  description: The users that are to be assigned as members of the group. If a member is contained in the owners list, it will be ignored.
-                  items:
-                    type: object
-                    properties:
-                      user_uid:
-                        type: string
-                        description: The user_uid
-                  example:
-                  - user_uid: YhxzalsjfhauYna
-    GetGroupResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The group ID for the group.
-              example: '10'
-            type:
-              type: string
-              description: The classification of the object (`"groups"`) for API schema serialization purposes.
-              example: groups
-            attributes:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: The name of the group. The character limit is 255.
-                  example: My Group
-                purpose:
-                  type: string
-                  description: The purpose of the group. The character limit is 500.
-                  example: To group users with the same access level together
-                enabled:
-                  type: boolean
-                  description: This identifies whether the group is enabled for use.
-                  example: true
-                owners:
-                  type: array
-                  description: The users that are to be assigned as owners of the group.
-                  items:
-                    type: object
-                    properties:
-                      user_uid:
-                        type: string
-                        description: The user_uid
-                  example:
-                  - user_uid: P2tuGWyTWxCAQgTd1XKx
-                members:
-                  type: array
-                  description: The users that are to be assigned as members of the group.
-                  items:
-                    type: object
-                    properties:
-                      user_uid:
-                        type: string
-                        description: The user_uid
-                  example:
-                  - user_uid: YhxzalsjfhauYna
-                member_count:
-                  type: number
-                  description: The number of owners and members that the group has.
-                  example: 2
     MultipleGroupsResponse:
       type: object
       description: The data associated with the resource.
@@ -370,6 +238,75 @@ components:
                     type: number
                     description: The number of owners and members that the group has.
                     example: 2
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    GetGroupResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The group ID for the group.
+              example: '10'
+            type:
+              type: string
+              description: The classification of the object (`"groups"`) for API schema serialization purposes.
+              example: groups
+            attributes:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the group. The character limit is 255.
+                  example: My Group
+                purpose:
+                  type: string
+                  description: The purpose of the group. The character limit is 500.
+                  example: To group users with the same access level together
+                enabled:
+                  type: boolean
+                  description: This identifies whether the group is enabled for use.
+                  example: true
+                owners:
+                  type: array
+                  description: The users that are to be assigned as owners of the group.
+                  items:
+                    type: object
+                    properties:
+                      user_uid:
+                        type: string
+                        description: The user_uid
+                  example:
+                  - user_uid: P2tuGWyTWxCAQgTd1XKx
+                members:
+                  type: array
+                  description: The users that are to be assigned as members of the group.
+                  items:
+                    type: object
+                    properties:
+                      user_uid:
+                        type: string
+                        description: The user_uid
+                  example:
+                  - user_uid: YhxzalsjfhauYna
+                member_count:
+                  type: number
+                  description: The number of owners and members that the group has.
+                  example: 2
     UpdateGroupRequest:
       type: object
       description: The data required to update a group.
@@ -425,43 +362,106 @@ components:
                         description: The user_uid
                   example:
                   - user_uid: YhxzalsjfhauYna
-    Errors:
+    CreateGroupRequest:
       type: object
+      description: The data required to create a new group.
+      required:
+      - data
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-  responses:
-    UnprocessableEntity:
-      description: Unprocessable entity.
-    BadCredentials:
-      description: Bad credentials.
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    TooManyRequests:
-      description: Too many requests.
+        data:
+          type: object
+          description: The data associated with the new group.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"groups"`) for API schema serialization purposes.
+              example: groups
+            attributes:
+              type: object
+              description: The attributes associated with the new group.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the group. The character limit is 255.
+                  example: My Group
+                purpose:
+                  type: string
+                  description: The purpose of the group. The character limit is 500.
+                  example: To group users with the same access level together
+                owners:
+                  type: array
+                  description: The users that are to be assigned as owners of the group. If omitted, defaults to the user who initiates the request.
+                  items:
+                    type: object
+                    properties:
+                      user_uid:
+                        type: string
+                        description: The user_uid
+                  example:
+                  - user_uid: P2tuGWyTWxCAQgTd1XKx
+                members:
+                  type: array
+                  description: The users that are to be assigned as members of the group. If a member is contained in the owners list, it will be ignored.
+                  items:
+                    type: object
+                    properties:
+                      user_uid:
+                        type: string
+                        description: The user_uid
+                  example:
+                  - user_uid: YhxzalsjfhauYna
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+  parameters:
+    groupIdPathParam:
+      name: group_id
+      description: The ID of the group.
+      schema:
+        type: string
+        example: 10
+      in: path
+      required: true
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

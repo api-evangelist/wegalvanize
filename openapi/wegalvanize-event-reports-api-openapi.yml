@@ -79,36 +79,13 @@ components:
               type: string
               description: The classification of the related object.
               example: collection
-    Error:
+    Errors:
       type: object
-      required:
-      - status
       properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     SingleEventReportResponse:
       type: object
       description: The data associated with the resource.
@@ -184,14 +161,39 @@ components:
                   data:
                     id: '29'
                     type: questionnaires
-    Errors:
+    Error:
       type: object
+      required:
+      - status
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   responses:
+    BadCredentials:
+      description: Bad credentials.
     NotFound:
       description: Not found.
       content:
@@ -203,10 +205,6 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
     MissingResourceId:
       description: Bad request.
       content:
@@ -219,15 +217,9 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
+    Forbidden:
+      description: Forbidden.
   parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     resourceIdParam:
       in: path
       name: id
@@ -236,6 +228,14 @@ components:
       schema:
         type: string
         example: 9999
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

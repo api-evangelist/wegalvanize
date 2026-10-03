@@ -194,106 +194,68 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    recordStatusFilterParam:
-      in: query
-      name: filter[metadata.status][]
-      description: Requesting the API to return records with the specified statuses only. To filter the records for multiple values, add the filter string multiple times. For example, if you need to get records that have either "New" or "Open" status, pass the filters as follows `?filter[metadata.status][]=New&filter[metadata.status][]=Open`. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: New
-    recordAssigneeFilterParam:
-      in: query
-      name: filter[metadata.assignee]
-      description: Requesting the API to return records with the specified assignees only. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: Bob%20Marley
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    tableIdParam:
-      in: path
-      name: table_id
-      description: The ID of the table.
-      required: true
-      schema:
-        type: integer
-        example: 300
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-  schemas:
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
+  responses:
+    BadCredentials:
+      description: Bad credentials.
+    MissingTableId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, table_id, is missing.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    MultiRecordsResponse:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    Forbidden:
+      description: Forbidden.
+  schemas:
+    Errors:
       type: object
-      required:
-      - columns
-      - data
       properties:
-        columns:
+        errors:
           type: array
-          description: A key value pair. The key represents the column name and the value represents the column data type. See the request sample for details.
           items:
-            type: object
-          example:
-          - field_name: field_one
-            display_name: Field one
-            data_type: character
-          - field_name: field_two
-            display_name: Field two
-            data_type: character
-        data:
-          type: array
-          description: A key value pair. The key represents the column name and the value represents the column data. See the request sample for details.
-          items:
-            type: object
-          example:
-          - field_one: X
-            field_two: '2'
-          - field_one: XYZ
-            field_two: '676'
+            $ref: '#/components/schemas/Error'
     SingleRecordResponse:
       type: object
       required:
@@ -318,13 +280,6 @@ components:
           example:
             field_one: X
             field_two: '2'
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     CreateRecordsPayload:
       type: object
       description: The data associated with the resource.
@@ -362,60 +317,105 @@ components:
               type: boolean
               description: Setting to `true` deletes existing records in the table and uploads the new records. Setting to `false` uploads new records and appends them to existing records in the table.
               example: true
-  responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
+    MultiRecordsResponse:
+      type: object
+      required:
+      - columns
+      - data
+      properties:
+        columns:
+          type: array
+          description: A key value pair. The key represents the column name and the value represents the column data type. See the request sample for details.
+          items:
+            type: object
           example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    BadCredentials:
-      description: Bad credentials.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
+          - field_name: field_one
+            display_name: Field one
+            data_type: character
+          - field_name: field_two
+            display_name: Field two
+            data_type: character
+        data:
+          type: array
+          description: A key value pair. The key represents the column name and the value represents the column data. See the request sample for details.
+          items:
+            type: object
           example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+          - field_one: X
+            field_two: '2'
+          - field_one: XYZ
+            field_two: '676'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
 
                 '
-    Forbidden:
-      description: Forbidden.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    MissingTableId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, table_id, is missing.
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+  parameters:
+    recordAssigneeFilterParam:
+      in: query
+      name: filter[metadata.assignee]
+      description: Requesting the API to return records with the specified assignees only. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: Bob%20Marley
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    tableIdParam:
+      in: path
+      name: table_id
+      description: The ID of the table.
+      required: true
+      schema:
+        type: integer
+        example: 300
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    recordStatusFilterParam:
+      in: query
+      name: filter[metadata.status][]
+      description: Requesting the API to return records with the specified statuses only. To filter the records for multiple values, add the filter string multiple times. For example, if you need to get records that have either "New" or "Open" status, pass the filters as follows `?filter[metadata.status][]=New&filter[metadata.status][]=Open`. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: New
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

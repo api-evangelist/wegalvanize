@@ -168,129 +168,50 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
+  parameters:
+    folderCollaboratorUserIdParam:
+      in: path
+      name: user_id
+      description: The ID of the user.
+      required: true
+      schema:
+        type: number
+        example: 2
+    folderIdParam:
+      in: path
+      name: folder_id
+      description: The ID of the folder.
+      required: true
+      schema:
+        type: number
+        example: 2
+    robotQueryOffsetParam:
+      name: offset
+      in: query
+      required: false
+      description: Required data records start position, start from 0
+      schema:
+        type: integer
+        minimum: 0
+        example: 1
+    robotQueryUsersPerPageParam:
+      name: usersPerPage
+      in: query
+      required: false
+      description: Required number of records to read, start from 1
+      schema:
+        type: integer
+        minimum: 1
+        example: 2
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   schemas:
-    UpdateFolderCollaboratorRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          properties:
-            attributes:
-              type: object
-              properties:
-                role:
-                  type: string
-                  enum:
-                  - reviewer
-                  - editor
-                  - owner
-                  - readonly
-                  - developer
-                  description: The role a collaborator can have
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    FolderCollaboratorResponse:
-      type: object
-      description: The data associated with the resource.
-      properties:
-        data:
-          type: object
-          properties:
-            id:
-              type: number
-              description: The user ID.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`"collaborators"`).
-              example: collaborators
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                username:
-                  type: string
-                  description: The username
-                  example: user
-                email:
-                  type: string
-                  description: The email of the user.
-                  example: user@diligent.com
-                role:
-                  type: string
-                  enum:
-                  - reviewer
-                  - editor
-                  - owner
-                  - readonly
-                  - developer
-                  description: The role a collaborator can have
-                admin:
-                  type: boolean
-                  description: Whether is admin or not
-    CreateFolderCollaboratorRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          properties:
-            attributes:
-              type: object
-              properties:
-                user_id:
-                  type: number
-                  description: The user ID.
-                  example: 1
-                role:
-                  type: string
-                  enum:
-                  - reviewer
-                  - editor
-                  - owner
-                  - readonly
-                  - developer
-                  description: The role a collaborator can have
     ListFolderCollaboratorsResponse:
       type: object
       description: The data associated with the resource.
@@ -337,6 +258,128 @@ components:
           type: number
           description: The total number of collaborators in the folder.
           example: 100
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    CreateFolderCollaboratorRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          properties:
+            attributes:
+              type: object
+              properties:
+                user_id:
+                  type: number
+                  description: The user ID.
+                  example: 1
+                role:
+                  type: string
+                  enum:
+                  - reviewer
+                  - editor
+                  - owner
+                  - readonly
+                  - developer
+                  description: The role a collaborator can have
+    UpdateFolderCollaboratorRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          properties:
+            attributes:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - reviewer
+                  - editor
+                  - owner
+                  - readonly
+                  - developer
+                  description: The role a collaborator can have
+    FolderCollaboratorResponse:
+      type: object
+      description: The data associated with the resource.
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              type: number
+              description: The user ID.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"collaborators"`).
+              example: collaborators
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                username:
+                  type: string
+                  description: The username
+                  example: user
+                email:
+                  type: string
+                  description: The email of the user.
+                  example: user@diligent.com
+                role:
+                  type: string
+                  enum:
+                  - reviewer
+                  - editor
+                  - owner
+                  - readonly
+                  - developer
+                  description: The role a collaborator can have
+                admin:
+                  type: boolean
+                  description: Whether is admin or not
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   responses:
     BadCredentials:
       description: Bad credentials.
@@ -354,49 +397,6 @@ components:
               detail: params.org_id should NOT be shorter than 1 characters
     Forbidden:
       description: Forbidden.
-  parameters:
-    folderIdParam:
-      in: path
-      name: folder_id
-      description: The ID of the folder.
-      required: true
-      schema:
-        type: number
-        example: 2
-    robotQueryOffsetParam:
-      name: offset
-      in: query
-      required: false
-      description: Required data records start position, start from 0
-      schema:
-        type: integer
-        minimum: 0
-        example: 1
-    robotQueryUsersPerPageParam:
-      name: usersPerPage
-      in: query
-      required: false
-      description: Required number of records to read, start from 1
-      schema:
-        type: integer
-        minimum: 1
-        example: 2
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    folderCollaboratorUserIdParam:
-      in: path
-      name: user_id
-      description: The ID of the user.
-      required: true
-      schema:
-        type: number
-        example: 2
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -218,46 +218,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    ResourceIdConflict:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_id_conflict
-              title: Resource ID conflict
-              detail: 'The id specified in the request body, 1, conflicts with
-
-                the id specified in the path, 101.
-
-                '
     NotFound:
       description: Not found.
       content:
@@ -283,12 +243,52 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
+    BadCredentials:
+      description: Bad credentials.
+    ResourceIdConflict:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_id_conflict
+              title: Resource ID conflict
+              detail: 'The id specified in the request body, 1, conflicts with
+
+                the id specified in the path, 101.
+
+                '
     Forbidden:
       description: Forbidden.
     Accepted:
       description: Accepted.
-    BadCredentials:
-      description: Bad credentials.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -303,32 +303,81 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-  parameters:
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    analysisIdParam:
-      in: path
-      name: analysis_id
-      description: The ID of the analysis where the requested table will be created.
-      required: true
-      schema:
-        type: integer
-        example: 20
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
   schemas:
+    UpdateTablePayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the table.
+              example: '300'
+            type:
+              type: string
+              description: The classification of the object (`"tables"`).
+              example: tables
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the table.
+                  maxLength: 255
+                  example: My first Table
+                description:
+                  type: string
+                  description: The description of the table.
+                  example: Description of My first Table
+                script_name:
+                  type: string
+                  description: The name of the script, or process, used to generate the result set.
+                  maxLength: 255
+                  example: Sec01_Wknd_Unauth_Access_Point
+                publish_platform_reporting_sync:
+                  type: boolean
+                  description: The flag that indicates whether the table is synchronizing with activity center.
+                  example: true
+                primary_key:
+                  type:
+                  - string
+                  - 'null'
+                  description: Field that uniquely identifies a record. Specifying a primary key field allows uploads of records sharing the same primary key to be merged rather than duplicated.
+                  maxLength: 255
+                  default: null
+                  example: primary_key
+                record_identifiers:
+                  type: array
+                  items:
+                    type: string
+                  description: 'Select a few non-sensitive fields that identify a record. You can select any imported data, Results metadata fields, and questionnaire fields. These fields will be displayed in emails sent to recipients and when they fill out questionnaires. In sequential certifications, recipients always see previous answers.
+
+                    * You can select values from `user_fields` (user-created columns in the table)
+
+                    * You can select values from `metadata_fields`, which can be one or more of the following: `record_id`, `position`, `priority`, `status`, `publish_date`, `publisher`, `assignee`, `group`, `updated_at`, `closed_at`
+
+                    '
+                  default:
+                  - :record_id
+                  example:
+                  - :record_id
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     GetTablesResponse:
       type: object
       description: The data associated with the resource.
@@ -491,94 +540,6 @@ components:
                   type: string
                   description: The id of the single questionnaire associated with this table (assessment tables only).
                   example: '1'
-    UpdateTablePayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the table.
-              example: '300'
-            type:
-              type: string
-              description: The classification of the object (`"tables"`).
-              example: tables
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the table.
-                  maxLength: 255
-                  example: My first Table
-                description:
-                  type: string
-                  description: The description of the table.
-                  example: Description of My first Table
-                script_name:
-                  type: string
-                  description: The name of the script, or process, used to generate the result set.
-                  maxLength: 255
-                  example: Sec01_Wknd_Unauth_Access_Point
-                publish_platform_reporting_sync:
-                  type: boolean
-                  description: The flag that indicates whether the table is synchronizing with activity center.
-                  example: true
-                primary_key:
-                  type:
-                  - string
-                  - 'null'
-                  description: Field that uniquely identifies a record. Specifying a primary key field allows uploads of records sharing the same primary key to be merged rather than duplicated.
-                  maxLength: 255
-                  default: null
-                  example: primary_key
-                record_identifiers:
-                  type: array
-                  items:
-                    type: string
-                  description: 'Select a few non-sensitive fields that identify a record. You can select any imported data, Results metadata fields, and questionnaire fields. These fields will be displayed in emails sent to recipients and when they fill out questionnaires. In sequential certifications, recipients always see previous answers.
-
-                    * You can select values from `user_fields` (user-created columns in the table)
-
-                    * You can select values from `metadata_fields`, which can be one or more of the following: `record_id`, `position`, `priority`, `status`, `publish_date`, `publisher`, `assignee`, `group`, `updated_at`, `closed_at`
-
-                    '
-                  default:
-                  - :record_id
-                  example:
-                  - :record_id
-    RelationshipObject:
-      type: object
-      description: The object related to the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the related object.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
     SingleTableResponse:
       type: object
       description: The data associated with the resource.
@@ -685,13 +646,27 @@ components:
                   data:
                     id: '20'
                     type: analyses
-    Errors:
+    RelationshipObject:
       type: object
+      description: The object related to the resource.
+      required:
+      - data
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        data:
+          type: object
+          description: The data associated with the related object.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the related object.
+              example: 1
+            type:
+              type: string
+              description: The classification of the related object.
+              example: collection
     Error:
       type: object
       required:
@@ -722,6 +697,31 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+  parameters:
+    analysisIdParam:
+      in: path
+      name: analysis_id
+      description: The ID of the analysis where the requested table will be created.
+      required: true
+      schema:
+        type: integer
+        example: 20
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -277,32 +277,6 @@ paths:
                   detail: has existing projects
 components:
   responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -328,137 +302,44 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    Forbidden:
-      description: Forbidden.
     BadCredentials:
       description: Bad credentials.
-  parameters:
-    filterName:
-      in: query
-      name: filter[name]
-      description: Filter by name.  Response will include partial matches and ignore case.
-      required: false
-      schema:
-        type: string
-        example: LoremIpsum
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    projectTypeSparseFieldsetParams:
-      in: query
-      name: fields[project_types]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: name,description,workflow,project_terms,certification_terms,control_terms,finding_terms,finding_retest_terms,finding_remediation_terms,control_test_terms,narrative_terms,objective_terms,planning_terms,results_terms,risk_terms,risk_control_matrix_terms,test_plan_terms,process_walkthrough_terms,walkthrough_terms,testing_round_terms,assigned_users
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
+    NoContent:
+      description: No content.
+    Forbidden:
+      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
   schemas:
-    CreateProjectTypeRequest:
+    Errors:
       type: object
-      description: 'The data associated with the resource.
-
-
-        No terms are available when creating a project type because the workflow determines which terms will be created
-
-        along with the project type. These terms are not available until after the project type has been created.
-
-        '
-      required:
-      - data
       properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"project_types"`).
-              example: project_types
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              - workflow
-              - enable_creating_projects
-              properties:
-                name:
-                  type: string
-                  description: The name of the project type.
-                  maxLength: 255
-                  example: Project type name
-                description:
-                  type: string
-                  description: A detailed description of the project type.
-                  maxLength: 255
-                  example: Project type description.
-                workflow:
-                  type: string
-                  description: 'The type of workflow associated with the project type. The workflow can be Workplan (`procedure`) or Internal Control (`control`).
-
-
-                    `procedure` workflows are appropriate for straight-forward projects and frameworks, which consist of a set of steps or procedures that the assurance team will execute,
-
-                    and the documentation of the outcome of each step. The attributes `narrative_terms`, `control_test_terms`, and `test_plan_terms` are not available for this workflow.
-
-
-                    `control` workflows are appropriate for more complex types of projects and frameworks, where narratives are
-
-                    defined, walkthroughs are performed to verify control design, and tests are performed to verify the operating effectiveness of controls.
-
-
-                    For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a>.
-
-                    '
-                  example: control
-                enable_creating_projects:
-                  type: boolean
-                  description: 'Specifies if users with the appropriate permissions can create new projects and frameworks using this project type (`true`) or if they cannot (`false`).
-
-
-                    Typically, you specify `true` when you have finalized your project type settings and you are ready for others to use the project type. If you want the project type
-
-                    to remain in draft mode, and prevent others from using it, specify `false`.
-
-                    '
-                  default: true
-                  example: true
-            source_project_type_id:
-              type: string
-              description: The ID of the resource to copy.
-              example: '1'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     UpdateProjectTypeRequest:
       type: object
       required:
@@ -3809,43 +3690,6 @@ components:
                             type: string
                             description: The classification of the object (`"users"`).
                             example: users
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     GetProjectTypesResponse:
       type: object
       required:
@@ -5571,6 +5415,162 @@ components:
               - 'null'
               description: Previous page url
               example: null
+    CreateProjectTypeRequest:
+      type: object
+      description: 'The data associated with the resource.
+
+
+        No terms are available when creating a project type because the workflow determines which terms will be created
+
+        along with the project type. These terms are not available until after the project type has been created.
+
+        '
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"project_types"`).
+              example: project_types
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              - workflow
+              - enable_creating_projects
+              properties:
+                name:
+                  type: string
+                  description: The name of the project type.
+                  maxLength: 255
+                  example: Project type name
+                description:
+                  type: string
+                  description: A detailed description of the project type.
+                  maxLength: 255
+                  example: Project type description.
+                workflow:
+                  type: string
+                  description: 'The type of workflow associated with the project type. The workflow can be Workplan (`procedure`) or Internal Control (`control`).
+
+
+                    `procedure` workflows are appropriate for straight-forward projects and frameworks, which consist of a set of steps or procedures that the assurance team will execute,
+
+                    and the documentation of the outcome of each step. The attributes `narrative_terms`, `control_test_terms`, and `test_plan_terms` are not available for this workflow.
+
+
+                    `control` workflows are appropriate for more complex types of projects and frameworks, where narratives are
+
+                    defined, walkthroughs are performed to verify control design, and tests are performed to verify the operating effectiveness of controls.
+
+
+                    For more information, see <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Workflows and project types</a>.
+
+                    '
+                  example: control
+                enable_creating_projects:
+                  type: boolean
+                  description: 'Specifies if users with the appropriate permissions can create new projects and frameworks using this project type (`true`) or if they cannot (`false`).
+
+
+                    Typically, you specify `true` when you have finalized your project type settings and you are ready for others to use the project type. If you want the project type
+
+                    to remain in draft mode, and prevent others from using it, specify `false`.
+
+                    '
+                  default: true
+                  example: true
+            source_project_type_id:
+              type: string
+              description: The ID of the resource to copy.
+              example: '1'
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+  parameters:
+    projectTypeSparseFieldsetParams:
+      in: query
+      name: fields[project_types]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,description,workflow,project_terms,certification_terms,control_terms,finding_terms,finding_retest_terms,finding_remediation_terms,control_test_terms,narrative_terms,objective_terms,planning_terms,results_terms,risk_terms,risk_control_matrix_terms,test_plan_terms,process_walkthrough_terms,walkthrough_terms,testing_round_terms,assigned_users
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    filterName:
+      in: query
+      name: filter[name]
+      description: Filter by name.  Response will include partial matches and ignore case.
+      required: false
+      schema:
+        type: string
+        example: LoremIpsum
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

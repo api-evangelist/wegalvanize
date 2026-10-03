@@ -419,222 +419,7 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    GetEntityCategoriesResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            - relationships
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '1'
-              type:
-                type: string
-                description: The type of entity category (`"entity_categories"`).
-                example: entity_categories
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                required:
-                - title
-                properties:
-                  title:
-                    type: string
-                    description: the name of entity category
-                    maxLength: 60
-                    example: My new entity category
-                  description:
-                    type: string
-                    description: the description of entity category
-                    example: My new description
-                  position:
-                    type: integer
-                    description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                      '
-                    example: 1
-                  entities_count:
-                    type: integer
-                    description: 'Related entities count, is a value between `1` and `2147483647`.
-
-                      '
-                    example: 1
-                  created_at:
-                    type: string
-                    description: The timestamp identifying when the entity category was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The timestamp identifying when the entity category was last updated.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                properties:
-                  entities:
-                    type: object
-                    description: 'Each entity category may have associated entities.
-
-                      '
-                    required:
-                    - data
-                    properties:
-                      data:
-                        type: array
-                        items:
-                          type: object
-                          description: Entities associated with a category
-                          required:
-                          - id
-                          - type
-                          properties:
-                            id:
-                              type: string
-                              description: The ID of the entity.
-                              example: '1'
-                            type:
-                              type: string
-                              description: The classification of the object (`"entities"`).
-                              example: entities
-        links:
-          type: object
-          required:
-          - next
-          - prev
-          properties:
-            next:
-              type:
-              - string
-              - 'null'
-              description: Next page url
-              example: /api/resource?page[number]=Mg==
-            prev:
-              type:
-              - string
-              - 'null'
-              description: Previous page url
-              example: null
-    GetEntityResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '2'
-            type:
-              type: string
-              description: The type of resource (`"entities"`).
-              example: entities
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              properties:
-                title:
-                  type: string
-                  description: The title of the entity.
-                  maxLength: 120
-                  example: Entity title
-                description:
-                  type: string
-                  description: A detailed description of the entity.
-                  maxLength: 524288
-                  example: Entity description
-                children_count:
-                  type: integer
-                  description: A count of entity children.
-                  example: 1
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the entity was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the entity was last updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                entity_category:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Each entity can be associated to the category.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the category.
-                          example: '54'
-                        type:
-                          type: string
-                          description: The classification of the object (`"entity_categories"`).
-                          example: entity_categories
-                parent:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Each entity can be associated to the parent entity.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the entity.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"entities"`).
-                          example: entities
-    CreateEntityCategoryResponse:
+    GetEntityCategoryResponse:
       type: object
       required:
       - data
@@ -693,98 +478,13 @@ components:
                   description: The timestamp identifying when the entity category was last updated.
                   example: '2019-02-09T13:17:26Z'
                   format: date-time
-    CreateEntityRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The type of resource (`"entities"`).
-              example: entities
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              properties:
-                title:
-                  type: string
-                  description: The title of the entity.
-                  maxLength: 120
-                  example: Entity title
-                description:
-                  type: string
-                  description: A detailed description of the entity.
-                  maxLength: 524288
-                  example: Entity description
             relationships:
               type: object
               description: The relationships associated with the resource.
               properties:
-                entity_category:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Each entity can be associated to the category.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the category.
-                          example: '54'
-                        type:
-                          type: string
-                          description: The classification of the object (`"entity_categories"`).
-                          example: entity_categories
-                parent:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Each entity can be associated to the parent entity.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the entity.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"entities"`).
-                          example: entities
-                children:
-                  type:
-                  - object
-                  - 'null'
-                  description: 'Each entity can have multiple associated entities.
+                entities:
+                  type: object
+                  description: 'Each entity category may have associated entities.
 
                     '
                   required:
@@ -794,12 +494,7 @@ components:
                       type: array
                       items:
                         type: object
-                        description: 'Entity associated with a parent entity.
-
-
-                          >**Note**: only existing top-level entities can be assigned as children
-
-                          '
+                        description: Entities associated with a category
                         required:
                         - id
                         - type
@@ -807,7 +502,7 @@ components:
                           id:
                             type: string
                             description: The ID of the entity.
-                            example: '3'
+                            example: '1'
                           type:
                             type: string
                             description: The classification of the object (`"entities"`).
@@ -939,6 +634,153 @@ components:
               - 'null'
               description: Previous page url
               example: null
+    UpdateEntityCategoryRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The type of entity category (`"entity_categories"`).
+              example: entity_categories
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                title:
+                  type: string
+                  description: the name of entity category
+                  maxLength: 60
+                  example: My new entity category
+                description:
+                  type: string
+                  description: the description of entity category
+                  example: My new description
+                position:
+                  type: integer
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+    GetEntityResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '2'
+            type:
+              type: string
+              description: The type of resource (`"entities"`).
+              example: entities
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: The title of the entity.
+                  maxLength: 120
+                  example: Entity title
+                description:
+                  type: string
+                  description: A detailed description of the entity.
+                  maxLength: 524288
+                  example: Entity description
+                children_count:
+                  type: integer
+                  description: A count of entity children.
+                  example: 1
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the entity was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the entity was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                entity_category:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Each entity can be associated to the category.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the category.
+                          example: '54'
+                        type:
+                          type: string
+                          description: The classification of the object (`"entity_categories"`).
+                          example: entity_categories
+                parent:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Each entity can be associated to the parent entity.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the entity.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"entities"`).
+                          example: entities
     CreateEntityCategoryRequest:
       type: object
       description: The data associated with the resource.
@@ -972,6 +814,65 @@ components:
                   type: string
                   description: the description of entity category
                   example: My new description
+    CreateEntityCategoryResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The type of entity category (`"entity_categories"`).
+              example: entity_categories
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: the name of entity category
+                  maxLength: 60
+                  example: My new entity category
+                description:
+                  type: string
+                  description: the description of entity category
+                  example: My new description
+                position:
+                  type: integer
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                entities_count:
+                  type: integer
+                  description: 'Related entities count, is a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the entity category was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the entity category was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
     Errors:
       type: object
       properties:
@@ -979,6 +880,234 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
+    GetEntityCategoriesResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '1'
+              type:
+                type: string
+                description: The type of entity category (`"entity_categories"`).
+                example: entity_categories
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                required:
+                - title
+                properties:
+                  title:
+                    type: string
+                    description: the name of entity category
+                    maxLength: 60
+                    example: My new entity category
+                  description:
+                    type: string
+                    description: the description of entity category
+                    example: My new description
+                  position:
+                    type: integer
+                    description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                      '
+                    example: 1
+                  entities_count:
+                    type: integer
+                    description: 'Related entities count, is a value between `1` and `2147483647`.
+
+                      '
+                    example: 1
+                  created_at:
+                    type: string
+                    description: The timestamp identifying when the entity category was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The timestamp identifying when the entity category was last updated.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                properties:
+                  entities:
+                    type: object
+                    description: 'Each entity category may have associated entities.
+
+                      '
+                    required:
+                    - data
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+                          description: Entities associated with a category
+                          required:
+                          - id
+                          - type
+                          properties:
+                            id:
+                              type: string
+                              description: The ID of the entity.
+                              example: '1'
+                            type:
+                              type: string
+                              description: The classification of the object (`"entities"`).
+                              example: entities
+        links:
+          type: object
+          required:
+          - next
+          - prev
+          properties:
+            next:
+              type:
+              - string
+              - 'null'
+              description: Next page url
+              example: /api/resource?page[number]=Mg==
+            prev:
+              type:
+              - string
+              - 'null'
+              description: Previous page url
+              example: null
+    CreateEntityRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The type of resource (`"entities"`).
+              example: entities
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  description: The title of the entity.
+                  maxLength: 120
+                  example: Entity title
+                description:
+                  type: string
+                  description: A detailed description of the entity.
+                  maxLength: 524288
+                  example: Entity description
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                entity_category:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Each entity can be associated to the category.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the category.
+                          example: '54'
+                        type:
+                          type: string
+                          description: The classification of the object (`"entity_categories"`).
+                          example: entity_categories
+                parent:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Each entity can be associated to the parent entity.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the entity.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"entities"`).
+                          example: entities
+                children:
+                  type:
+                  - object
+                  - 'null'
+                  description: 'Each entity can have multiple associated entities.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        description: 'Entity associated with a parent entity.
+
+
+                          >**Note**: only existing top-level entities can be assigned as children
+
+                          '
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the entity.
+                            example: '3'
+                          type:
+                            type: string
+                            description: The classification of the object (`"entities"`).
+                            example: entities
     UpdateEntityRequest:
       type: object
       description: The data associated with the resource.
@@ -1103,94 +1232,6 @@ components:
                             type: string
                             description: The classification of the object (`"entities"`).
                             example: entities
-    GetEntityCategoryResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The type of entity category (`"entity_categories"`).
-              example: entity_categories
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              properties:
-                title:
-                  type: string
-                  description: the name of entity category
-                  maxLength: 60
-                  example: My new entity category
-                description:
-                  type: string
-                  description: the description of entity category
-                  example: My new description
-                position:
-                  type: integer
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                entities_count:
-                  type: integer
-                  description: 'Related entities count, is a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the entity category was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the entity category was last updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                entities:
-                  type: object
-                  description: 'Each entity category may have associated entities.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        description: Entities associated with a category
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the entity.
-                            example: '1'
-                          type:
-                            type: string
-                            description: The classification of the object (`"entities"`).
-                            example: entities
     Error:
       type: object
       required:
@@ -1221,123 +1262,7 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
-    UpdateEntityCategoryRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The type of entity category (`"entity_categories"`).
-              example: entity_categories
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                title:
-                  type: string
-                  description: the name of entity category
-                  maxLength: 60
-                  example: My new entity category
-                description:
-                  type: string
-                  description: the description of entity category
-                  example: My new description
-                position:
-                  type: integer
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-  parameters:
-    entityCategorySparseFieldsetParams:
-      in: query
-      name: fields[entity_categories]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,position,entities_count,created_at,updated_at,entities
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    entitySparseFieldsetParams:
-      in: query
-      name: fields[entities]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,created_at,updated_at,parent,children_count,entity_category
   responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
     NotFound:
       description: Not found.
       content:
@@ -1363,10 +1288,36 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    Forbidden:
-      description: Forbidden.
     BadCredentials:
       description: Bad credentials.
+    NoContent:
+      description: No content.
+    Forbidden:
+      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -1381,6 +1332,55 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
+  parameters:
+    entitySparseFieldsetParams:
+      in: query
+      name: fields[entities]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,created_at,updated_at,parent,children_count,entity_category
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    entityCategorySparseFieldsetParams:
+      in: query
+      name: fields[entity_categories]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,position,entities_count,created_at,updated_at,entities
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

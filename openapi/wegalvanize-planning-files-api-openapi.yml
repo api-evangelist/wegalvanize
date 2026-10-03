@@ -257,135 +257,74 @@ paths:
                   title: Invalid resource
                   detail: This planning file cannot be deleted because the preparer has already signed off.
 components:
-  responses:
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NoContent:
-      description: No content.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    Forbidden:
-      description: Forbidden.
-    BadCredentials:
-      description: Bad credentials.
-    MissingProjectId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, project_id, is missing.
-  parameters:
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    parentResourceTypeParam:
-      in: path
-      name: parent_resource_type
-      description: The type of the parent resource.
-      required: true
-      schema:
-        type: string
-        enum:
-        - projects
-        - frameworks
-        default: projects
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    planningFileSparseFieldsetParams:
-      in: query
-      name: fields[planning_files]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
-    parentResourceIdParam:
-      in: path
-      name: parent_resource_id
-      description: The ID of the parent resource.
-      required: true
-      schema:
-        type: integer
-        example: 1
   schemas:
+    CreatePlanningFileRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"planning_files"`).
+              example: planning_files
+            attributes:
+              type: object
+              description: The attributes associated with the planning file.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the planning file.
+                  maxLength: 255
+                  example: Planning File Name
+                reference_id:
+                  type: string
+                  description: The planning id, reference number, or code for the planning file.
+                  maxLength: 8
+                  example: BPWS1
+                description:
+                  type: string
+                  description: A detailed description of the planning file.
+                  maxLength: 524288
+                  example: <h1>Planning file heading</h1><p>Planning file description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this planning file is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Planning Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
     GetPlanningFileResponse:
       type: object
       required:
@@ -555,73 +494,13 @@ components:
                           type: string
                           description: The classification of the object (`"frameworks"`).
                           example: frameworks
-    CreatePlanningFileRequest:
+    Errors:
       type: object
-      description: The data associated with the resource.
-      required:
-      - data
       properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"planning_files"`).
-              example: planning_files
-            attributes:
-              type: object
-              description: The attributes associated with the planning file.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the planning file.
-                  maxLength: 255
-                  example: Planning File Name
-                reference_id:
-                  type: string
-                  description: The planning id, reference number, or code for the planning file.
-                  maxLength: 8
-                  example: BPWS1
-                description:
-                  type: string
-                  description: A detailed description of the planning file.
-                  maxLength: 524288
-                  example: <h1>Planning file heading</h1><p>Planning file description.</p>
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this planning file is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Planning Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     UpdatePlanningFileRequest:
       type: object
       required:
@@ -925,13 +804,6 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       required:
@@ -962,6 +834,134 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+  responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    BadCredentials:
+      description: Bad credentials.
+    NoContent:
+      description: No content.
+    MissingProjectId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, project_id, is missing.
+    Forbidden:
+      description: Forbidden.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+  parameters:
+    planningFileSparseFieldsetParams:
+      in: query
+      name: fields[planning_files]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,reference_id,description,position,created_at,updated_at,custom_attributes,project,framework,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    parentResourceIdParam:
+      in: path
+      name: parent_resource_id
+      description: The ID of the parent resource.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    parentResourceTypeParam:
+      in: path
+      name: parent_resource_type
+      description: The type of the parent resource.
+      required: true
+      schema:
+        type: string
+        enum:
+        - projects
+        - frameworks
+        default: projects
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

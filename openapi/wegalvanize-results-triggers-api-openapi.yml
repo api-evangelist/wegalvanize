@@ -119,46 +119,13 @@ components:
               type: string
               description: The classification of the related object.
               example: collection
-    Error:
+    Errors:
       type: object
-      required:
-      - status
       properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    ResultsTriggerConditionConfiguration:
-      type: object
-      description: Configuration for condition type with operator and value
-      properties:
-        operator:
-          type: string
-          example: is_x_days_before_today
-        value:
-          type: string
-          example: '1'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     GetResultsTriggerResponse:
       type: object
       description: Configuration of a single Results trigger.
@@ -379,6 +346,16 @@ components:
               data:
                 id: '208546'
                 type: tables
+    ResultsTriggerConditionConfiguration:
+      type: object
+      description: Configuration for condition type with operator and value
+      properties:
+        operator:
+          type: string
+          example: is_x_days_before_today
+        value:
+          type: string
+          example: '1'
     ResultsFrequency:
       type: object
       description: Frequency configuration (realtime or scheduled)
@@ -524,41 +501,39 @@ components:
               data:
                 id: '1'
                 type: tables
-    Errors:
+    Error:
       type: object
+      required:
+      - status
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
   responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
     BadCredentials:
       description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    InternalServerError:
-      description: Internal Server Error.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '500'
-              code: internal_server_error
-              title: Internal Server Error
-              detail: A program error occurred. If the problem persists, contact Galvanize Support.
     MissingTableId:
       description: Bad request.
       content:
@@ -571,7 +546,40 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, table_id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    InternalServerError:
+      description: Internal Server Error.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '500'
+              code: internal_server_error
+              title: Internal Server Error
+              detail: A program error occurred. If the problem persists, contact Galvanize Support.
+    Forbidden:
+      description: Forbidden.
   parameters:
+    triggerIdParam:
+      name: trigger_id
+      in: path
+      required: true
+      description: The ID of the Results trigger.
+      schema:
+        type: integer
+      example: 4
     orgIdParam:
       in: path
       name: org_id
@@ -588,14 +596,6 @@ components:
       schema:
         type: integer
         example: 300
-    triggerIdParam:
-      name: trigger_id
-      in: path
-      required: true
-      description: The ID of the Results trigger.
-      schema:
-        type: integer
-      example: 4
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

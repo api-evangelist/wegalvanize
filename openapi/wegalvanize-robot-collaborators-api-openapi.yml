@@ -58,6 +58,41 @@ components:
       description: Bad credentials.
     Forbidden:
       description: Forbidden.
+  parameters:
+    robotQueryOffsetParam:
+      name: offset
+      in: query
+      required: false
+      description: Required data records start position, start from 0
+      schema:
+        type: integer
+        minimum: 0
+        example: 1
+    robotQueryUsersPerPageParam:
+      name: usersPerPage
+      in: query
+      required: false
+      description: Required number of records to read, start from 1
+      schema:
+        type: integer
+        minimum: 1
+        example: 2
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
+      required: true
+      schema:
+        type: string
+        example: 2
   schemas:
     ListRobotCollaboratorsResponse:
       type: object
@@ -105,41 +140,6 @@ components:
           type: number
           description: The total number of collaborators in the robot.
           example: 100
-  parameters:
-    robotQueryOffsetParam:
-      name: offset
-      in: query
-      required: false
-      description: Required data records start position, start from 0
-      schema:
-        type: integer
-        minimum: 0
-        example: 1
-    robotQueryUsersPerPageParam:
-      name: usersPerPage
-      in: query
-      required: false
-      description: Required number of records to read, start from 1
-      schema:
-        type: integer
-        minimum: 1
-        example: 2
-    robotIdParam:
-      in: path
-      name: robot_id
-      description: The ID of the robot.
-      required: true
-      schema:
-        type: string
-        example: 2
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
