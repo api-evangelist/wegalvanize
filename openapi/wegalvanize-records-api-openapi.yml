@@ -194,60 +194,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    MissingTableId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, table_id, is missing.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    Forbidden:
-      description: Forbidden.
   schemas:
     Errors:
       type: object
@@ -256,30 +202,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-    SingleRecordResponse:
-      type: object
-      required:
-      - columns
-      - data
-      properties:
-        columns:
-          type: array
-          description: A key value pair. The key represents the column name and the value represents the column data type. See the request sample for details.
-          items:
-            type: object
-          example:
-          - field_name: field_one
-            display_name: Field one
-            data_type: character
-          - field_name: field_two
-            display_name: Field two
-            data_type: character
-        data:
-          type: object
-          description: A key value pair. The key represents the column name and the value represents the column data. See the request sample for details.
-          example:
-            field_one: X
-            field_two: '2'
     CreateRecordsPayload:
       type: object
       description: The data associated with the resource.
@@ -317,34 +239,6 @@ components:
               type: boolean
               description: Setting to `true` deletes existing records in the table and uploads the new records. Setting to `false` uploads new records and appends them to existing records in the table.
               example: true
-    MultiRecordsResponse:
-      type: object
-      required:
-      - columns
-      - data
-      properties:
-        columns:
-          type: array
-          description: A key value pair. The key represents the column name and the value represents the column data type. See the request sample for details.
-          items:
-            type: object
-          example:
-          - field_name: field_one
-            display_name: Field one
-            data_type: character
-          - field_name: field_two
-            display_name: Field two
-            data_type: character
-        data:
-          type: array
-          description: A key value pair. The key represents the column name and the value represents the column data. See the request sample for details.
-          items:
-            type: object
-          example:
-          - field_one: X
-            field_two: '2'
-          - field_one: XYZ
-            field_two: '676'
     Error:
       type: object
       required:
@@ -375,23 +269,59 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    MultiRecordsResponse:
+      type: object
+      required:
+      - columns
+      - data
+      properties:
+        columns:
+          type: array
+          description: A key value pair. The key represents the column name and the value represents the column data type. See the request sample for details.
+          items:
+            type: object
+          example:
+          - field_name: field_one
+            display_name: Field one
+            data_type: character
+          - field_name: field_two
+            display_name: Field two
+            data_type: character
+        data:
+          type: array
+          description: A key value pair. The key represents the column name and the value represents the column data. See the request sample for details.
+          items:
+            type: object
+          example:
+          - field_one: X
+            field_two: '2'
+          - field_one: XYZ
+            field_two: '676'
+    SingleRecordResponse:
+      type: object
+      required:
+      - columns
+      - data
+      properties:
+        columns:
+          type: array
+          description: A key value pair. The key represents the column name and the value represents the column data type. See the request sample for details.
+          items:
+            type: object
+          example:
+          - field_name: field_one
+            display_name: Field one
+            data_type: character
+          - field_name: field_two
+            display_name: Field two
+            data_type: character
+        data:
+          type: object
+          description: A key value pair. The key represents the column name and the value represents the column data. See the request sample for details.
+          example:
+            field_one: X
+            field_two: '2'
   parameters:
-    recordAssigneeFilterParam:
-      in: query
-      name: filter[metadata.assignee]
-      description: Requesting the API to return records with the specified assignees only. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: Bob%20Marley
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
     tableIdParam:
       in: path
       name: table_id
@@ -400,14 +330,22 @@ components:
       schema:
         type: integer
         example: 300
-    orgIdParam:
+    resourceIdParam:
       in: path
-      name: org_id
-      description: The ID of the HighBond instance.
+      name: id
+      description: The ID of the requested resource.
       required: true
       schema:
         type: string
-        example: 1
+        example: 9999
+    recordAssigneeFilterParam:
+      in: query
+      name: filter[metadata.assignee]
+      description: Requesting the API to return records with the specified assignees only. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: Bob%20Marley
     recordStatusFilterParam:
       in: query
       name: filter[metadata.status][]
@@ -416,6 +354,68 @@ components:
       schema:
         type: string
         example: New
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+  responses:
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    MissingTableId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, table_id, is missing.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

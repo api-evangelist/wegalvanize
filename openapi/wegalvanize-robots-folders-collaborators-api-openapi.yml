@@ -168,50 +168,14 @@ paths:
         '403':
           $ref: '#/components/responses/Forbidden'
 components:
-  parameters:
-    folderCollaboratorUserIdParam:
-      in: path
-      name: user_id
-      description: The ID of the user.
-      required: true
-      schema:
-        type: number
-        example: 2
-    folderIdParam:
-      in: path
-      name: folder_id
-      description: The ID of the folder.
-      required: true
-      schema:
-        type: number
-        example: 2
-    robotQueryOffsetParam:
-      name: offset
-      in: query
-      required: false
-      description: Required data records start position, start from 0
-      schema:
-        type: integer
-        minimum: 0
-        example: 1
-    robotQueryUsersPerPageParam:
-      name: usersPerPage
-      in: query
-      required: false
-      description: Required number of records to read, start from 1
-      schema:
-        type: integer
-        minimum: 1
-        example: 2
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     ListFolderCollaboratorsResponse:
       type: object
       description: The data associated with the resource.
@@ -258,59 +222,6 @@ components:
           type: number
           description: The total number of collaborators in the folder.
           example: 100
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    CreateFolderCollaboratorRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          properties:
-            attributes:
-              type: object
-              properties:
-                user_id:
-                  type: number
-                  description: The user ID.
-                  example: 1
-                role:
-                  type: string
-                  enum:
-                  - reviewer
-                  - editor
-                  - owner
-                  - readonly
-                  - developer
-                  description: The role a collaborator can have
-    UpdateFolderCollaboratorRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          properties:
-            attributes:
-              type: object
-              properties:
-                role:
-                  type: string
-                  enum:
-                  - reviewer
-                  - editor
-                  - owner
-                  - readonly
-                  - developer
-                  description: The role a collaborator can have
     FolderCollaboratorResponse:
       type: object
       description: The data associated with the resource.
@@ -380,9 +291,96 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    UpdateFolderCollaboratorRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          properties:
+            attributes:
+              type: object
+              properties:
+                role:
+                  type: string
+                  enum:
+                  - reviewer
+                  - editor
+                  - owner
+                  - readonly
+                  - developer
+                  description: The role a collaborator can have
+    CreateFolderCollaboratorRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          properties:
+            attributes:
+              type: object
+              properties:
+                user_id:
+                  type: number
+                  description: The user ID.
+                  example: 1
+                role:
+                  type: string
+                  enum:
+                  - reviewer
+                  - editor
+                  - owner
+                  - readonly
+                  - developer
+                  description: The role a collaborator can have
+  parameters:
+    folderIdParam:
+      in: path
+      name: folder_id
+      description: The ID of the folder.
+      required: true
+      schema:
+        type: number
+        example: 2
+    robotQueryUsersPerPageParam:
+      name: usersPerPage
+      in: query
+      required: false
+      description: Required number of records to read, start from 1
+      schema:
+        type: integer
+        minimum: 1
+        example: 2
+    folderCollaboratorUserIdParam:
+      in: path
+      name: user_id
+      description: The ID of the user.
+      required: true
+      schema:
+        type: number
+        example: 2
+    robotQueryOffsetParam:
+      name: offset
+      in: query
+      required: false
+      description: Required data records start position, start from 0
+      schema:
+        type: integer
+        minimum: 0
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   responses:
-    BadCredentials:
-      description: Bad credentials.
     SchemaValidationFailed:
       description: Bad Request
       content:
@@ -397,6 +395,8 @@ components:
               detail: params.org_id should NOT be shorter than 1 characters
     Forbidden:
       description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

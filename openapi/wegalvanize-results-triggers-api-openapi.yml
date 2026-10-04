@@ -126,6 +126,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
+    ResultsTriggerConditionConfiguration:
+      type: object
+      description: Configuration for condition type with operator and value
+      properties:
+        operator:
+          type: string
+          example: is_x_days_before_today
+        value:
+          type: string
+          example: '1'
     GetResultsTriggerResponse:
       type: object
       description: Configuration of a single Results trigger.
@@ -346,65 +356,36 @@ components:
               data:
                 id: '208546'
                 type: tables
-    ResultsTriggerConditionConfiguration:
+    Error:
       type: object
-      description: Configuration for condition type with operator and value
-      properties:
-        operator:
-          type: string
-          example: is_x_days_before_today
-        value:
-          type: string
-          example: '1'
-    ResultsFrequency:
-      type: object
-      description: Frequency configuration (realtime or scheduled)
       required:
-      - type
+      - status
       properties:
-        type:
+        status:
           type: string
-          enum:
-          - realtime
-          - schedule
-          example: realtime
-        only_for_new_records:
-          type: boolean
-          description: Whether the trigger runs only for new records (realtime only).
-          example: false
-        frequency_type:
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
           type: string
-          description: Schedule frequency type (scheduled only).
-          example: daily
-        start_date:
+          description: Application-specific error code, expressed as a string value.
+        title:
           type: string
-          format: date
-          description: Schedule start date (scheduled only).
-          example: '2026-03-04'
-        run_hour:
-          type: integer
-          minimum: 0
-          maximum: 23
-          description: Hour of day to run (scheduled only).
-          example: 9
-        time_zone:
+          description: A short, human-readable summary of the problem.
+        detail:
           type: string
-          description: Time zone for the schedule (scheduled only).
-          example: UTC
-        day_of_week:
-          type:
-          - string
-          - 'null'
-          description: Day of week for weekly schedules (scheduled only).
-          example: null
-        day_of_month:
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-          maximum: 31
-          description: Day of month for monthly schedules (scheduled only).
-          example: null
+          description: A human-readable explanation specific to this occurrence of the problem.
     MultiResultsTriggersResponse:
       type: object
       description: The data associated with the resource.
@@ -501,39 +482,81 @@ components:
               data:
                 id: '1'
                 type: tables
-    Error:
+    ResultsFrequency:
       type: object
+      description: Frequency configuration (realtime or scheduled)
       required:
-      - status
+      - type
       properties:
-        status:
+        type:
           type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
+          enum:
+          - realtime
+          - schedule
+          example: realtime
+        only_for_new_records:
+          type: boolean
+          description: Whether the trigger runs only for new records (realtime only).
+          example: false
+        frequency_type:
           type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
+          description: Schedule frequency type (scheduled only).
+          example: daily
+        start_date:
           type: string
-          description: A short, human-readable summary of the problem.
-        detail:
+          format: date
+          description: Schedule start date (scheduled only).
+          example: '2026-03-04'
+        run_hour:
+          type: integer
+          minimum: 0
+          maximum: 23
+          description: Hour of day to run (scheduled only).
+          example: 9
+        time_zone:
           type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+          description: Time zone for the schedule (scheduled only).
+          example: UTC
+        day_of_week:
+          type:
+          - string
+          - 'null'
+          description: Day of week for weekly schedules (scheduled only).
+          example: null
+        day_of_month:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+          maximum: 31
+          description: Day of month for monthly schedules (scheduled only).
+          example: null
+  parameters:
+    triggerIdParam:
+      name: trigger_id
+      in: path
+      required: true
+      description: The ID of the Results trigger.
+      schema:
+        type: integer
+      example: 4
+    tableIdParam:
+      in: path
+      name: table_id
+      description: The ID of the table.
+      required: true
+      schema:
+        type: integer
+        example: 300
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   responses:
-    BadCredentials:
-      description: Bad credentials.
     MissingTableId:
       description: Bad request.
       content:
@@ -546,17 +569,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, table_id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
     InternalServerError:
       description: Internal Server Error.
       content:
@@ -571,31 +583,19 @@ components:
               detail: A program error occurred. If the problem persists, contact Galvanize Support.
     Forbidden:
       description: Forbidden.
-  parameters:
-    triggerIdParam:
-      name: trigger_id
-      in: path
-      required: true
-      description: The ID of the Results trigger.
-      schema:
-        type: integer
-      example: 4
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    tableIdParam:
-      in: path
-      name: table_id
-      description: The ID of the table.
-      required: true
-      schema:
-        type: integer
-        example: 300
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

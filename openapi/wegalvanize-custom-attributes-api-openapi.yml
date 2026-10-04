@@ -221,201 +221,7 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
-  responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
-    NoContent:
-      description: No content.
-    Forbidden:
-      description: Forbidden.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
-  parameters:
-    projectTypeIdParam:
-      in: path
-      name: project_type_id
-      description: The ID of the project type.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    customAttributeSparseFieldsetParams:
-      in: query
-      name: fields[custom_attributes]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: term,options,customizable_type,field_type,weight,required,default_values
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
   schemas:
-    UpdateCustomAttributeRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The type of the custom attribute (`"custom_attributes"`).
-              example: custom_attributes
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - term
-              properties:
-                term:
-                  type: string
-                  description: The displayed name of the custom attribute.
-                  example: Custom Risk Factor Attribute
-                options:
-                  type:
-                  - array
-                  - 'null'
-                  description: 'The value or values (for multiselect) for this custom attribute.
-
-
-                    >**Note**: This is a required field if the custom attribute is of field_type select or multiselect.
-
-                    '
-                  example:
-                  - Option1
-                  - Option2
-                  - Option3
-                  items:
-                    type: string
-                weight:
-                  type: integer
-                  description: 'The weight value, only for custom attributes of type CustomRiskFactor. The weight value must be an integer between 1 and 1000.
-
-
-                    >**Note**: This is a required field if the custom attribute is of type CustomRiskFactor.
-
-                    '
-                  format: int64
-                  example: 100
-                required:
-                  type: boolean
-                  description: A boolean value indicating whether the custom attribute is required.
-                  example: true
-                default_values:
-                  type:
-                  - array
-                  - 'null'
-                  description: 'The default value or values for this custom attribute.
-
-                    '
-                  example:
-                  - Option1
-                  - Option2
-                  - Option3
-                  items:
-                    type: string
     Errors:
       type: object
       properties:
@@ -614,6 +420,160 @@ components:
               - 'null'
               description: Previous page url
               example: null
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    CreateCustomAttributeRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The type of the custom attribute (`"custom_attributes"`).
+              example: custom_attributes
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - customizable_type
+              - term
+              - field_type
+              properties:
+                customizable_type:
+                  type: string
+                  description: 'The type of the custom attribute. Valid types are:
+
+                    - CustomControlAttribute
+
+                    - CustomControlTestAttribute
+
+                    - CustomControlTestPlanAttribute
+
+                    - CustomFindingActionAttribute
+
+                    - CustomFindingAttribute
+
+                    - CustomObjectiveAttribute
+
+                    - CustomPlanningAttribute
+
+                    - CustomProjectPlanningAttribute
+
+                    - CustomResultsAttribute
+
+                    - CustomRiskAttribute
+
+                    - CustomRiskFactor
+
+                    - CustomWalkthroughAttribute
+
+
+                    >**Note**: There can be up to 5 of each custom attribute per project type, except for CustomRiskFactor, which can have up to 8 per project type. If the customizable_type is CustomRiskFactor, the weight field becomes a required field, and the field type can only be `select`.
+
+                    '
+                  example: CustomRiskFactor
+                term:
+                  type: string
+                  description: The displayed name of the custom attribute.
+                  example: Custom Risk Factor Attribute
+                field_type:
+                  type: string
+                  description: 'The field type of the custom attribute. Valid field types are:
+
+                    - select
+
+                    - multiselect
+
+                    - date
+
+                    - text
+
+                    - paragraph
+
+
+                    >**Note**: If field_type is select or multiselect, the options field becomes a required field.
+
+                    '
+                  example: select
+                options:
+                  type:
+                  - array
+                  - 'null'
+                  description: 'The value or values (for multiselect) for this custom attribute.
+
+
+                    >**Note**: This is a required field if the custom attribute is of field_type select or multiselect.
+
+                    '
+                  example:
+                  - Option1
+                  - Option2
+                  - Option3
+                  items:
+                    type: string
+                weight:
+                  type: integer
+                  description: 'The weight value, only for custom attributes of type CustomRiskFactor. The weight value must be an integer between 1 and 1000.
+
+
+                    >**Note**: This is a required field if the custom attribute is of type CustomRiskFactor.
+
+                    '
+                  format: int64
+                  example: 100
+                required:
+                  type: boolean
+                  description: A boolean value indicating whether the custom attribute is required.
+                  example: true
+                default_values:
+                  type:
+                  - array
+                  - 'null'
+                  description: 'The default value or values for this custom attribute.
+
+                    '
+                  example:
+                  - Option1
+                  - Option2
+                  - Option3
+                  items:
+                    type: string
     GetCustomAttributeResponse:
       type: object
       required:
@@ -784,7 +744,7 @@ components:
                           type: string
                           description: The classification of the object (`"project_types"`).
                           example: project_types
-    CreateCustomAttributeRequest:
+    UpdateCustomAttributeRequest:
       type: object
       description: The data associated with the resource.
       required:
@@ -794,9 +754,14 @@ components:
           type: object
           description: The data associated with the resource.
           required:
+          - id
           - type
           - attributes
           properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
             type:
               type: string
               description: The type of the custom attribute (`"custom_attributes"`).
@@ -805,66 +770,12 @@ components:
               type: object
               description: The attributes associated with the resource.
               required:
-              - customizable_type
               - term
-              - field_type
               properties:
-                customizable_type:
-                  type: string
-                  description: 'The type of the custom attribute. Valid types are:
-
-                    - CustomControlAttribute
-
-                    - CustomControlTestAttribute
-
-                    - CustomControlTestPlanAttribute
-
-                    - CustomFindingActionAttribute
-
-                    - CustomFindingAttribute
-
-                    - CustomObjectiveAttribute
-
-                    - CustomPlanningAttribute
-
-                    - CustomProjectPlanningAttribute
-
-                    - CustomResultsAttribute
-
-                    - CustomRiskAttribute
-
-                    - CustomRiskFactor
-
-                    - CustomWalkthroughAttribute
-
-
-                    >**Note**: There can be up to 5 of each custom attribute per project type, except for CustomRiskFactor, which can have up to 8 per project type. If the customizable_type is CustomRiskFactor, the weight field becomes a required field, and the field type can only be `select`.
-
-                    '
-                  example: CustomRiskFactor
                 term:
                   type: string
                   description: The displayed name of the custom attribute.
                   example: Custom Risk Factor Attribute
-                field_type:
-                  type: string
-                  description: 'The field type of the custom attribute. Valid field types are:
-
-                    - select
-
-                    - multiselect
-
-                    - date
-
-                    - text
-
-                    - paragraph
-
-
-                    >**Note**: If field_type is select or multiselect, the options field becomes a required field.
-
-                    '
-                  example: select
                 options:
                   type:
                   - array
@@ -908,36 +819,125 @@ components:
                   - Option3
                   items:
                     type: string
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+    NoContent:
+      description: No content.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
+  parameters:
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    customAttributeSparseFieldsetParams:
+      in: query
+      name: fields[custom_attributes]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: term,options,customizable_type,field_type,weight,required,default_values
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    projectTypeIdParam:
+      in: path
+      name: project_type_id
+      description: The ID of the project type.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

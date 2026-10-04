@@ -1044,46 +1044,34 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CreatePageBreakPayload:
+    Errors:
       type: object
-      description: The data associated with the resource.
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    RelationshipObject:
+      type: object
+      description: The object related to the resource.
       required:
       - data
       properties:
         data:
           type: object
-          description: The data associated with the resource.
+          description: The data associated with the related object.
           required:
+          - id
           - type
-          - attributes
           properties:
+            id:
+              type: string
+              description: The ID of the related object.
+              example: 1
             type:
               type: string
-              description: The classification of the object (`"page_breaks"`).
-              example: questionnaire_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - position
-              properties:
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the page break as the second item in the questionnaire.
-
-
-                    If the value is not provided, the page break will be appended to the end of the questionnaire.
-
-                    '
-                  example: 2
-                reference_id:
-                  type: string
-                  description: Unique identifier for the Page Break within the questionnaire.
-                  example: Important-Page-Break
+              description: The classification of the related object.
+              example: collection
     SingleSimpleQuestionResponse:
       type: object
       description: The data associated with the resource.
@@ -1191,7 +1179,7 @@ components:
                   data:
                     id: '1'
                     type: questionnaires
-    SinglePageBreakResponse:
+    UpdatePageBreakPayload:
       type: object
       description: The data associated with the resource.
       required:
@@ -1204,7 +1192,6 @@ components:
           - id
           - type
           - attributes
-          - relationships
           properties:
             id:
               type: string
@@ -1212,11 +1199,13 @@ components:
               example: '20'
             type:
               type: string
-              description: The classification of the object (`"page_breaks"`).
+              description: The classification of the object (`"questions"`).
               example: questionnaire_items
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - position
               properties:
                 position:
                   type: integer
@@ -1235,34 +1224,241 @@ components:
                   type: string
                   description: Unique identifier for the Page Break within the questionnaire.
                   example: Important-Page-Break
-                item_type:
+    CreateNumericScaleQuestionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"questions"`).
+              example: questionnaire_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - text
+              - scale_start
+              - scale_end
+              properties:
+                text:
+                  type: string
+                  description: The main text of the question.
+                  example: On a scale of 1 to 10, how much do you love cats?
+                instructions:
+                  type: string
+                  description: The instructions for answering the question.
+                  example: 10 is the only right choice.
+                column_text:
                   type: string
                   maxLength: 255
-                  description: The type of the questionnaire item.
-                  example: PageBreak
-                created_at:
+                  description: The display name of the question when it appears in a table.
+                  example: Cat love number
+                optional:
+                  type: boolean
+                  description: Specifies whether the question is optional.
+                  default: false
+                  example: false
+                scale_start:
+                  type: integer
+                  format: int64
+                  description: The start of the numeric scale.
+                  maximum: 1
+                  minimum: 0
+                  example: 1
+                scale_end:
+                  type: integer
+                  format: int64
+                  description: The end of the numeric scale.
+                  maximum: 10
+                  minimum: 2
+                  example: 10
+                label_left:
                   type: string
-                  description: The date the page break was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
+                  description: The label for the low end of the numeric scale.
+                  example: This is the beginning of the scale.
+                label_center:
                   type: string
-                  description: The date the page break was updated.
-                  example: '2019-03-18T22:02:05Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - questionnaire
-              properties:
-                questionnaire:
-                  $ref: '#/components/schemas/RelationshipObject'
-              example:
-                questionnaire:
-                  data:
-                    id: '1'
-                    type: questionnaires
+                  description: The label for the center of the numeric scale.
+                  example: This is the center of the scale.
+                label_right:
+                  type: string
+                  description: The label for the high end of the numeric scale.
+                  example: This is the end of the scale.
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The position value determines the order of items within the questionnaire.
+
+
+                    e.g. position value of 2 will place the numeric scale question as the second item in the questionnaire.
+
+
+                    If the value is not provided, the numeric scale question will be appended to the end of the questionnaire.
+
+                    '
+                  example: 5
+                question_id:
+                  type: integer
+                  description: Id of the question.
+                  example: 47
+                reference_id:
+                  type: string
+                  description: Unique identifier for the Numeric Scale question within the questionnaire.
+                  example: Important-Questions
+                weight:
+                  type: number
+                  format: double
+                  description: Adds importance weight to numeric scale question.
+                  example: 4.13
+    MultiQuestionnairesResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            - relationships
+            properties:
+              id:
+                type: string
+                description: The ID of the requested resource.
+                example: '20'
+              type:
+                type: string
+                description: The classification of the object (`"questionnaires"`).
+                example: questionnaires
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the questionnaire.
+                    maxLength: 255
+                    example: My first Questionnaire
+                  instruction:
+                    type: string
+                    description: Specifies the instructions for those individuals receiving your questionnaire.
+                    example: Please complete the training before filling out this questionnaire.
+                  position:
+                    type: integer
+                    format: int64
+                    minimum: 0
+                    description: The position of the questionnaire in a collection.
+                    example: 55
+                  resubmittable:
+                    type: boolean
+                    description: To allow users to submit updated responses to previously assigned questionnaires without supplying an explanatory comment.
+                    default: false
+                    example: false
+                  respondent_view:
+                    type: string
+                    description: Specifies whether recipients should see information about specific records.
+                    enum:
+                    - all_records
+                    - select_records
+                    - no_records
+                    default: all_records
+                  email_subject:
+                    type:
+                    - string
+                    - 'null'
+                    maxLength: 255
+                    description: 'The subject of the email notification to respondents when a questionnaire is sent.
+
+                      If an email_subject value is not specified, there will be a default email subject.
+
+                      '
+                    example: Respond to My first Questionnaire
+                  email_message:
+                    type:
+                    - string
+                    - 'null'
+                    description: 'The content of the email notification to respondents when a questionnaire is sent.
+
+                      If an email_message value is not specified, there will be a default email message body.
+
+                      '
+                    example: Test Collection has requested that you complete a questionnaire.
+                  linked_tables_ids:
+                    type: array
+                    items:
+                      type: integer
+                      format: int64
+                    description: The IDs of the linked tables.
+                    example:
+                    - 1
+                    - 3
+                    - 5
+                  linked_tables_only:
+                    type: boolean
+                    description: Specifies whether only allow this questionnaire to be sent from linked tables for all roles.
+                    default: false
+                    example: false
+                  weighting:
+                    type: boolean
+                    description: Specifies whether the questionnaire supports weighted questions and responses.
+                    example: false
+                  reference_id:
+                    type: string
+                    description: Unique identifier for the questionnaire within the collection, for the question within the questionnaire, and for the response option within the choice question.
+                    example: important-questionnaire
+                  locale:
+                    type: string
+                    description: 'A locale for questionnaire system labels. The available locales are `"en"`, `"de"`, `"es"`, `"fr"`, `"pt"`, `"ja"`, `"zh"`, `"el"`, `"it"`, `"pl"`, `"ro"`, `"ru"`, `"uk"`
+
+                      '
+                    example: pl
+                  surveys_ids:
+                    type: array
+                    items:
+                      type: integer
+                      format: int64
+                    description: The IDs of the surveys that use this questionnaire as the primary questionnaire.
+                    example:
+                    - 1
+                    - 3
+                  created_at:
+                    type: string
+                    description: The date the questionnaire was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The date the questionnaire was updated.
+                    example: '2019-03-18T22:02:05Z'
+                    format: date-time
+              relationships:
+                type: object
+                description: The relationships associated with the resource.
+                required:
+                - collection
+                properties:
+                  collection:
+                    $ref: '#/components/schemas/RelationshipObject'
+                example:
+                  collection:
+                    data:
+                      id: '1'
+                      type: collections
     SingleQuestionnaireResponse:
       type: object
       description: The data associated with the resource.
@@ -1400,6 +1596,358 @@ components:
                   data:
                     id: '1'
                     type: collections
+    CreateSectionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"sections"`).
+              example: questionnaire_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the section.
+                  example: Section One
+                description:
+                  type: string
+                  description: The description of the section.
+                  example: This section is related to health care.
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The position value determines the order of items within the questionnaire.
+
+
+                    e.g. position value of 2 will place the section as the second item in the questionnaire.
+
+
+                    If the value is not provided, the section will be appended to the end of the questionnaire.
+
+                    '
+                  example: 8
+                reference_id:
+                  type: string
+                  description: Unique identifier for the Section within the questionnaire.
+                  example: Important-Section-Headers
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    UpdateQuestionnairePayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"questionnaires"`).
+              example: questionnaires
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the questionnaire.
+                  maxLength: 255
+                  example: My first Questionnaire
+                instruction:
+                  type: string
+                  description: Specifies the instructions for those individuals receiving your questionnaire.
+                  example: Please complete the training before filling out this questionnaire.
+                position:
+                  type: integer
+                  format: int64
+                  minimum: 0
+                  description: The position of the questionnaire in a collection.
+                  example: 55
+                resubmittable:
+                  type: boolean
+                  description: To allow users to submit updated responses to previously assigned questionnaires without supplying an explanatory comment.
+                  default: false
+                  example: false
+                respondent_view:
+                  type: string
+                  description: Specifies whether recipients should see information about specific records.
+                  enum:
+                  - all_records
+                  - select_records
+                  - no_records
+                  default: all_records
+                email_subject:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 255
+                  description: 'The subject of the email notification to respondents when a questionnaire is sent.
+
+                    If an email_subject value is not specified, there will be a default email subject.
+
+                    '
+                  example: Respond to My first Questionnaire
+                email_message:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'The content of the email notification to respondents when a questionnaire is sent.
+
+                    If an email_message value is not specified, there will be a default email message body.
+
+                    '
+                  example: Test Collection has requested that you complete a questionnaire.
+                linked_tables_ids:
+                  type: array
+                  items:
+                    type: integer
+                    format: int64
+                  description: The IDs of the linked tables.
+                  example:
+                  - 1
+                  - 3
+                  - 5
+                linked_tables_only:
+                  type: boolean
+                  description: Specifies whether only allow this questionnaire to be sent from linked tables for all roles.
+                  default: false
+                  example: false
+                weighting:
+                  type: boolean
+                  description: Specifies whether the questionnaire supports weighted questions and responses.
+                  example: false
+                reference_id:
+                  type: string
+                  description: Unique identifier for the questionnaire within the collection, for the question within the questionnaire, and for the response option within the choice question.
+                  example: important-questionnaire
+                locale:
+                  type: string
+                  description: 'A locale for questionnaire system labels. The available locales are `"en"`, `"de"`, `"es"`, `"fr"`, `"pt"`, `"ja"`, `"zh"`, `"el"`, `"it"`, `"pl"`, `"ro"`, `"ru"`, `"uk"`
+
+                    '
+                  example: pl
+    UpdateSimpleQuestionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"questions"`).
+              example: questionnaire_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                text:
+                  type: string
+                  description: The simple question text.
+                  example: What is your email?
+                instructions:
+                  type: string
+                  description: The instructions for answering the question.
+                  example: Please provide your work email.
+                column_text:
+                  type: string
+                  description: The column display name in linked tables.
+                  maxLength: 255
+                  example: email
+                optional:
+                  type: boolean
+                  description: Specifies whether the question is optional.
+                  default: false
+                  example: false
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The position value determines the order of items within the questionnaire.
+
+
+                    e.g. position value of 2 will place the simple question as the second item in the questionnaire.
+
+
+                    If the value is not provided, the simple question will be appended to the end of the questionnaire.
+
+                    '
+                  example: 8
+                question_id:
+                  type: integer
+                  description: Id of the question.
+                  example: 42
+                reference_id:
+                  type: string
+                  description: Unique identifier for the Simple question within the questionnaire.
+                  example: Important-Questions
+                weight:
+                  type: number
+                  format: double
+                  description: Adds importance weight to simple question.
+                  example: 4.13
+    UpdateNumericScaleQuestionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"questions"`).
+              example: questionnaire_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - text
+              - scale_start
+              - scale_end
+              properties:
+                text:
+                  type: string
+                  description: The main text of the question.
+                  example: On a scale of 1 to 10, how much do you love cats?
+                instructions:
+                  type: string
+                  description: The instructions for answering the question.
+                  example: 10 is the only right choice.
+                column_text:
+                  type: string
+                  maxLength: 255
+                  description: The display name of the question when it appears in a table.
+                  example: Cat love number
+                optional:
+                  type: boolean
+                  description: Specifies whether the question is optional.
+                  default: false
+                  example: false
+                scale_start:
+                  type: integer
+                  format: int64
+                  description: The start of the numeric scale.
+                  maximum: 1
+                  minimum: 0
+                  example: 1
+                scale_end:
+                  type: integer
+                  format: int64
+                  description: The end of the numeric scale.
+                  maximum: 10
+                  minimum: 2
+                  example: 10
+                label_left:
+                  type: string
+                  description: The label for the low end of the numeric scale.
+                  example: This is the beginning of the scale.
+                label_center:
+                  type: string
+                  description: The label for the center of the numeric scale.
+                  example: This is the center of the scale.
+                label_right:
+                  type: string
+                  description: The label for the high end of the numeric scale.
+                  example: This is the end of the scale.
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The position value determines the order of items within the questionnaire.
+
+
+                    e.g. position value of 2 will place the numeric scale question as the second item in the questionnaire.
+
+
+                    If the value is not provided, the numeric scale question will be appended to the end of the questionnaire.
+
+                    '
+                  example: 5
+                question_id:
+                  type: integer
+                  description: Id of the question.
+                  example: 47
+                reference_id:
+                  type: string
+                  description: Unique identifier for the Numeric Scale question within the questionnaire.
+                  example: Important-Questions
+                weight:
+                  type: number
+                  format: double
+                  description: Adds importance weight to numeric scale question.
+                  example: 4.13
     UpdateChoiceQuestionPayload:
       type: object
       description: The data associated with the resource.
@@ -1546,109 +2094,7 @@ components:
                   type: integer
                   description: Id of the question.
                   example: 77
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    CreateNumericScaleQuestionPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"questions"`).
-              example: questionnaire_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - text
-              - scale_start
-              - scale_end
-              properties:
-                text:
-                  type: string
-                  description: The main text of the question.
-                  example: On a scale of 1 to 10, how much do you love cats?
-                instructions:
-                  type: string
-                  description: The instructions for answering the question.
-                  example: 10 is the only right choice.
-                column_text:
-                  type: string
-                  maxLength: 255
-                  description: The display name of the question when it appears in a table.
-                  example: Cat love number
-                optional:
-                  type: boolean
-                  description: Specifies whether the question is optional.
-                  default: false
-                  example: false
-                scale_start:
-                  type: integer
-                  format: int64
-                  description: The start of the numeric scale.
-                  maximum: 1
-                  minimum: 0
-                  example: 1
-                scale_end:
-                  type: integer
-                  format: int64
-                  description: The end of the numeric scale.
-                  maximum: 10
-                  minimum: 2
-                  example: 10
-                label_left:
-                  type: string
-                  description: The label for the low end of the numeric scale.
-                  example: This is the beginning of the scale.
-                label_center:
-                  type: string
-                  description: The label for the center of the numeric scale.
-                  example: This is the center of the scale.
-                label_right:
-                  type: string
-                  description: The label for the high end of the numeric scale.
-                  example: This is the end of the scale.
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the numeric scale question as the second item in the questionnaire.
-
-
-                    If the value is not provided, the numeric scale question will be appended to the end of the questionnaire.
-
-                    '
-                  example: 5
-                question_id:
-                  type: integer
-                  description: Id of the question.
-                  example: 47
-                reference_id:
-                  type: string
-                  description: Unique identifier for the Numeric Scale question within the questionnaire.
-                  example: Important-Questions
-                weight:
-                  type: number
-                  format: double
-                  description: Adds importance weight to numeric scale question.
-                  example: 4.13
-    UpdateNumericScaleQuestionPayload:
+    SinglePageBreakResponse:
       type: object
       description: The data associated with the resource.
       required:
@@ -1659,365 +2105,68 @@ components:
           description: The data associated with the resource.
           required:
           - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
-            type:
-              type: string
-              description: The classification of the object (`"questions"`).
-              example: questionnaire_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - text
-              - scale_start
-              - scale_end
-              properties:
-                text:
-                  type: string
-                  description: The main text of the question.
-                  example: On a scale of 1 to 10, how much do you love cats?
-                instructions:
-                  type: string
-                  description: The instructions for answering the question.
-                  example: 10 is the only right choice.
-                column_text:
-                  type: string
-                  maxLength: 255
-                  description: The display name of the question when it appears in a table.
-                  example: Cat love number
-                optional:
-                  type: boolean
-                  description: Specifies whether the question is optional.
-                  default: false
-                  example: false
-                scale_start:
-                  type: integer
-                  format: int64
-                  description: The start of the numeric scale.
-                  maximum: 1
-                  minimum: 0
-                  example: 1
-                scale_end:
-                  type: integer
-                  format: int64
-                  description: The end of the numeric scale.
-                  maximum: 10
-                  minimum: 2
-                  example: 10
-                label_left:
-                  type: string
-                  description: The label for the low end of the numeric scale.
-                  example: This is the beginning of the scale.
-                label_center:
-                  type: string
-                  description: The label for the center of the numeric scale.
-                  example: This is the center of the scale.
-                label_right:
-                  type: string
-                  description: The label for the high end of the numeric scale.
-                  example: This is the end of the scale.
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the numeric scale question as the second item in the questionnaire.
-
-
-                    If the value is not provided, the numeric scale question will be appended to the end of the questionnaire.
-
-                    '
-                  example: 5
-                question_id:
-                  type: integer
-                  description: Id of the question.
-                  example: 47
-                reference_id:
-                  type: string
-                  description: Unique identifier for the Numeric Scale question within the questionnaire.
-                  example: Important-Questions
-                weight:
-                  type: number
-                  format: double
-                  description: Adds importance weight to numeric scale question.
-                  example: 4.13
-    CreateChoiceQuestionPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"questions"`).
-              example: questionnaire_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - text
-              - item_type
-              - options
-              properties:
-                text:
-                  type: string
-                  description: The main text of the question.
-                  example: What's the best pet in the world?
-                instructions:
-                  type: string
-                  description: The instructions for answering the question.
-                  example: Cat is the only right choice.
-                column_text:
-                  type: string
-                  maxLength: 255
-                  description: The display name of the question when it appears in a table.
-                  example: Best pet
-                optional:
-                  type: boolean
-                  description: Specifies whether the question is optional.
-                  default: false
-                  example: false
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the choice question as the second item in the questionnaire.
-
-
-                    If the value is not provided, the choice question will be appended to the end of the questionnaire.
-
-                    '
-                  example: 4
-                weight:
-                  type: number
-                  format: double
-                  description: Adds importance weight to choice question.
-                  example: 4.21
-                reference_id:
-                  type: string
-                  description: Unique identifier for the question within the questionnaire, and for the response option within the choice question.
-                  example: Important-Questions
-                other_value:
-                  type: string
-                  description: 'When spcified, respondents can provide an alternative answer if the available options do not apply to them.
-
-                    The text will be used as the label to this option.
-
-                    '
-                  example: None of the above
-                options:
-                  type: array
-                  description: 'The options available to choose.
-
-
-                    Note:
-
-
-                    1. When updating the options of a choice question, HighBond will replace all existing options
-
-                    and their follow up questions with the new options provided in the upload payload.
-
-
-                    2. Follow-up questions must be existing (already created) questions.
-
-
-                    3. Follow-up questions cannot be another choice question which has its own follow-up questions.
-
-
-                    4. Follow-up questions cannot have more than one parent question.
-
-
-                    5.The reference_id must be unique for each option, if the reference_id value is not null.
-
-                    '
-                  items:
-                    type: object
-                    required:
-                    - text
-                    properties:
-                      text:
-                        type: string
-                        description: The text of an option.
-                        example: cat
-                      follow_up_questions:
-                        type: array
-                        items:
-                          type: integer
-                          format: int64
-                        description: The IDs of the follow-up questions to an option
-                        example:
-                        - 1
-                        - 2
-                      weight:
-                        type: number
-                        format: double
-                        description: Adds importance weight to an option.
-                        example: 4.12
-                      reference_id:
-                        type: string
-                        description: Unique identifier for the response option within the choice question.
-                        example: Important-Options
-                  minItems: 1
-                  uniqueItems: true
-                  example:
-                  - reference_id: cat-option
-                    text: cat
-                    weight: 2
-                  - reference_id: dog-option
-                    text: dog
-                    weight: 1
-                    follow_up_questions:
-                    - 1
-                    - 2
-                  - reference_id: dragon-option
-                    text: dragon
-                    follow_up_questions:
-                    - 3
-                question_id:
-                  type: integer
-                  description: Id of the question.
-                  example: 77
-                item_type:
-                  type: string
-                  maxLength: 255
-                  description: Specifies the type of the questionnaire item.
-                  enum:
-                  - SingleChoiceQuestion
-                  - MultipleChoiceQuestion
-                  - DropdownQuestion
-                  example: SingleChoiceQuestion
-    CreateQuestionnairePayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
           - type
           - attributes
           - relationships
           properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
             type:
               type: string
-              description: The classification of the object (`"questionnaires"`).
-              example: questionnaires
+              description: The classification of the object (`"page_breaks"`).
+              example: questionnaire_items
             attributes:
               type: object
               description: The attributes associated with the resource.
-              required:
-              - name
               properties:
-                name:
-                  type: string
-                  description: The name of the questionnaire.
-                  maxLength: 255
-                  example: My first Questionnaire
-                instruction:
-                  type: string
-                  description: Specifies the instructions for those individuals receiving your questionnaire.
-                  example: Please complete the training before filling out this questionnaire.
                 position:
                   type: integer
                   format: int64
-                  minimum: 0
-                  description: The position of the questionnaire in a collection.
-                  example: 55
-                resubmittable:
-                  type: boolean
-                  description: To allow users to submit updated responses to previously assigned questionnaires without supplying an explanatory comment.
-                  default: false
-                  example: false
-                respondent_view:
-                  type: string
-                  description: Specifies whether recipients should see information about specific records.
-                  enum:
-                  - all_records
-                  - select_records
-                  - no_records
-                  default: all_records
-                email_subject:
-                  type:
-                  - string
-                  - 'null'
-                  maxLength: 255
-                  description: 'The subject of the email notification to respondents when a questionnaire is sent.
+                  description: 'The position value determines the order of items within the questionnaire.
 
-                    If an email_subject value is not specified, there will be a default email subject.
+
+                    e.g. position value of 2 will place the page break as the second item in the questionnaire.
+
+
+                    If the value is not provided, the page break will be appended to the end of the questionnaire.
 
                     '
-                  example: Respond to My first Questionnaire
-                email_message:
-                  type:
-                  - string
-                  - 'null'
-                  description: 'The content of the email notification to respondents when a questionnaire is sent.
-
-                    If an email_message value is not specified, there will be a default email message body.
-
-                    '
-                  example: Test Collection has requested that you complete a questionnaire.
-                linked_tables_ids:
-                  type: array
-                  items:
-                    type: integer
-                    format: int64
-                  description: The IDs of the linked tables.
-                  example:
-                  - 1
-                  - 3
-                  - 5
-                linked_tables_only:
-                  type: boolean
-                  description: Specifies whether only allow this questionnaire to be sent from linked tables for all roles.
-                  default: false
-                  example: false
-                weighting:
-                  type: boolean
-                  description: Specifies whether the questionnaire supports weighted questions and responses.
-                  example: false
+                  example: 2
                 reference_id:
                   type: string
-                  description: Unique identifier for the questionnaire within the collection, for the question within the questionnaire, and for the response option within the choice question.
-                  example: important-questionnaire
-                locale:
+                  description: Unique identifier for the Page Break within the questionnaire.
+                  example: Important-Page-Break
+                item_type:
                   type: string
-                  description: 'A locale for questionnaire system labels. The available locales are `"en"`, `"de"`, `"es"`, `"fr"`, `"pt"`, `"ja"`, `"zh"`, `"el"`, `"it"`, `"pl"`, `"ro"`, `"ru"`, `"uk"`
-
-                    '
-                  example: pl
+                  maxLength: 255
+                  description: The type of the questionnaire item.
+                  example: PageBreak
+                created_at:
+                  type: string
+                  description: The date the page break was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the page break was updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
             relationships:
               type: object
               description: The relationships associated with the resource.
               required:
-              - collection
+              - questionnaire
               properties:
-                collection:
+                questionnaire:
                   $ref: '#/components/schemas/RelationshipObject'
               example:
-                collection:
+                questionnaire:
                   data:
                     id: '1'
-                    type: collections
-    UpdateSimpleQuestionPayload:
+                    type: questionnaires
+    SingleSectionResponse:
       type: object
       description: The data associated with the resource.
       required:
@@ -2030,6 +2179,7 @@ components:
           - id
           - type
           - attributes
+          - relationships
           properties:
             id:
               type: string
@@ -2037,56 +2187,65 @@ components:
               example: '20'
             type:
               type: string
-              description: The classification of the object (`"questions"`).
+              description: The classification of the object (`"sections"`).
               example: questionnaire_items
             attributes:
               type: object
               description: The attributes associated with the resource.
               properties:
-                text:
+                name:
                   type: string
-                  description: The simple question text.
-                  example: What is your email?
-                instructions:
+                  description: The name of the section.
+                  example: Section One
+                description:
                   type: string
-                  description: The instructions for answering the question.
-                  example: Please provide your work email.
-                column_text:
-                  type: string
-                  description: The column display name in linked tables.
-                  maxLength: 255
-                  example: email
-                optional:
-                  type: boolean
-                  description: Specifies whether the question is optional.
-                  default: false
-                  example: false
+                  description: The description of the section.
+                  example: This section is related to health care.
                 position:
                   type: integer
                   format: int64
                   description: 'The position value determines the order of items within the questionnaire.
 
 
-                    e.g. position value of 2 will place the simple question as the second item in the questionnaire.
+                    e.g. position value of 2 will place the section as the second item in the questionnaire.
 
 
-                    If the value is not provided, the simple question will be appended to the end of the questionnaire.
+                    If the value is not provided, the section will be appended to the end of the questionnaire.
 
                     '
                   example: 8
-                question_id:
-                  type: integer
-                  description: Id of the question.
-                  example: 42
                 reference_id:
                   type: string
-                  description: Unique identifier for the Simple question within the questionnaire.
-                  example: Important-Questions
-                weight:
-                  type: number
-                  format: double
-                  description: Adds importance weight to simple question.
-                  example: 4.13
+                  description: Unique identifier for the Section within the questionnaire.
+                  example: Important-Section-Headers
+                item_type:
+                  type: string
+                  maxLength: 255
+                  description: The type of the questionnaire item.
+                  example: SectionHeader
+                created_at:
+                  type: string
+                  description: The date the section layout was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the section layout was updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - questionnaire
+              properties:
+                questionnaire:
+                  $ref: '#/components/schemas/RelationshipObject'
+              example:
+                questionnaire:
+                  data:
+                    id: '1'
+                    type: questionnaires
     SingleChoiceQuestionResponse:
       type: object
       description: The data associated with the resource.
@@ -2266,147 +2425,7 @@ components:
                   data:
                     id: '1'
                     type: questionnaires
-    MultiQuestionnairesResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            - relationships
-            properties:
-              id:
-                type: string
-                description: The ID of the requested resource.
-                example: '20'
-              type:
-                type: string
-                description: The classification of the object (`"questionnaires"`).
-                example: questionnaires
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the questionnaire.
-                    maxLength: 255
-                    example: My first Questionnaire
-                  instruction:
-                    type: string
-                    description: Specifies the instructions for those individuals receiving your questionnaire.
-                    example: Please complete the training before filling out this questionnaire.
-                  position:
-                    type: integer
-                    format: int64
-                    minimum: 0
-                    description: The position of the questionnaire in a collection.
-                    example: 55
-                  resubmittable:
-                    type: boolean
-                    description: To allow users to submit updated responses to previously assigned questionnaires without supplying an explanatory comment.
-                    default: false
-                    example: false
-                  respondent_view:
-                    type: string
-                    description: Specifies whether recipients should see information about specific records.
-                    enum:
-                    - all_records
-                    - select_records
-                    - no_records
-                    default: all_records
-                  email_subject:
-                    type:
-                    - string
-                    - 'null'
-                    maxLength: 255
-                    description: 'The subject of the email notification to respondents when a questionnaire is sent.
-
-                      If an email_subject value is not specified, there will be a default email subject.
-
-                      '
-                    example: Respond to My first Questionnaire
-                  email_message:
-                    type:
-                    - string
-                    - 'null'
-                    description: 'The content of the email notification to respondents when a questionnaire is sent.
-
-                      If an email_message value is not specified, there will be a default email message body.
-
-                      '
-                    example: Test Collection has requested that you complete a questionnaire.
-                  linked_tables_ids:
-                    type: array
-                    items:
-                      type: integer
-                      format: int64
-                    description: The IDs of the linked tables.
-                    example:
-                    - 1
-                    - 3
-                    - 5
-                  linked_tables_only:
-                    type: boolean
-                    description: Specifies whether only allow this questionnaire to be sent from linked tables for all roles.
-                    default: false
-                    example: false
-                  weighting:
-                    type: boolean
-                    description: Specifies whether the questionnaire supports weighted questions and responses.
-                    example: false
-                  reference_id:
-                    type: string
-                    description: Unique identifier for the questionnaire within the collection, for the question within the questionnaire, and for the response option within the choice question.
-                    example: important-questionnaire
-                  locale:
-                    type: string
-                    description: 'A locale for questionnaire system labels. The available locales are `"en"`, `"de"`, `"es"`, `"fr"`, `"pt"`, `"ja"`, `"zh"`, `"el"`, `"it"`, `"pl"`, `"ro"`, `"ru"`, `"uk"`
-
-                      '
-                    example: pl
-                  surveys_ids:
-                    type: array
-                    items:
-                      type: integer
-                      format: int64
-                    description: The IDs of the surveys that use this questionnaire as the primary questionnaire.
-                    example:
-                    - 1
-                    - 3
-                  created_at:
-                    type: string
-                    description: The date the questionnaire was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The date the questionnaire was updated.
-                    example: '2019-03-18T22:02:05Z'
-                    format: date-time
-              relationships:
-                type: object
-                description: The relationships associated with the resource.
-                required:
-                - collection
-                properties:
-                  collection:
-                    $ref: '#/components/schemas/RelationshipObject'
-                example:
-                  collection:
-                    data:
-                      id: '1'
-                      type: collections
-    UpdateSectionPayload:
+    CreateSimpleQuestionPayload:
       type: object
       description: The data associated with the resource.
       required:
@@ -2416,14 +2435,9 @@ components:
           type: object
           description: The data associated with the resource.
           required:
-          - id
           - type
           - attributes
           properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
             type:
               type: string
               description: The classification of the object (`"questions"`).
@@ -2431,134 +2445,68 @@ components:
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - text
+              - item_type
               properties:
-                name:
+                text:
                   type: string
-                  description: The name of the section.
-                  example: Section One
-                description:
+                  description: The simple question text.
+                  example: What is your email?
+                instructions:
                   type: string
-                  description: The description of the section.
-                  example: This section is related to health care.
+                  description: The instructions for answering the question.
+                  example: Please provide your work email.
+                column_text:
+                  type: string
+                  description: The column display name in linked tables.
+                  maxLength: 255
+                  example: email
+                optional:
+                  type: boolean
+                  description: Specifies whether the question is optional.
+                  default: false
+                  example: false
                 position:
                   type: integer
                   format: int64
                   description: 'The position value determines the order of items within the questionnaire.
 
 
-                    e.g. position value of 2 will place the section as the second item in the questionnaire.
+                    e.g. position value of 2 will place the simple question as the second item in the questionnaire.
 
 
-                    If the value is not provided, the section will be appended to the end of the questionnaire.
+                    If the value is not provided, the simple question will be appended to the end of the questionnaire.
 
                     '
                   example: 8
-                reference_id:
-                  type: string
-                  description: Unique identifier for the Section within the questionnaire.
-                  example: Important-Section-Headers
-    SingleSectionResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
-            type:
-              type: string
-              description: The classification of the object (`"sections"`).
-              example: questionnaire_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the section.
-                  example: Section One
-                description:
-                  type: string
-                  description: The description of the section.
-                  example: This section is related to health care.
-                position:
+                question_id:
                   type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the section as the second item in the questionnaire.
-
-
-                    If the value is not provided, the section will be appended to the end of the questionnaire.
-
-                    '
-                  example: 8
+                  description: Id of the question.
+                  example: 42
                 reference_id:
                   type: string
-                  description: Unique identifier for the Section within the questionnaire.
-                  example: Important-Section-Headers
+                  description: Unique identifier for the Simple question within the questionnaire.
+                  example: Important-Questions
+                weight:
+                  type: number
+                  format: double
+                  description: Adds importance weight to simple question.
+                  example: 4.13
                 item_type:
                   type: string
+                  description: Specifies the type of the questionnaire item.
                   maxLength: 255
-                  description: The type of the questionnaire item.
-                  example: SectionHeader
-                created_at:
-                  type: string
-                  description: The date the section layout was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The date the section layout was updated.
-                  example: '2019-03-18T22:02:05Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - questionnaire
-              properties:
-                questionnaire:
-                  $ref: '#/components/schemas/RelationshipObject'
-              example:
-                questionnaire:
-                  data:
-                    id: '1'
-                    type: questionnaires
-    RelationshipObject:
-      type: object
-      description: The object related to the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the related object.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
-    UpdatePageBreakPayload:
+                  enum:
+                  - ParagraphTextQuestion
+                  - AttachmentQuestion
+                  - TextQuestion
+                  - EmailQuestion
+                  - NumericQuestion
+                  - DateQuestion
+                  - DigitalSignatureQuestion
+                  example: EmailQuestion
+    CreatePageBreakPayload:
       type: object
       description: The data associated with the resource.
       required:
@@ -2568,17 +2516,12 @@ components:
           type: object
           description: The data associated with the resource.
           required:
-          - id
           - type
           - attributes
           properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
             type:
               type: string
-              description: The classification of the object (`"questions"`).
+              description: The classification of the object (`"page_breaks"`).
               example: questionnaire_items
             attributes:
               type: object
@@ -2603,6 +2546,160 @@ components:
                   type: string
                   description: Unique identifier for the Page Break within the questionnaire.
                   example: Important-Page-Break
+    CreateChoiceQuestionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"questions"`).
+              example: questionnaire_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - text
+              - item_type
+              - options
+              properties:
+                text:
+                  type: string
+                  description: The main text of the question.
+                  example: What's the best pet in the world?
+                instructions:
+                  type: string
+                  description: The instructions for answering the question.
+                  example: Cat is the only right choice.
+                column_text:
+                  type: string
+                  maxLength: 255
+                  description: The display name of the question when it appears in a table.
+                  example: Best pet
+                optional:
+                  type: boolean
+                  description: Specifies whether the question is optional.
+                  default: false
+                  example: false
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The position value determines the order of items within the questionnaire.
+
+
+                    e.g. position value of 2 will place the choice question as the second item in the questionnaire.
+
+
+                    If the value is not provided, the choice question will be appended to the end of the questionnaire.
+
+                    '
+                  example: 4
+                weight:
+                  type: number
+                  format: double
+                  description: Adds importance weight to choice question.
+                  example: 4.21
+                reference_id:
+                  type: string
+                  description: Unique identifier for the question within the questionnaire, and for the response option within the choice question.
+                  example: Important-Questions
+                other_value:
+                  type: string
+                  description: 'When spcified, respondents can provide an alternative answer if the available options do not apply to them.
+
+                    The text will be used as the label to this option.
+
+                    '
+                  example: None of the above
+                options:
+                  type: array
+                  description: 'The options available to choose.
+
+
+                    Note:
+
+
+                    1. When updating the options of a choice question, HighBond will replace all existing options
+
+                    and their follow up questions with the new options provided in the upload payload.
+
+
+                    2. Follow-up questions must be existing (already created) questions.
+
+
+                    3. Follow-up questions cannot be another choice question which has its own follow-up questions.
+
+
+                    4. Follow-up questions cannot have more than one parent question.
+
+
+                    5.The reference_id must be unique for each option, if the reference_id value is not null.
+
+                    '
+                  items:
+                    type: object
+                    required:
+                    - text
+                    properties:
+                      text:
+                        type: string
+                        description: The text of an option.
+                        example: cat
+                      follow_up_questions:
+                        type: array
+                        items:
+                          type: integer
+                          format: int64
+                        description: The IDs of the follow-up questions to an option
+                        example:
+                        - 1
+                        - 2
+                      weight:
+                        type: number
+                        format: double
+                        description: Adds importance weight to an option.
+                        example: 4.12
+                      reference_id:
+                        type: string
+                        description: Unique identifier for the response option within the choice question.
+                        example: Important-Options
+                  minItems: 1
+                  uniqueItems: true
+                  example:
+                  - reference_id: cat-option
+                    text: cat
+                    weight: 2
+                  - reference_id: dog-option
+                    text: dog
+                    weight: 1
+                    follow_up_questions:
+                    - 1
+                    - 2
+                  - reference_id: dragon-option
+                    text: dragon
+                    follow_up_questions:
+                    - 3
+                question_id:
+                  type: integer
+                  description: Id of the question.
+                  example: 77
+                item_type:
+                  type: string
+                  maxLength: 255
+                  description: Specifies the type of the questionnaire item.
+                  enum:
+                  - SingleChoiceQuestion
+                  - MultipleChoiceQuestion
+                  - DropdownQuestion
+                  example: SingleChoiceQuestion
     SingleNumericScaleQuestionResponse:
       type: object
       description: The data associated with the resource.
@@ -2728,7 +2825,7 @@ components:
                   data:
                     id: '1'
                     type: questionnaires
-    UpdateQuestionnairePayload:
+    UpdateSectionPayload:
       type: object
       description: The data associated with the resource.
       required:
@@ -2748,11 +2845,71 @@ components:
               example: '20'
             type:
               type: string
+              description: The classification of the object (`"questions"`).
+              example: questionnaire_items
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the section.
+                  example: Section One
+                description:
+                  type: string
+                  description: The description of the section.
+                  example: This section is related to health care.
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The position value determines the order of items within the questionnaire.
+
+
+                    e.g. position value of 2 will place the section as the second item in the questionnaire.
+
+
+                    If the value is not provided, the section will be appended to the end of the questionnaire.
+
+                    '
+                  example: 8
+                reference_id:
+                  type: string
+                  description: Unique identifier for the Section within the questionnaire.
+                  example: Important-Section-Headers
+    MultiQuestionnaireItemsResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: "A list of questionnaire items in the questionnaire. The list is ordered by the positions of the questionnaire items. The types of the questionnaire items in the list could be any of the followings:\t\n   * Numeric Scale Question\n   * Simple Question\t\n   * Choice Question\t\n   * Page Break\t\n   * Section\n\n   Questionnaire items that are not `Page Break` or `Section` will include a `question_id` field with an id of this questionnaire item\n"
+          items:
+            type: object
+    CreateQuestionnairePayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          - relationships
+          properties:
+            type:
+              type: string
               description: The classification of the object (`"questionnaires"`).
               example: questionnaires
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - name
               properties:
                 name:
                   type: string
@@ -2832,177 +2989,46 @@ components:
 
                     '
                   example: pl
-    MultiQuestionnaireItemsResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: "A list of questionnaire items in the questionnaire. The list is ordered by the positions of the questionnaire items. The types of the questionnaire items in the list could be any of the followings:\t\n   * Numeric Scale Question\n   * Simple Question\t\n   * Choice Question\t\n   * Page Break\t\n   * Section\n\n   Questionnaire items that are not `Page Break` or `Section` will include a `question_id` field with an id of this questionnaire item\n"
-          items:
-            type: object
-    CreateSectionPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"sections"`).
-              example: questionnaire_items
-            attributes:
+            relationships:
               type: object
-              description: The attributes associated with the resource.
+              description: The relationships associated with the resource.
               required:
-              - name
+              - collection
               properties:
-                name:
-                  type: string
-                  description: The name of the section.
-                  example: Section One
-                description:
-                  type: string
-                  description: The description of the section.
-                  example: This section is related to health care.
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the section as the second item in the questionnaire.
-
-
-                    If the value is not provided, the section will be appended to the end of the questionnaire.
-
-                    '
-                  example: 8
-                reference_id:
-                  type: string
-                  description: Unique identifier for the Section within the questionnaire.
-                  example: Important-Section-Headers
-    CreateSimpleQuestionPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"questions"`).
-              example: questionnaire_items
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - text
-              - item_type
-              properties:
-                text:
-                  type: string
-                  description: The simple question text.
-                  example: What is your email?
-                instructions:
-                  type: string
-                  description: The instructions for answering the question.
-                  example: Please provide your work email.
-                column_text:
-                  type: string
-                  description: The column display name in linked tables.
-                  maxLength: 255
-                  example: email
-                optional:
-                  type: boolean
-                  description: Specifies whether the question is optional.
-                  default: false
-                  example: false
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The position value determines the order of items within the questionnaire.
-
-
-                    e.g. position value of 2 will place the simple question as the second item in the questionnaire.
-
-
-                    If the value is not provided, the simple question will be appended to the end of the questionnaire.
-
-                    '
-                  example: 8
-                question_id:
-                  type: integer
-                  description: Id of the question.
-                  example: 42
-                reference_id:
-                  type: string
-                  description: Unique identifier for the Simple question within the questionnaire.
-                  example: Important-Questions
-                weight:
-                  type: number
-                  format: double
-                  description: Adds importance weight to simple question.
-                  example: 4.13
-                item_type:
-                  type: string
-                  description: Specifies the type of the questionnaire item.
-                  maxLength: 255
-                  enum:
-                  - ParagraphTextQuestion
-                  - AttachmentQuestion
-                  - TextQuestion
-                  - EmailQuestion
-                  - NumericQuestion
-                  - DateQuestion
-                  - DigitalSignatureQuestion
-                  example: EmailQuestion
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
+                collection:
+                  $ref: '#/components/schemas/RelationshipObject'
+              example:
+                collection:
+                  data:
+                    id: '1'
+                    type: collections
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-  responses:
     NotFound:
       description: Not found.
       content:
@@ -3014,24 +3040,6 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
-    NoContent:
-      description: No content.
     ResourceIdConflict:
       description: Bad request.
       content:
@@ -3048,6 +3056,22 @@ components:
                 the id specified in the path, 101.
 
                 '
+    NoContent:
+      description: No content.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
     Forbidden:
       description: Forbidden.
     MissingCollectionId:
@@ -3062,18 +3086,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, collection_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
     MissingOrgId:
       description: Bad request.
       content:
@@ -3086,29 +3098,9 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
+    BadCredentials:
+      description: Bad credentials.
   parameters:
-    collectionIdParam:
-      in: path
-      name: collection_id
-      description: The ID of the collection.
-      required: true
-      schema:
-        type: integer
-        example: 1
     questionnaireIdParam:
       in: path
       name: questionnaire_id
@@ -3117,13 +3109,13 @@ components:
       schema:
         type: string
         example: 10
-    orgIdParam:
+    collectionIdParam:
       in: path
-      name: org_id
-      description: The ID of the HighBond instance.
+      name: collection_id
+      description: The ID of the collection.
       required: true
       schema:
-        type: string
+        type: integer
         example: 1
     resourceIdParam:
       in: path
@@ -3133,6 +3125,14 @@ components:
       schema:
         type: string
         example: 9999
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

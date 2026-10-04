@@ -249,100 +249,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    SingleAnalysisResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          - relationships
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
-            type:
-              type: string
-              description: The classification of the object (`"analyses"`).
-              example: analyses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the analysis.
-                  maxLength: 255
-                  example: My first Analysis
-                description:
-                  type: string
-                  description: The description of the analysis.
-                  example: Description of My first Analysis
-                created_at:
-                  type: string
-                  description: The date the analysis was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The date the analysis was updated.
-                  example: '2019-03-18T22:02:05Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                collection:
-                  $ref: '#/components/schemas/RelationshipObject'
-              example:
-                collection:
-                  data:
-                    id: '1'
-                    type: collections
-    UpdateAnalysisPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '20'
-            type:
-              type: string
-              description: The classification of the object (`"analyses"`).
-              example: analyses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the analysis.
-                  maxLength: 255
-                  example: My first Analysis
-                description:
-                  type: string
-                  description: The description of the analysis.
-                  example: Description of My first Analysis
     Errors:
       type: object
       properties:
@@ -350,38 +256,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-    CreateAnalysisPayload:
+    RelationshipObject:
       type: object
-      description: The data associated with the resource.
+      description: The object related to the resource.
       required:
       - data
       properties:
         data:
           type: object
-          description: The data associated with the resource.
+          description: The data associated with the related object.
           required:
+          - id
           - type
-          - attributes
           properties:
+            id:
+              type: string
+              description: The ID of the related object.
+              example: 1
             type:
               type: string
-              description: The classification of the object (`"analyses"`).
-              example: analyses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the analysis.
-                  maxLength: 255
-                  example: My first Analysis
-                description:
-                  type: string
-                  description: The description of the analysis.
-                  example: Description of My first Analysis
+              description: The classification of the related object.
+              example: collection
     MultiAnalysesResponse:
       type: object
       description: The data associated with the resource.
@@ -442,27 +337,6 @@ components:
                     data:
                       id: '1'
                       type: collections
-    RelationshipObject:
-      type: object
-      description: The object related to the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the related object.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
     Error:
       type: object
       required:
@@ -493,7 +367,159 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    UpdateAnalysisPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"analyses"`).
+              example: analyses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the analysis.
+                  maxLength: 255
+                  example: My first Analysis
+                description:
+                  type: string
+                  description: The description of the analysis.
+                  example: Description of My first Analysis
+    SingleAnalysisResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '20'
+            type:
+              type: string
+              description: The classification of the object (`"analyses"`).
+              example: analyses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the analysis.
+                  maxLength: 255
+                  example: My first Analysis
+                description:
+                  type: string
+                  description: The description of the analysis.
+                  example: Description of My first Analysis
+                created_at:
+                  type: string
+                  description: The date the analysis was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the analysis was updated.
+                  example: '2019-03-18T22:02:05Z'
+                  format: date-time
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                collection:
+                  $ref: '#/components/schemas/RelationshipObject'
+              example:
+                collection:
+                  data:
+                    id: '1'
+                    type: collections
+    CreateAnalysisPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"analyses"`).
+              example: analyses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the analysis.
+                  maxLength: 255
+                  example: My first Analysis
+                description:
+                  type: string
+                  description: The description of the analysis.
+                  example: Description of My first Analysis
   responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
     NotFound:
       description: Not found.
       content:
@@ -505,22 +531,6 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
     ResourceIdConflict:
       description: Bad request.
       content:
@@ -537,10 +547,24 @@ components:
                 the id specified in the path, 101.
 
                 '
-    Forbidden:
-      description: Forbidden.
     Accepted:
       description: Accepted.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
     MissingCollectionId:
       description: Bad request.
       content:
@@ -553,18 +577,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, collection_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
     MissingOrgId:
       description: Bad request.
       content:
@@ -577,20 +589,8 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
+    BadCredentials:
+      description: Bad credentials.
   parameters:
     collectionIdParam:
       in: path
@@ -600,14 +600,6 @@ components:
       schema:
         type: integer
         example: 1
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     resourceIdParam:
       in: path
       name: id
@@ -616,6 +608,14 @@ components:
       schema:
         type: string
         example: 9999
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

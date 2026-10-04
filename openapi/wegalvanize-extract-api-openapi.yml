@@ -1003,58 +1003,42 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
   schemas:
-    ImpactReportTargetConfiguration:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    RobotIdConfiguration:
       oneOf:
-      - title: Target type & id
+      - title: robotId
         type: object
+        required:
+        - robotId
         properties:
-          targetTypeId:
-            minLength: 1
+          robotId:
             type: string
-          targetType:
-            minLength: 1
-            type: string
-      - title: Target type, id, resource and resource id
+      - title: robotIdTaskId
         type: object
+        required:
+        - robotId
+        - taskId
         properties:
-          targetResourceId:
-            minLength: 1
+          robotId:
             type: string
-          targetTypeId:
-            minLength: 1
+          taskId:
             type: string
-          targetResource:
-            minLength: 1
+      - title: robotIdVersion
+        type: object
+        required:
+        - robotId
+        - taskId
+        properties:
+          robotId:
             type: string
-          targetType:
-            minLength: 1
+          version:
             type: string
     RobotAppConfiguration:
       oneOf:
@@ -1080,6 +1064,62 @@ components:
             minLength: 1
             type: string
           version:
+            minLength: 1
+            type: string
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    ImpactReportTargetConfiguration:
+      oneOf:
+      - title: Target type & id
+        type: object
+        properties:
+          targetTypeId:
+            minLength: 1
+            type: string
+          targetType:
+            minLength: 1
+            type: string
+      - title: Target type, id, resource and resource id
+        type: object
+        properties:
+          targetResourceId:
+            minLength: 1
+            type: string
+          targetTypeId:
+            minLength: 1
+            type: string
+          targetResource:
+            minLength: 1
+            type: string
+          targetType:
             minLength: 1
             type: string
     CreateExtractResponse:
@@ -1120,111 +1160,6 @@ components:
                   type: string
                   description: The status of the extract.
                   example: processing
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    CreateExtractRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`extract`).
-              example: extract
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - resources
-              properties:
-                resources:
-                  type: object
-                  description: The resources associated to extract.
-                  $ref: '#/components/schemas/ExtractionType'
-    RobotIdConfiguration:
-      oneOf:
-      - title: robotId
-        type: object
-        required:
-        - robotId
-        properties:
-          robotId:
-            type: string
-      - title: robotIdTaskId
-        type: object
-        required:
-        - robotId
-        - taskId
-        properties:
-          robotId:
-            type: string
-          taskId:
-            type: string
-      - title: robotIdVersion
-        type: object
-        required:
-        - robotId
-        - taskId
-        properties:
-          robotId:
-            type: string
-          version:
-            type: string
-    GetExtractResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The session ID of the extraction.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`extract`).
-              example: extract
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - created_at
-              - status
-              properties:
-                created_at:
-                  type: string
-                  description: The timestamp specifying when the extract was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                status:
-                  type: string
-                  description: The status of the extraction. Can have one of the following values - success, inprogress, error
-                  example: success
-                signed_url:
-                  type: string
-                  description: The signed URL of the generated Terraform / JSON / YML scripts.
-                  example: https://sdk-services-us-west-2-bucket.s3.us-west-2.amazonaws.com/17d16331-4c31-4068-a306-92d6802cf53c/output.zip?AWSAccessKeyId=XXXXXXXXXXXX&Expires=604800&Signature=XXXXXXXXXXXXX
     ExtractionType:
       anyOf:
       - type: object
@@ -3558,37 +3493,84 @@ components:
                   minLength: 1
                   type: string
             description: Impact Report Targets to be extracted. Report Target type or Report Target Ids are required.
-    Error:
+    CreateExtractRequest:
       type: object
+      description: The data associated with the resource.
       required:
-      - status
+      - data
       properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
+        data:
           type: object
-          description: Indicates which part of the request document caused the error.
+          description: The data associated with the resource.
           required:
-          - pointer
+          - type
+          - attributes
           properties:
-            pointer:
+            type:
               type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - resources
+              properties:
+                resources:
+                  type: object
+                  description: The resources associated to extract.
+                  $ref: '#/components/schemas/ExtractionType'
+    GetExtractResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The session ID of the extraction.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`extract`).
+              example: extract
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - created_at
+              - status
+              properties:
+                created_at:
+                  type: string
+                  description: The timestamp specifying when the extract was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                status:
+                  type: string
+                  description: The status of the extraction. Can have one of the following values - success, inprogress, error
+                  example: success
+                signed_url:
+                  type: string
+                  description: The signed URL of the generated Terraform / JSON / YML scripts.
+                  example: https://sdk-services-us-west-2-bucket.s3.us-west-2.amazonaws.com/17d16331-4c31-4068-a306-92d6802cf53c/output.zip?AWSAccessKeyId=XXXXXXXXXXXX&Expires=604800&Signature=XXXXXXXXXXXXX
   parameters:
+    sessionIdPathParam:
+      name: session_id
+      description: The session_id of the extract.
+      schema:
+        type: string
+        example: 183dabb4-cf04-480e-94d7-8bc94f957ef6
+      in: path
+      required: true
     outputFormatParam:
       name: output_format
       description: The output_format to extract.
@@ -3609,14 +3591,32 @@ components:
       schema:
         type: string
         example: 1
-    sessionIdPathParam:
-      name: session_id
-      description: The session_id of the extract.
-      schema:
-        type: string
-        example: 183dabb4-cf04-480e-94d7-8bc94f957ef6
-      in: path
-      required: true
+  responses:
+    BadCredentials:
+      description: Bad credentials.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

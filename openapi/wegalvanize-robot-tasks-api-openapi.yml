@@ -518,127 +518,21 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    CreateRobotTaskRequest:
+    Errors:
       type: object
-      required:
-      - data
       properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"robot_tasks"`).
-              example: robot_tasks
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                app_version:
-                  type: integer
-                  description: The version of the script.
-                  example: 1
-                email_notifications_enabled:
-                  type: boolean
-                  description: If `true`, an email notification is sent to one or more specific users if the task fails.
-                environment:
-                  type: string
-                  description: The environment of the script.
-                  enum:
-                  - production
-                  - development
-                log_enabled:
-                  type: boolean
-                  description: If `true`, a log is available every time the analytic is run.
-                name:
-                  type: string
-                  description: The name of the task.
-                  example: Intelligent Iron Clock
-                public_key_name:
-                  type: string
-                  example: Super_secret_public_key_name
-                  description: The public RSA key for encrypting password values.
-                publish_to_results:
-                  type: boolean
-                  description: This is not currently supported.
-                share_encrypted:
-                  type: boolean
-                  description: If `true`, any user with access to the robot can run, disable, or enable the task. If `false`, only the user who entered the password can run, disable, or enable the task.
-                  example: true
-                analytic_names:
-                  type: array
-                  description: A list of the names of scripts to run.
-                  items:
-                    type: string
-                    example: Analyze
-    RobotTaskValue:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    GetRobotTaskScheduleResponse:
       type: object
       description: The data associated with the resource.
       required:
-      - id
-      - type
-      - attributes
-      properties:
-        id:
-          type: string
-          description: The ID of the task.
-          example: 1
-        type:
-          type: string
-          description: The classification of the object (`"values"`).
-          example: values
-        attributes:
-          type: object
-          description: The attributes associated with the resource.
-          required:
-          - analytic_name
-          - parameter_id
-          - encrypted
-          - data
-          properties:
-            analytic_name:
-              type: string
-              description: The name of the script, which is used as a parameter value.
-              example: Extended foreground project
-            parameter_id:
-              type: string
-              description: The identifier of the parameter.
-              example: v_time
-            encrypted:
-              type: boolean
-              description: If `true`, the script contains a `PASSWORD` analytic tag, which prompts the user for a password before running the analytic, and encrypts the entered value. The `PASSWORD` parameter is required in any command that imports from or exports to HighBond.
-            data:
-              type: object
-              description: The data associated with the resource.
-              required:
-              - value
-              - type
-              properties:
-                value:
-                  $ref: '#/components/schemas/RobotTaskRequestValue'
-                type:
-                  type: string
-                  description: The data type of the value.
-                  enum:
-                  - character
-                  - date
-                  - datetime
-                  - file
-                  - logical
-                  - number
-                  - table
-                  - time
-    GetRobotTaskValuesResponse:
-      type: object
-      required:
       - data
       properties:
         data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            $ref: '#/components/schemas/RobotTaskValue'
+          $ref: '#/components/schemas/RobotTaskSchedule'
     RobotTaskSchedule:
       type: object
       description: The data associated with the resource.
@@ -703,112 +597,11 @@ components:
                   - 0
                   - 1
                   - 2
-    UpdateRobotTaskValuesRequest:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            properties:
-              type:
-                type: string
-                description: The classification of the object (`"values"`).
-                example: values
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                required:
-                - analytic_name
-                - parameter_id
-                - encrypted
-                - data
-                properties:
-                  analytic_name:
-                    type: string
-                    description: The name of the script, which is used as a parameter value.
-                    example: Extended foreground project
-                  parameter_id:
-                    type: string
-                    description: The identifier of the parameter.
-                    example: v_time
-                  encrypted:
-                    type: boolean
-                    description: If `true`, the script contains a `PASSWORD` analytic tag, which prompts the user for a password before running the analytic, and encrypts the entered value. The `PASSWORD` parameter is required in any command that imports from or exports to HighBond.
-                  data:
-                    type: object
-                    description: The data associated with the resource.
-                    required:
-                    - value
-                    - type
-                    properties:
-                      value:
-                        $ref: '#/components/schemas/RobotTaskRequestValue'
-                      type:
-                        type: string
-                        description: The data type of the value.
-                        enum:
-                        - character
-                        - date
-                        - datetime
-                        - file
-                        - logical
-                        - number
-                        - table
-                        - time
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     RobotTaskRequestValue:
       description: A user-facing input parameter, which lets a user specify script input values in advance. This allows an analytic script to run unattended, either immediately, or at a scheduled time.
       anyOf:
       - $ref: '#/components/schemas/StringValue'
       - $ref: '#/components/schemas/StringValues'
-    StringValue:
-      type: string
-    RobotsError:
-      type: object
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          items:
-            type: object
-            properties:
-              status:
-                type: string
-                description: A HTTP response status code indicating an unprocessable entity.
-                enum:
-                - '422'
-                example: '422'
-              source:
-                type: object
-                properties:
-                  pointer:
-                    type: string
-                    description: Indicates the specific source of the error.
-                    example: /data/attributes/name
-              title:
-                type: string
-                description: A title of the error.
-                example: can't be blank
-              detail:
-                type: string
-                description: A descriptive statement of the error.
-                example: Name can't be blank
-    StringValues:
-      type: array
-      items:
-        type: string
     CreateRobotTaskScheduleRequest:
       type: object
       description: The data associated with the resource.
@@ -867,6 +660,263 @@ components:
                       - 0
                       - 1
                       - 2
+    UpdateRobotTaskValuesRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            description: The data associated with the resource.
+            properties:
+              type:
+                type: string
+                description: The classification of the object (`"values"`).
+                example: values
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                required:
+                - analytic_name
+                - parameter_id
+                - encrypted
+                - data
+                properties:
+                  analytic_name:
+                    type: string
+                    description: The name of the script, which is used as a parameter value.
+                    example: Extended foreground project
+                  parameter_id:
+                    type: string
+                    description: The identifier of the parameter.
+                    example: v_time
+                  encrypted:
+                    type: boolean
+                    description: If `true`, the script contains a `PASSWORD` analytic tag, which prompts the user for a password before running the analytic, and encrypts the entered value. The `PASSWORD` parameter is required in any command that imports from or exports to HighBond.
+                  data:
+                    type: object
+                    description: The data associated with the resource.
+                    required:
+                    - value
+                    - type
+                    properties:
+                      value:
+                        $ref: '#/components/schemas/RobotTaskRequestValue'
+                      type:
+                        type: string
+                        description: The data type of the value.
+                        enum:
+                        - character
+                        - date
+                        - datetime
+                        - file
+                        - logical
+                        - number
+                        - table
+                        - time
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    RobotTask:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - id
+      - type
+      - attributes
+      properties:
+        id:
+          type: string
+          description: The ID of the task.
+          example: 1
+        type:
+          type: string
+          description: The classification of the object (`"robot_tasks"`).
+          example: robot_tasks
+        attributes:
+          type: object
+          description: The attributes associated with the resource.
+          properties:
+            analytic_names:
+              type: array
+              description: A list of the names of scripts to run.
+              items:
+                type: string
+              example:
+              - Analyze
+            app_version:
+              type: integer
+              description: The version of the script.
+              example: 1
+            conflicts:
+              type: object
+              description: Specifies the conflicts related to a script activation.
+              example: '2019-03-21T16:25:00.478Z'
+            count:
+              type: integer
+              description: The folder name that is automatically created in the Robots Agent. The folder corresponds to an individual task.
+              example: 1
+            created_at:
+              type: string
+              description: The date the task was created.
+              example: '2019-03-21T20:22:48.282Z'
+            email_notifications_enabled:
+              type: boolean
+              description: If `true`, an email notification is sent to one or more specific users if the task fails.
+              example: true
+            enabled:
+              type: boolean
+              description: Specifies whether the task is enabled. You cannot run a disabled task.
+              example: true
+            environment:
+              type: string
+              description: The environment of the script.
+              enum:
+              - production
+              - development
+            log_enabled:
+              type: boolean
+              description: If `true`, a log is available every time the analytic is run.
+              example: true
+            name:
+              type: string
+              description: The name of the task.
+              example: Incredible Copper Pants
+            public_key_name:
+              type: string
+              description: The public RSA key for encrypting password values.
+              example: Super_secret_public_key_name
+            publish_to_results:
+              type: boolean
+              description: This is not currently supported.
+              example: true
+            share_encrypted:
+              type: boolean
+              description: If `true`, any user with access to the robot can run, disable, or enable the task. If `false`, only the user who entered the password can run, disable, or enable the task.
+              example: false
+            updated_at:
+              type: string
+              description: The date when the task was updated.
+              example: '2019-03-21T20:22:48.282Z'
+            next_runs:
+              type: array
+              description: Specifies when the task will next run.
+              items:
+                type: string
+                example: '2019-03-21T20:22:48.282Z'
+    GetRobotTaskResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RobotTask'
+    GetRobotTasksResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            $ref: '#/components/schemas/RobotTask'
+    StringValues:
+      type: array
+      items:
+        type: string
+    CreateRobotTaskRequest:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"robot_tasks"`).
+              example: robot_tasks
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                app_version:
+                  type: integer
+                  description: The version of the script.
+                  example: 1
+                email_notifications_enabled:
+                  type: boolean
+                  description: If `true`, an email notification is sent to one or more specific users if the task fails.
+                environment:
+                  type: string
+                  description: The environment of the script.
+                  enum:
+                  - production
+                  - development
+                log_enabled:
+                  type: boolean
+                  description: If `true`, a log is available every time the analytic is run.
+                name:
+                  type: string
+                  description: The name of the task.
+                  example: Intelligent Iron Clock
+                public_key_name:
+                  type: string
+                  example: Super_secret_public_key_name
+                  description: The public RSA key for encrypting password values.
+                publish_to_results:
+                  type: boolean
+                  description: This is not currently supported.
+                share_encrypted:
+                  type: boolean
+                  description: If `true`, any user with access to the robot can run, disable, or enable the task. If `false`, only the user who entered the password can run, disable, or enable the task.
+                  example: true
+                analytic_names:
+                  type: array
+                  description: A list of the names of scripts to run.
+                  items:
+                    type: string
+                    example: Analyze
+    GetRobotTaskValuesResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            $ref: '#/components/schemas/RobotTaskValue'
     GetRunRobotTaskResponse:
       type: object
       properties:
@@ -996,14 +1046,9 @@ components:
                         type:
                           type: string
                           description: The classification of the object (`"user"`).
-    GetRobotTaskResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/RobotTask'
-    RobotTask:
+    StringValue:
+      type: string
+    RobotTaskValue:
       type: object
       description: The data associated with the resource.
       required:
@@ -1017,126 +1062,93 @@ components:
           example: 1
         type:
           type: string
-          description: The classification of the object (`"robot_tasks"`).
-          example: robot_tasks
+          description: The classification of the object (`"values"`).
+          example: values
         attributes:
           type: object
           description: The attributes associated with the resource.
-          properties:
-            analytic_names:
-              type: array
-              description: A list of the names of scripts to run.
-              items:
-                type: string
-              example:
-              - Analyze
-            app_version:
-              type: integer
-              description: The version of the script.
-              example: 1
-            conflicts:
-              type: object
-              description: Specifies the conflicts related to a script activation.
-              example: '2019-03-21T16:25:00.478Z'
-            count:
-              type: integer
-              description: The folder name that is automatically created in the Robots Agent. The folder corresponds to an individual task.
-              example: 1
-            created_at:
-              type: string
-              description: The date the task was created.
-              example: '2019-03-21T20:22:48.282Z'
-            email_notifications_enabled:
-              type: boolean
-              description: If `true`, an email notification is sent to one or more specific users if the task fails.
-              example: true
-            enabled:
-              type: boolean
-              description: Specifies whether the task is enabled. You cannot run a disabled task.
-              example: true
-            environment:
-              type: string
-              description: The environment of the script.
-              enum:
-              - production
-              - development
-            log_enabled:
-              type: boolean
-              description: If `true`, a log is available every time the analytic is run.
-              example: true
-            name:
-              type: string
-              description: The name of the task.
-              example: Incredible Copper Pants
-            public_key_name:
-              type: string
-              description: The public RSA key for encrypting password values.
-              example: Super_secret_public_key_name
-            publish_to_results:
-              type: boolean
-              description: This is not currently supported.
-              example: true
-            share_encrypted:
-              type: boolean
-              description: If `true`, any user with access to the robot can run, disable, or enable the task. If `false`, only the user who entered the password can run, disable, or enable the task.
-              example: false
-            updated_at:
-              type: string
-              description: The date when the task was updated.
-              example: '2019-03-21T20:22:48.282Z'
-            next_runs:
-              type: array
-              description: Specifies when the task will next run.
-              items:
-                type: string
-                example: '2019-03-21T20:22:48.282Z'
-    GetRobotTasksResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            $ref: '#/components/schemas/RobotTask'
-    GetRobotTaskScheduleResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/RobotTaskSchedule'
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
           required:
-          - pointer
+          - analytic_name
+          - parameter_id
+          - encrypted
+          - data
           properties:
-            pointer:
+            analytic_name:
               type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+              description: The name of the script, which is used as a parameter value.
+              example: Extended foreground project
+            parameter_id:
+              type: string
+              description: The identifier of the parameter.
+              example: v_time
+            encrypted:
+              type: boolean
+              description: If `true`, the script contains a `PASSWORD` analytic tag, which prompts the user for a password before running the analytic, and encrypts the entered value. The `PASSWORD` parameter is required in any command that imports from or exports to HighBond.
+            data:
+              type: object
+              description: The data associated with the resource.
+              required:
+              - value
+              - type
+              properties:
+                value:
+                  $ref: '#/components/schemas/RobotTaskRequestValue'
+                type:
+                  type: string
+                  description: The data type of the value.
+                  enum:
+                  - character
+                  - date
+                  - datetime
+                  - file
+                  - logical
+                  - number
+                  - table
+                  - time
+    RobotsError:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                description: A HTTP response status code indicating an unprocessable entity.
+                enum:
+                - '422'
+                example: '422'
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+                    description: Indicates the specific source of the error.
+                    example: /data/attributes/name
+              title:
+                type: string
+                description: A title of the error.
+                example: can't be blank
+              detail:
+                type: string
+                description: A descriptive statement of the error.
+                example: Name can't be blank
   responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
     NotFound:
       description: Not found.
       content:
@@ -1148,6 +1160,30 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
+    MissingRobotTaskId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_task_id, is missing.
+    MissingRobotId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_id, is missing.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -1162,47 +1198,19 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    BadCredentials:
-      description: Bad credentials.
     Forbidden:
       description: Forbidden.
-    MissingRobotTaskId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_task_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    MissingRobotId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   parameters:
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
+      required: true
+      schema:
+        type: string
+        example: 2
     robotEnvParam:
       in: query
       name: env
@@ -1223,14 +1231,6 @@ components:
       schema:
         type: string
         example: 2
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     resourceIdParam:
       in: path
       name: id
@@ -1239,14 +1239,14 @@ components:
       schema:
         type: string
         example: 9999
-    robotIdParam:
+    orgIdParam:
       in: path
-      name: robot_id
-      description: The ID of the robot.
+      name: org_id
+      description: The ID of the HighBond instance.
       required: true
       schema:
         type: string
-        example: 2
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

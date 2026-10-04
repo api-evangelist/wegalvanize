@@ -60,86 +60,7 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    Forbidden:
-      description: Forbidden.
   schemas:
-    GetAgentsResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - id
-      - type
-      - attributes
-      properties:
-        data:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: The ID of the robot.
-                example: 1
-              type:
-                type: string
-                description: The classification of the object.
-                example: agent
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  agent_type:
-                    type: string
-                    enum:
-                    - cloud
-                    - default
-                    - flow
-                    description: The type of the agent. Can be `cloud`, `default`, or `flow`.
-                    example: cloud
-                  is_unicode:
-                    type: boolean
-                    description: If the agent is unicode or non-unicode.
-                    example: cloud
     Errors:
       type: object
       properties:
@@ -177,6 +98,85 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    GetAgentsResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - id
+      - type
+      - attributes
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the robot.
+                example: 1
+              type:
+                type: string
+                description: The classification of the object.
+                example: agent
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  agent_type:
+                    type: string
+                    enum:
+                    - cloud
+                    - default
+                    - flow
+                    description: The type of the agent. Can be `cloud`, `default`, or `flow`.
+                    example: cloud
+                  is_unicode:
+                    type: boolean
+                    description: If the agent is unicode or non-unicode.
+                    example: cloud
+  responses:
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    BadCredentials:
+      description: Bad credentials.
   parameters:
     orgIdParam:
       in: path

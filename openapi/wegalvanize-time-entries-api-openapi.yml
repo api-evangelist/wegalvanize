@@ -265,289 +265,6 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
-  parameters:
-    timeEntryEndDateFilterParams:
-      in: query
-      name: filter[date][end]
-      description: Requesting the API to filter results by end date. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '2021-04-30'
-    timeEntryTargetIdFilterParams:
-      in: query
-      name: filter[target.id]
-      description: Requesting the API to filter results by target's id. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: integer
-        example: 2
-    controlSparseFieldsetParams:
-      in: query
-      name: fields[controls]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
-    riskSparseFieldsetParams:
-      in: query
-      name: fields[risks]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,risk_id,owner,position,impact,likelihood,custom_attributes,custom_factors,created_at,updated_at,objective,mitigations,owner_user,entities,framework_origin,risk_assurance_data
-    projectSparseFieldsetParams:
-      in: query
-      name: fields[projects]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: name,state,status,created_at,updated_at,description,background,budget,position,header_alert_enabled,header_alert_text,certification,control_performance,risk_assurance,management_response,max_sample_size,number_of_testing_rounds,opinion,opinion_description,purpose,scope,start_date,target_date,tag_list,project_type,entities,collaborators,risk_assurance_data,collaborator_groups,time_spent,progress,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
-    timeEntryUserFilterParams:
-      in: query
-      name: filter[uid]
-      description: Requesting the API to filter results by user. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: integer
-        example: Hdf7sKAHWAiGsqeKhACh
-    objectiveSparseFieldsetParams:
-      in: query
-      name: fields[objectives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
-    narrativeSparseFieldsetParams:
-      in: query
-      name: fields[narratives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,created_at,updated_at,objective,framework_origin
-    projectFileFieldsetParams:
-      in: query
-      name: fields[project_files]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: name,reference,file_type,is_editable,is_signed_off
-    timeEntryTargetTypeFilterParams:
-      in: query
-      name: filter[target.type]
-      description: Requesting the API to filter results by target's type. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        enum:
-        - objectives
-        - projects
-        - project_files
-        - issues
-        - objectives
-        - narratives
-        - walkthroughs
-        - walkthrough_summaries
-        - testing_rounds
-        - controls
-        - risks
-        - risk_control_matrices
-        - control_tests
-        - control_test_plans
-        - project_results
-        - project_plannings
-        - accounts
-        - test_plans
-    timeEntryStartDateFilterParams:
-      in: query
-      name: filter[date][start]
-      description: Requesting the API to filter results by start date. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '2021-04-28'
-    timeEntrySparseFieldsetParams:
-      in: query
-      name: fields[time_entries]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: date,description,time,client_delay,created_at,updated_at,position,project,objective,target
-    timeEntryIncludeParams:
-      in: query
-      name: include
-      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: target,project,objective,category,assigned_user
-    controlTestSparseFieldsetParams:
-      in: query
-      name: fields[control_tests]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: assignee_name,testing_round_number,not_applicable,sample_size,testing_results,testing_conclusion,testing_conclusion_status,created_at,updated_at,control,assigned_user,actual_milestone_date,planned_milestone_date,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer
-    controlTestPlanFieldsetParams:
-      in: query
-      name: fields[control_test_plans]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,test_steps,sanitized_description,reference_prefix,self_link,update_linked_control_test_plans_link,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer,sample_size,test_method,audit_name,sanitized_test_steps
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    testingRoundFieldsetParams:
-      in: query
-      name: fields[testing_rounds]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: round_number,full_title
-    accountFieldsetParams:
-      in: query
-      name: fields[accounts]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: fy_end_day,fy_end_month
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    timeEntrySortParams:
-      in: query
-      name: sort
-      description: Orders the resulting resources by the given field(s). Sorts ascending by default, prefix with `-` to sort descending. You can provide multiple sort fields separated by comma.
-      required: false
-      schema:
-        type: string
-        enum:
-        - date
-        default: id
-    issueSparseFieldsetParams:
-      in: query
-      name: fields[issues]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,creator_name,created_at,updated_at,position,owner,recommendation,deficiency_type,severity,published,identified_at,reference,reference_prefix,risk,scope,escalation,cause,effect,cost_impact,executive_summary,executive_owner,project_owner,closed,remediation_status,remediation_plan,remediation_date,actual_remediation_date,retest_deadline_date,actual_retest_date,retesting_results_overview,custom_attributes,project,entities,target,owner_user,executive_owner_user,project_owner_user,creator_user
-    pageNumberParam:
-      in: query
-      name: page[number]
-      description: The page number of records to return. Default is 1.
-      required: false
-      schema:
-        type: string
-        example: 2
-    walkthroughFieldsetParams:
-      in: query
-      name: fields[walkthroughs]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: walkthrough,control_verified,original_updated_at,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer,control_performance_enabled,control_performance_readonly,signed_off,readonly,locked,enabled,planned_milestone_date,actual_milestone_date
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-  responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
-    NoContent:
-      description: No content.
-    Forbidden:
-      description: Forbidden.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
   schemas:
     Errors:
       type: object
@@ -556,7 +273,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-    UpdateTimeEntryRequest:
+    CreateTimeEntryRequest:
       type: object
       description: The data associated with the resource.
       required:
@@ -566,14 +283,9 @@ components:
           type: object
           description: The data associated with the resource.
           required:
-          - id
           - type
           - attributes
           properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
             type:
               type: string
               description: The classification of the object (`"time_entries"`).
@@ -698,6 +410,36 @@ components:
                           type: string
                           description: The classification of the object (`"users"`).
                           example: users
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     GetTimeEntryResponse:
       type: object
       description: The data associated with the resource.
@@ -827,6 +569,148 @@ components:
                           type: string
                           description: URL of page providing user interface for project.
                           example: https://myorg.projects.highbond.com/audits/1/dashboard
+                target:
+                  type: object
+                  description: Specifies the resource that the time entry is associated with.
+                  required:
+                  - data
+                  - links
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with a time entry.
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the resource.
+                          example: '1'
+                        type:
+                          type: string
+                          description: 'The classification of the object.
+
+
+                            A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
+
+                            `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
+
+                            `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
+
+                            '
+                          example: objectives
+                    links:
+                      type: object
+                      description: Links associated with a target relationship.
+                      properties:
+                        ui:
+                          type: string
+                          description: URL of page providing user interface for target resource.
+                          example: https://myorg.projects.highbond.com/audits/1/dashboard
+                category:
+                  type: object
+                  description: 'Time Entry can have a category, if target is NOT a project or project-related entity like Risk, Narrative, Control, etc.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the category.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"time_entry_categories"`).
+                          example: work_types
+                assigned_user:
+                  type:
+                  - object
+                  - 'null'
+                  description: "The person assigned to the time entry. Only the Professional Manager role user of the project is permitted to assign users, and only users of the Professional Manager, Professional User, \nor Contributor Tester role within a project can be specified. The specified user has full read and write access to the time entry. The current user is assigned when the user is not specified on create action.\n\nTo return this field, you must specify the `fields[time_entry]=assigned_user` parameter in your request. For more information, see\n<a href=\"#section/Making-requests\">Making requests</a>.\n"
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier (UID) of the assigned user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
+                          example: 3NQ6XzAUxqJMnAQ7n4KF
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+    UpdateTimeEntryRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"time_entries"`).
+              example: time_entries
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - date
+              - time
+              properties:
+                date:
+                  type: string
+                  description: The date of the time entry.
+                  maxLength: 60
+                  example: '2021-03-15'
+                description:
+                  type: string
+                  description: A detailed description of the time entry.
+                  example: TimeEntry description
+                time:
+                  type: number
+                  format: double
+                  description: The time of the time entry.
+                  example: 8
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+
+                    '
+                  example: 1
+                client_delay:
+                  type: boolean
+                  default: false
+                  description: 'Specifies whether project was delayed.
+
+                    '
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
                 target:
                   type: object
                   description: Specifies the resource that the time entry is associated with.
@@ -1123,173 +1007,289 @@ components:
                             description: The classification of the object (`"users"`).
                             example: users
           description: Array of time entries
-    CreateTimeEntryRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"time_entries"`).
-              example: time_entries
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - date
-              - time
-              properties:
-                date:
-                  type: string
-                  description: The date of the time entry.
-                  maxLength: 60
-                  example: '2021-03-15'
-                description:
-                  type: string
-                  description: A detailed description of the time entry.
-                  example: TimeEntry description
-                time:
-                  type: number
-                  format: double
-                  description: The time of the time entry.
-                  example: 8
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                client_delay:
-                  type: boolean
-                  default: false
-                  description: 'Specifies whether project was delayed.
-
-                    '
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                target:
-                  type: object
-                  description: Specifies the resource that the time entry is associated with.
-                  required:
-                  - data
-                  - links
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with a time entry.
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the resource.
-                          example: '1'
-                        type:
-                          type: string
-                          description: 'The classification of the object.
-
-
-                            A target can have one of the following types: `"projects`", `"narratives`", `"objectives`", `"walkthrough_summaries`",
-
-                            `"project_plannings`", `"walkthroughs`", `"control_tests`", `"control_test_plans`", `"project_results`", `"project_files`",
-
-                            `"risk_control_matrices`", `"testing_rounds`", `"risks`", `"controls`"
-
-                            '
-                          example: objectives
-                    links:
-                      type: object
-                      description: Links associated with a target relationship.
-                      properties:
-                        ui:
-                          type: string
-                          description: URL of page providing user interface for target resource.
-                          example: https://myorg.projects.highbond.com/audits/1/dashboard
-                category:
-                  type: object
-                  description: 'Time Entry can have a category, if target is NOT a project or project-related entity like Risk, Narrative, Control, etc.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the category.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"time_entry_categories"`).
-                          example: work_types
-                assigned_user:
-                  type:
-                  - object
-                  - 'null'
-                  description: "The person assigned to the time entry. Only the Professional Manager role user of the project is permitted to assign users, and only users of the Professional Manager, Professional User, \nor Contributor Tester role within a project can be specified. The specified user has full read and write access to the time entry. The current user is assigned when the user is not specified on create action.\n\nTo return this field, you must specify the `fields[time_entry]=assigned_user` parameter in your request. For more information, see\n<a href=\"#section/Making-requests\">Making requests</a>.\n"
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The unique identifier (UID) of the assigned user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
-                          example: 3NQ6XzAUxqJMnAQ7n4KF
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
+  parameters:
+    testingRoundFieldsetParams:
+      in: query
+      name: fields[testing_rounds]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: round_number,full_title
+    timeEntryUserFilterParams:
+      in: query
+      name: filter[uid]
+      description: Requesting the API to filter results by user. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: integer
+        example: Hdf7sKAHWAiGsqeKhACh
+    timeEntryTargetTypeFilterParams:
+      in: query
+      name: filter[target.type]
+      description: Requesting the API to filter results by target's type. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        enum:
+        - objectives
+        - projects
+        - project_files
+        - issues
+        - objectives
+        - narratives
+        - walkthroughs
+        - walkthrough_summaries
+        - testing_rounds
+        - controls
+        - risks
+        - risk_control_matrices
+        - control_tests
+        - control_test_plans
+        - project_results
+        - project_plannings
+        - accounts
+        - test_plans
+    controlSparseFieldsetParams:
+      in: query
+      name: fields[controls]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
+    objectiveSparseFieldsetParams:
+      in: query
+      name: fields[objectives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    projectFileFieldsetParams:
+      in: query
+      name: fields[project_files]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,reference,file_type,is_editable,is_signed_off
+    narrativeSparseFieldsetParams:
+      in: query
+      name: fields[narratives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,created_at,updated_at,objective,framework_origin
+    riskSparseFieldsetParams:
+      in: query
+      name: fields[risks]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,risk_id,owner,position,impact,likelihood,custom_attributes,custom_factors,created_at,updated_at,objective,mitigations,owner_user,entities,framework_origin,risk_assurance_data
+    issueSparseFieldsetParams:
+      in: query
+      name: fields[issues]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,creator_name,created_at,updated_at,position,owner,recommendation,deficiency_type,severity,published,identified_at,reference,reference_prefix,risk,scope,escalation,cause,effect,cost_impact,executive_summary,executive_owner,project_owner,closed,remediation_status,remediation_plan,remediation_date,actual_remediation_date,retest_deadline_date,actual_retest_date,retesting_results_overview,custom_attributes,project,entities,target,owner_user,executive_owner_user,project_owner_user,creator_user
+    controlTestSparseFieldsetParams:
+      in: query
+      name: fields[control_tests]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: assignee_name,testing_round_number,not_applicable,sample_size,testing_results,testing_conclusion,testing_conclusion_status,created_at,updated_at,control,assigned_user,actual_milestone_date,planned_milestone_date,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer
+    timeEntrySparseFieldsetParams:
+      in: query
+      name: fields[time_entries]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: date,description,time,client_delay,created_at,updated_at,position,project,objective,target
+    pageNumberParam:
+      in: query
+      name: page[number]
+      description: The page number of records to return. Default is 1.
+      required: false
+      schema:
+        type: string
+        example: 2
+    timeEntryStartDateFilterParams:
+      in: query
+      name: filter[date][start]
+      description: Requesting the API to filter results by start date. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '2021-04-28'
+    timeEntrySortParams:
+      in: query
+      name: sort
+      description: Orders the resulting resources by the given field(s). Sorts ascending by default, prefix with `-` to sort descending. You can provide multiple sort fields separated by comma.
+      required: false
+      schema:
+        type: string
+        enum:
+        - date
+        default: id
+    timeEntryTargetIdFilterParams:
+      in: query
+      name: filter[target.id]
+      description: Requesting the API to filter results by target's id. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: integer
+        example: 2
+    controlTestPlanFieldsetParams:
+      in: query
+      name: fields[control_test_plans]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,test_steps,sanitized_description,reference_prefix,self_link,update_linked_control_test_plans_link,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer,sample_size,test_method,audit_name,sanitized_test_steps
+    timeEntryEndDateFilterParams:
+      in: query
+      name: filter[date][end]
+      description: Requesting the API to filter results by end date. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '2021-04-30'
+    projectSparseFieldsetParams:
+      in: query
+      name: fields[projects]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: name,state,status,created_at,updated_at,description,background,budget,position,header_alert_enabled,header_alert_text,certification,control_performance,risk_assurance,management_response,max_sample_size,number_of_testing_rounds,opinion,opinion_description,purpose,scope,start_date,target_date,tag_list,project_type,entities,collaborators,risk_assurance_data,collaborator_groups,time_spent,progress,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    timeEntryIncludeParams:
+      in: query
+      name: include
+      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: target,project,objective,category,assigned_user
+    walkthroughFieldsetParams:
+      in: query
+      name: fields[walkthroughs]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: walkthrough,control_verified,original_updated_at,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer,control_performance_enabled,control_performance_readonly,signed_off,readonly,locked,enabled,planned_milestone_date,actual_milestone_date
+    accountFieldsetParams:
+      in: query
+      name: fields[accounts]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: fy_end_day,fy_end_month
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NoContent:
+      description: No content.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -252,6 +252,13 @@ paths:
                   detail: This results file cannot be deleted because the preparer has already signed off.
 components:
   schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     GetResultsFilesResponse:
       type: object
       required:
@@ -421,193 +428,36 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    CreateResultsFileRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"results_files"`).
-              example: results_files
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the results file.
-                  maxLength: 255
-                  example: Results File Name
-                reference_id:
-                  type: string
-                  description: The results id, reference number, or code for the results file.
-                  maxLength: 8
-                  example: BPWS1
-                description:
-                  type: string
-                  description: A detailed description of the results file.
-                  maxLength: 524288
-                  example: <h1>Results file heading</h1><p>Results file description.</p>
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
-
-                    '
-                  example: 1
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this results file is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Results Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-    UpdateResultsFileRequest:
+    Error:
       type: object
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the resource.
+          description: Indicates which part of the request document caused the error.
           required:
-          - id
-          - type
-          - attributes
+          - pointer
           properties:
-            id:
+            pointer:
               type: string
-              description: The ID of the requested resource.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`"results_files"`).
-              example: results_files
-            attributes:
-              type: object
-              description: The attributes associated with the planning file.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the results file.
-                  maxLength: 255
-                  example: Results File Name
-                reference_id:
-                  type: string
-                  description: The results id, reference number, or code for the results file.
-                  maxLength: 8
-                  example: BPWS1
-                description:
-                  type: string
-                  description: A detailed description of the results file.
-                  maxLength: 524288
-                  example: <h1>Results file heading</h1><p>Results file description.</p>
-                position:
-                  type: integer
-                  format: int64
-                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
 
-                    '
-                  example: 1
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this results file is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Results Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-                planned_start_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Planned start date
-                  example: '2019-02-09'
-                  format: date
-                planned_end_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Planned end date.
-                  example: '2019-02-10'
-                  format: date
-                actual_start_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Actual start date.
-                  example: '2019-02-09'
-                  format: date
-                actual_end_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Actual end date.
-                  example: '2019-02-10'
-                  format: date
-                actual_milestone_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Actual milestone date.
-                  example: '2019-02-10'
-                  format: date
-                planned_milestone_date:
-                  type:
-                  - string
-                  - 'null'
-                  description: Planned milestone date.
-                  example: '2019-02-09'
-                  format: date
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     GetResultsFileResponse:
       type: object
       required:
@@ -756,37 +606,199 @@ components:
                           type: string
                           description: The classification of the object (`"projects"`).
                           example: projects
-    Error:
+    UpdateResultsFileRequest:
       type: object
       required:
-      - status
+      - data
       properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
+        data:
           type: object
-          description: Indicates which part of the request document caused the error.
+          description: The data associated with the resource.
           required:
-          - pointer
+          - id
+          - type
+          - attributes
           properties:
-            pointer:
+            id:
               type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+              description: The ID of the requested resource.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"results_files"`).
+              example: results_files
+            attributes:
+              type: object
+              description: The attributes associated with the planning file.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the results file.
+                  maxLength: 255
+                  example: Results File Name
+                reference_id:
+                  type: string
+                  description: The results id, reference number, or code for the results file.
+                  maxLength: 8
+                  example: BPWS1
+                description:
+                  type: string
+                  description: A detailed description of the results file.
+                  maxLength: 524288
+                  example: <h1>Results file heading</h1><p>Results file description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
 
-                in the request document.
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this results file is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Results Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+                planned_start_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Planned start date
+                  example: '2019-02-09'
+                  format: date
+                planned_end_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Planned end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_start_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Actual start date.
+                  example: '2019-02-09'
+                  format: date
+                actual_end_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Actual end date.
+                  example: '2019-02-10'
+                  format: date
+                actual_milestone_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Actual milestone date.
+                  example: '2019-02-10'
+                  format: date
+                planned_milestone_date:
+                  type:
+                  - string
+                  - 'null'
+                  description: Planned milestone date.
+                  example: '2019-02-09'
+                  format: date
+    CreateResultsFileRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"results_files"`).
+              example: results_files
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the results file.
+                  maxLength: 255
+                  example: Results File Name
+                reference_id:
+                  type: string
+                  description: The results id, reference number, or code for the results file.
+                  maxLength: 8
+                  example: BPWS1
+                description:
+                  type: string
+                  description: A detailed description of the results file.
+                  maxLength: 524288
+                  example: <h1>Results file heading</h1><p>Results file description.</p>
+                position:
+                  type: integer
+                  format: int64
+                  description: 'The value that determines the order in which it is displayed in the index action. `position` must be a value between `1` and `2147483647`.
 
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+                    '
+                  example: 1
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this results file is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Results Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
   responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
     NotFound:
       description: Not found.
       content:
@@ -798,6 +810,8 @@ components:
             - status: '404'
               title: Not Found
               detail: The requested resource does not exist.
+    NoContent:
+      description: No content.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -812,10 +826,8 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    BadCredentials:
-      description: Bad credentials.
-    NoContent:
-      description: No content.
+    Forbidden:
+      description: Forbidden.
     MissingProjectId:
       description: Bad request.
       content:
@@ -828,20 +840,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, project_id, is missing.
-    Forbidden:
-      description: Forbidden.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
     MissingOrgId:
       description: Bad request.
       content:
@@ -854,31 +852,9 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   parameters:
-    projectIdParam:
-      in: path
-      name: project_id
-      description: The ID of the project.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     pageNumberEncodedParam:
       in: query
       name: page[number]
@@ -895,6 +871,22 @@ components:
       schema:
         type: string
         example: name,reference_id,description,position,created_at,updated_at,custom_attributes,project,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    projectIdParam:
+      in: path
+      name: project_id
+      description: The ID of the project.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
     resourceIdParam:
       in: path
       name: id
@@ -903,6 +895,14 @@ components:
       schema:
         type: string
         example: 9999
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

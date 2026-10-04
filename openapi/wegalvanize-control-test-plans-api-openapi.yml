@@ -167,168 +167,6 @@ paths:
                   code: invalid_resource
                   detail: can't be blank
 components:
-  parameters:
-    controlSparseFieldsetParams:
-      in: query
-      name: fields[controls]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
-    controlTestPlanControlIDFilterParams:
-      in: query
-      name: filter[control.id]
-      description: Requesting the API to filter results by control IDs. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: 1,2,3
-    controlTestPlanSortParams:
-      in: query
-      name: sort
-      description: Requesting the API to sort test plans by the values in a given field. The test plans are sorted ascending by default, but you can prefix the field name with `-` to sort descending (e.g., `-id`). You can sort test plans by only one field at a time.
-      required: false
-      schema:
-        type: string
-        enum:
-        - id
-        - testing_method
-        - total_sample_size
-        - test_steps
-        - created_at
-        - updated_at
-        default: id
-    controlTestPlanProjectStateFilterParams:
-      in: query
-      name: filter[project.state]
-      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
-    objectiveSparseFieldsetParams:
-      in: query
-      name: fields[objectives]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
-    controlTestPlanProjectIdFilterParams:
-      in: query
-      name: filter[project.id]
-      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: '1'
-    controlTestPlanIncludeParams:
-      in: query
-      name: include
-      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: control,control.objective
-    controlTestPlanProjectNameFilterParams:
-      in: query
-      name: filter[project.name]
-      description: Requesting the API to filter results by project name. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: some project name
-    pageSizeParam:
-      in: query
-      name: page[size]
-      description: The number of items returned per page. Default is 50. Maximum is 100.
-      required: false
-      schema:
-        type: string
-        example: 25
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    controlTestPlanSparseFieldsetParams:
-      in: query
-      name: fields[control_test_plans]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: testing_method,total_sample_size,test_steps,created_at,updated_at,custom_attributes,control,framework_origin,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer
-    controlTestPlanProjectStatusFilterParams:
-      in: query
-      name: filter[project.status]
-      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: active
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
-      schema:
-        type: string
-        example: Mg==
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-  responses:
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
-    Forbidden:
-      description: Forbidden.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
   schemas:
     Errors:
       type: object
@@ -420,6 +258,176 @@ components:
                         - Custom Select Option Text
                         items:
                           type: string
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    GetControlTestPlanResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: 1
+            type:
+              type: string
+              description: The classification of the object (`"control_test_plans"`).
+              example: control_test_plans
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                testing_method:
+                  type:
+                  - string
+                  - 'null'
+                  description: 'The method specifying how evidence will be obtained. The exact values for this field depend on the <a href="
+
+                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
+
+
+                    >**Note**: If the `testing_method` field has been disabled in the project type, the field is hidden from the API response.
+
+                    '
+                  example: Inspection
+                total_sample_size:
+                  type: integer
+                  description: 'The total sample size, split among testing rounds. `total_sample_size` must be a value between `0` and `2147483647`.
+
+
+                    Sample size is set when a test plan is created the first time, which occurs when you create a control. The logic used to automatically set the sample size field is
+
+                    based on two control attribute fields: `frequency` and `type`. For more information, see <a href="
+
+                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and testing
+
+                    controls</a>.
+
+
+                    >**Note**: If the `total_sample_size` field has been disabled in the project type, the field is hidden from the API response.
+
+                    '
+                  format: int64
+                  example: 1
+                test_steps:
+                  type: string
+                  description: The steps or attributes associated with the test plan.
+                  maxLength: 524288
+                  example: <h1>Heading</h1><p>Test Steps description.</p>
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the test plan was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the test plan was updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                custom_attributes:
+                  type: array
+                  description: An array of custom attributes defined on the project type used by the project this control test is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
+                  items:
+                    type: object
+                    description: A user defined custom attribute value.
+                    properties:
+                      id:
+                        type: string
+                        description: The ID of this custom attribute. Optional if term is included.
+                        example: '42'
+                      term:
+                        type: string
+                        description: The user defined term used to identify this custom attribute. Optional if id is included.
+                        example: Custom Control Test Plan Attribute
+                      value:
+                        type: array
+                        description: The value or values (for multiselect) for this custom attribute.
+                        example:
+                        - Custom Select Option Text
+                        items:
+                          type: string
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                control:
+                  type: object
+                  description: 'Each test plan has an associated control. A control is a program, policy, routine, or activity that is intended to mitigate a risk.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the control.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"controls"`).
+                          example: controls
+                framework_origin:
+                  type: object
+                  description: 'In the Projects app, a project `control_test_plan` can have a related counterpart in an associated framework. The `framework_origin` attribute shows related counterpart of `control_test_plan` from a framework.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the parent control.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"control_test_plans"`).
+                          example: control_test_plans
     GetControlTestPlansResponse:
       type: object
       required:
@@ -684,176 +692,168 @@ components:
               - 'null'
               description: Previous page url
               example: null
-    GetControlTestPlanResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: 1
-            type:
-              type: string
-              description: The classification of the object (`"control_test_plans"`).
-              example: control_test_plans
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                testing_method:
-                  type:
-                  - string
-                  - 'null'
-                  description: 'The method specifying how evidence will be obtained. The exact values for this field depend on the <a href="
-
-                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-customize-terms" target="_blank">configuration of the project type</a>.
-
-
-                    >**Note**: If the `testing_method` field has been disabled in the project type, the field is hidden from the API response.
-
-                    '
-                  example: Inspection
-                total_sample_size:
-                  type: integer
-                  description: 'The total sample size, split among testing rounds. `total_sample_size` must be a value between `0` and `2147483647`.
-
-
-                    Sample size is set when a test plan is created the first time, which occurs when you create a control. The logic used to automatically set the sample size field is
-
-                    based on two control attribute fields: `frequency` and `type`. For more information, see <a href="
-
-                    https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-tests-walkthroughs" target="_blank">Executing procedures and testing
-
-                    controls</a>.
-
-
-                    >**Note**: If the `total_sample_size` field has been disabled in the project type, the field is hidden from the API response.
-
-                    '
-                  format: int64
-                  example: 1
-                test_steps:
-                  type: string
-                  description: The steps or attributes associated with the test plan.
-                  maxLength: 524288
-                  example: <h1>Heading</h1><p>Test Steps description.</p>
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the test plan was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the test plan was updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                custom_attributes:
-                  type: array
-                  description: An array of custom attributes defined on the project type used by the project this control test is from. <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-project-types" target="_blank">Learn more about project types</a>. Make a PATCH request to modify the value of a custom attribute.
-                  items:
-                    type: object
-                    description: A user defined custom attribute value.
-                    properties:
-                      id:
-                        type: string
-                        description: The ID of this custom attribute. Optional if term is included.
-                        example: '42'
-                      term:
-                        type: string
-                        description: The user defined term used to identify this custom attribute. Optional if id is included.
-                        example: Custom Control Test Plan Attribute
-                      value:
-                        type: array
-                        description: The value or values (for multiselect) for this custom attribute.
-                        example:
-                        - Custom Select Option Text
-                        items:
-                          type: string
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                control:
-                  type: object
-                  description: 'Each test plan has an associated control. A control is a program, policy, routine, or activity that is intended to mitigate a risk.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the control.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"controls"`).
-                          example: controls
-                framework_origin:
-                  type: object
-                  description: 'In the Projects app, a project `control_test_plan` can have a related counterpart in an associated framework. The `framework_origin` attribute shows related counterpart of `control_test_plan` from a framework.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the parent control.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"control_test_plans"`).
-                          example: control_test_plans
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
+  parameters:
+    controlTestPlanProjectIdFilterParams:
+      in: query
+      name: filter[project.id]
+      description: Requesting the API to filter results by project ID. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: '1'
+    controlSparseFieldsetParams:
+      in: query
+      name: fields[controls]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,control_id,owner,frequency,control_type,prevent_detect,method,status,position,created_at,updated_at,custom_attributes,objective,walkthrough,control_test_plan,control_tests,mitigations,owner_user,entities,framework_origin
+    controlTestPlanProjectStateFilterParams:
+      in: query
+      name: filter[project.state]
+      description: Requesting the API to filter results by project state. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
+    objectiveSparseFieldsetParams:
+      in: query
+      name: fields[objectives]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: title,description,reference,division_department,owner,executive_owner,created_at,updated_at,project,assigned_user,owner_user,executive_owner_user,custom_attributes,position,risk_control_matrix_id,walkthrough_summary_id,testing_round_1_id,testing_round_2_id,testing_round_3_id,testing_round_4_id,entities,framework,framework_origin,risk_assurance_data,planned_start_date,actual_start_date,planned_end_date,actual_end_date,planned_milestone_date,actual_milestone_date
+    controlTestPlanProjectNameFilterParams:
+      in: query
+      name: filter[project.name]
+      description: Requesting the API to filter results by project name. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: some project name
+    controlTestPlanProjectStatusFilterParams:
+      in: query
+      name: filter[project.status]
+      description: Requesting the API to filter results by project status. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: active
+    controlTestPlanIncludeParams:
+      in: query
+      name: include
+      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: control,control.objective
+    controlTestPlanSparseFieldsetParams:
+      in: query
+      name: fields[control_test_plans]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: testing_method,total_sample_size,test_steps,created_at,updated_at,custom_attributes,control,framework_origin,preparer_signoff,detail_reviewer_signoff,general_reviewer_signoff,supplemental_reviewer,specialty_reviewer
+    controlTestPlanControlIDFilterParams:
+      in: query
+      name: filter[control.id]
+      description: Requesting the API to filter results by control IDs. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: 1,2,3
+    pageSizeParam:
+      in: query
+      name: page[size]
+      description: The number of items returned per page. Default is 50. Maximum is 100.
+      required: false
+      schema:
+        type: string
+        example: 25
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
+    controlTestPlanSortParams:
+      in: query
+      name: sort
+      description: Requesting the API to sort test plans by the values in a given field. The test plans are sorted ascending by default, but you can prefix the field name with `-` to sort descending (e.g., `-id`). You can sort test plans by only one field at a time.
+      required: false
+      schema:
+        type: string
+        enum:
+        - id
+        - testing_method
+        - total_sample_size
+        - test_steps
+        - created_at
+        - updated_at
+        default: id
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+    Forbidden:
+      description: Forbidden.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

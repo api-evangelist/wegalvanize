@@ -205,6 +205,13 @@ components:
               type: string
               description: The classification of the related object.
               example: collection
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     CreateSurveyPayload:
       type: object
       description: The data associated with the resource.
@@ -251,13 +258,71 @@ components:
                   data:
                     id: '29'
                     type: questionnaires
-    Errors:
+    UpdateSurveyPayload:
       type: object
+      description: The data associated with the resource.
+      required:
+      - data
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the survey.
+              example: '300'
+            type:
+              type: string
+              description: The classification of the object (`"surveys"`).
+              example: surveys
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the survey.
+                  maxLength: 255
+                  example: My first Survey
+                description:
+                  type: string
+                  description: The description of the survey.
+                  example: Description of My first Survey
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     SingleSurveyResponse:
       type: object
       description: The data associated with the resource.
@@ -333,111 +398,7 @@ components:
                   data:
                     id: '29'
                     type: questionnaires
-    UpdateSurveyPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the survey.
-              example: '300'
-            type:
-              type: string
-              description: The classification of the object (`"surveys"`).
-              example: surveys
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the survey.
-                  maxLength: 255
-                  example: My first Survey
-                description:
-                  type: string
-                  description: The description of the survey.
-                  example: Description of My first Survey
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
   responses:
-    BadCredentials:
-      description: Bad credentials.
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
     ResourceIdConflict:
       description: Bad request.
       content:
@@ -454,6 +415,20 @@ components:
                 the id specified in the path, 101.
 
                 '
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
     MissingResourceId:
       description: Bad request.
       content:
@@ -466,6 +441,21 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    Forbidden:
+      description: Forbidden.
+    Accepted:
+      description: Accepted.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -480,19 +470,21 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-    Forbidden:
-      description: Forbidden.
-    Accepted:
-      description: Accepted.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   parameters:
-    analysisIdParam:
-      in: path
-      name: analysis_id
-      description: The ID of the analysis where the requested table will be created.
-      required: true
-      schema:
-        type: integer
-        example: 20
     resourceIdParam:
       in: path
       name: id
@@ -509,6 +501,14 @@ components:
       schema:
         type: string
         example: 1
+    analysisIdParam:
+      in: path
+      name: analysis_id
+      description: The ID of the analysis where the requested table will be created.
+      required: true
+      schema:
+        type: integer
+        example: 20
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

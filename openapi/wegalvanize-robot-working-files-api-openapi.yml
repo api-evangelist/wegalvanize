@@ -123,23 +123,43 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    DeleteRobotWorkingFileResponse:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    Error:
       type: object
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the resource
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
           properties:
-            id:
+            pointer:
               type: string
-              description: The ID of the file.
-              example: Data_source.xls
-            type:
-              type: string
-              description: The classification of the object (`"robot_files"`).
-              example: robot_files
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     CreateRobotWorkingFileRequest:
       type: object
       required:
@@ -161,13 +181,23 @@ components:
                   type: string
                   description: The name of the file.
                   example: Data_source.xls
-    Errors:
+    DeleteRobotWorkingFileResponse:
       type: object
+      required:
+      - data
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        data:
+          type: object
+          description: The data associated with the resource
+          properties:
+            id:
+              type: string
+              description: The ID of the file.
+              example: Data_source.xls
+            type:
+              type: string
+              description: The classification of the object (`"robot_files"`).
+              example: robot_files
     CreateRobotWorkingFileResponse:
       type: object
       description: The data associated with the resource.
@@ -231,64 +261,6 @@ components:
                   type: string
                   description: The date the url expires.
                   example: '2019-03-21T20:22:48.282Z'
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    Forbidden:
-      description: Forbidden.
-    MissingRobotId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_id, is missing.
   parameters:
     robotEnvParam:
       in: query
@@ -302,6 +274,14 @@ components:
         - production
         default: development
       example: production
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
+      required: true
+      schema:
+        type: string
+        example: 2
     robotFileNameParam:
       in: query
       name: filename
@@ -318,14 +298,34 @@ components:
       schema:
         type: string
         example: 1
-    robotIdParam:
-      in: path
-      name: robot_id
-      description: The ID of the robot.
-      required: true
-      schema:
-        type: string
-        example: 2
+  responses:
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingRobotId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

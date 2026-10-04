@@ -240,104 +240,6 @@ paths:
         '415':
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
-  responses:
-    MissingTableId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, table_id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    BadCredentials:
-      description: Bad credentials.
-    NoContent:
-      description: No content.
-    ResourceIdConflict:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_id_conflict
-              title: Resource ID conflict
-              detail: 'The id specified in the request body, 1, conflicts with
-
-                the id specified in the path, 101.
-
-                '
-    Forbidden:
-      description: Forbidden.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    MissingOrgId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
   schemas:
     Errors:
       type: object
@@ -346,142 +248,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-    CreateInterpretationPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"interpretations"`).
-              example: interpretations
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              - raw
-              properties:
-                title:
-                  type: string
-                  description: The name of the interpretation.
-                  maxLength: 255
-                  example: My first Interpretation
-                raw:
-                  type: string
-                  description: A JSON string storing the configurations of an interpretation. See the response sample for details.
-                  example: "{\n    \"control_test_id\": 300,\n    \"filterConfig\": {\n        \"filtersOpen\": false,\n        \"myRecords\": false,\n        \"openStatuses\": true\n    },\n    \"formatVersion\": 1.16,\n    \"tableConfig\": {\n        \"columns\": [\n            {\n                \"fieldName\": \"account_number\",\n                \"visible\": true\n            },\n            {\n                \"fieldName\": \"balance\",\n                \"visible\": true\n            }\n        ],\n        \"formatting\": {}\n    },\n    \"visualizationConfig\": {\n        \"colorMapping\": {}\n    },\n    \"visualizationInfo\": {\n        \"currentTabIndex\": \"0,\",\n        \"linkLatestTable\": \"false,\",\n        \"selectedVizId\": \"e6c1,\",\n        \"summary\": \"interpretation 101 summary,\",\n        \"tableName\": \"table1,\",\n        \"title\": \"interpretation 101\"\n    },\n    \"visualizations\": [\n        {\n            \"config\": {\n                \"dataConfig\": {\n                    \"chartColumns\": [],\n                    \"chartRows\": [],\n                    \"chartValues\": []\n                },\n                \"displayConfig\": {}\n            },\n            \"id\": \"453d\",\n            \"title\": \"interpretation visualization 1\",\n            \"type\": \"SummaryTable\"\n        }\n    ]\n}\n"
-                default:
-                  type: boolean
-                  description: 'Specifies if the interpretation is the default interpretation for the table.
-
-
-                    **Note:**
-
-                    There is only one default interpretation allowed per table.
-
-                    '
-                  example: false
-                  default: false
-    UpdateInterpretationPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the interpretation.
-              example: '4001'
-            type:
-              type: string
-              description: The classification of the object (`"interpretations"`).
-              example: interpretations
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                title:
-                  type: string
-                  description: The name of the interpretation.
-                  maxLength: 255
-                  example: My first Interpretation
-                raw:
-                  type: string
-                  description: A JSON string storing the configurations of an interpretation. See the response sample for details.
-                  example: "{\n    \"control_test_id\": 300,\n    \"filterConfig\": {\n        \"filtersOpen\": false,\n        \"myRecords\": false,\n        \"openStatuses\": true\n    },\n    \"formatVersion\": 1.16,\n    \"tableConfig\": {\n        \"columns\": [\n            {\n                \"fieldName\": \"account_number\",\n                \"visible\": true\n            },\n            {\n                \"fieldName\": \"balance\",\n                \"visible\": true\n            }\n        ],\n        \"formatting\": {}\n    },\n    \"visualizationConfig\": {\n        \"colorMapping\": {}\n    },\n    \"visualizationInfo\": {\n        \"currentTabIndex\": \"0,\",\n        \"linkLatestTable\": \"false,\",\n        \"selectedVizId\": \"e6c1,\",\n        \"summary\": \"interpretation 101 summary,\",\n        \"tableName\": \"table1,\",\n        \"title\": \"interpretation 101\"\n    },\n    \"visualizations\": [\n        {\n            \"config\": {\n                \"dataConfig\": {\n                    \"chartColumns\": [],\n                    \"chartRows\": [],\n                    \"chartValues\": []\n                },\n                \"displayConfig\": {}\n            },\n            \"id\": \"453d\",\n            \"title\": \"interpretation visualization 1\",\n            \"type\": \"SummaryTable\"\n        }\n    ]\n}\n"
-    MultiInterpretationsResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            properties:
-              id:
-                type: string
-                description: The ID of the interpretation.
-                example: '4001'
-              type:
-                type: string
-                description: The classification of the object (`"interpretations"`).
-                example: interpretations
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  title:
-                    type: string
-                    description: The name of the interpretation.
-                    maxLength: 255
-                    example: My first Interpretation
-                  default:
-                    type: boolean
-                    description: 'Specifies if the interpretation is the default interpretation for the table.
-
-
-                      **Note:**
-
-                      There is only one default interpretation allowed per table.
-
-                      '
-                    example: false
-                    default: false
-                  created_at:
-                    type: string
-                    description: The date the interpretation was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The date the interpretation was updated.
-                    example: '2019-03-18T22:02:05Z'
-                    format: date-time
     RelationshipObject:
       type: object
       description: The object related to the resource.
@@ -572,6 +338,62 @@ components:
                   data:
                     id: '300'
                     type: tables
+    MultiInterpretationsResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            properties:
+              id:
+                type: string
+                description: The ID of the interpretation.
+                example: '4001'
+              type:
+                type: string
+                description: The classification of the object (`"interpretations"`).
+                example: interpretations
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  title:
+                    type: string
+                    description: The name of the interpretation.
+                    maxLength: 255
+                    example: My first Interpretation
+                  default:
+                    type: boolean
+                    description: 'Specifies if the interpretation is the default interpretation for the table.
+
+
+                      **Note:**
+
+                      There is only one default interpretation allowed per table.
+
+                      '
+                    example: false
+                    default: false
+                  created_at:
+                    type: string
+                    description: The date the interpretation was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The date the interpretation was updated.
+                    example: '2019-03-18T22:02:05Z'
+                    format: date-time
     Error:
       type: object
       required:
@@ -602,6 +424,184 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    UpdateInterpretationPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the interpretation.
+              example: '4001'
+            type:
+              type: string
+              description: The classification of the object (`"interpretations"`).
+              example: interpretations
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                title:
+                  type: string
+                  description: The name of the interpretation.
+                  maxLength: 255
+                  example: My first Interpretation
+                raw:
+                  type: string
+                  description: A JSON string storing the configurations of an interpretation. See the response sample for details.
+                  example: "{\n    \"control_test_id\": 300,\n    \"filterConfig\": {\n        \"filtersOpen\": false,\n        \"myRecords\": false,\n        \"openStatuses\": true\n    },\n    \"formatVersion\": 1.16,\n    \"tableConfig\": {\n        \"columns\": [\n            {\n                \"fieldName\": \"account_number\",\n                \"visible\": true\n            },\n            {\n                \"fieldName\": \"balance\",\n                \"visible\": true\n            }\n        ],\n        \"formatting\": {}\n    },\n    \"visualizationConfig\": {\n        \"colorMapping\": {}\n    },\n    \"visualizationInfo\": {\n        \"currentTabIndex\": \"0,\",\n        \"linkLatestTable\": \"false,\",\n        \"selectedVizId\": \"e6c1,\",\n        \"summary\": \"interpretation 101 summary,\",\n        \"tableName\": \"table1,\",\n        \"title\": \"interpretation 101\"\n    },\n    \"visualizations\": [\n        {\n            \"config\": {\n                \"dataConfig\": {\n                    \"chartColumns\": [],\n                    \"chartRows\": [],\n                    \"chartValues\": []\n                },\n                \"displayConfig\": {}\n            },\n            \"id\": \"453d\",\n            \"title\": \"interpretation visualization 1\",\n            \"type\": \"SummaryTable\"\n        }\n    ]\n}\n"
+    CreateInterpretationPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"interpretations"`).
+              example: interpretations
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              - raw
+              properties:
+                title:
+                  type: string
+                  description: The name of the interpretation.
+                  maxLength: 255
+                  example: My first Interpretation
+                raw:
+                  type: string
+                  description: A JSON string storing the configurations of an interpretation. See the response sample for details.
+                  example: "{\n    \"control_test_id\": 300,\n    \"filterConfig\": {\n        \"filtersOpen\": false,\n        \"myRecords\": false,\n        \"openStatuses\": true\n    },\n    \"formatVersion\": 1.16,\n    \"tableConfig\": {\n        \"columns\": [\n            {\n                \"fieldName\": \"account_number\",\n                \"visible\": true\n            },\n            {\n                \"fieldName\": \"balance\",\n                \"visible\": true\n            }\n        ],\n        \"formatting\": {}\n    },\n    \"visualizationConfig\": {\n        \"colorMapping\": {}\n    },\n    \"visualizationInfo\": {\n        \"currentTabIndex\": \"0,\",\n        \"linkLatestTable\": \"false,\",\n        \"selectedVizId\": \"e6c1,\",\n        \"summary\": \"interpretation 101 summary,\",\n        \"tableName\": \"table1,\",\n        \"title\": \"interpretation 101\"\n    },\n    \"visualizations\": [\n        {\n            \"config\": {\n                \"dataConfig\": {\n                    \"chartColumns\": [],\n                    \"chartRows\": [],\n                    \"chartValues\": []\n                },\n                \"displayConfig\": {}\n            },\n            \"id\": \"453d\",\n            \"title\": \"interpretation visualization 1\",\n            \"type\": \"SummaryTable\"\n        }\n    ]\n}\n"
+                default:
+                  type: boolean
+                  description: 'Specifies if the interpretation is the default interpretation for the table.
+
+
+                    **Note:**
+
+                    There is only one default interpretation allowed per table.
+
+                    '
+                  example: false
+                  default: false
+  responses:
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    ResourceIdConflict:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_id_conflict
+              title: Resource ID conflict
+              detail: 'The id specified in the request body, 1, conflicts with
+
+                the id specified in the path, 101.
+
+                '
+    MissingTableId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, table_id, is missing.
+    NoContent:
+      description: No content.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   parameters:
     tableIdParam:
       in: path
@@ -611,14 +611,6 @@ components:
       schema:
         type: integer
         example: 300
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
     resourceIdParam:
       in: path
       name: id
@@ -627,6 +619,14 @@ components:
       schema:
         type: string
         example: 9999
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

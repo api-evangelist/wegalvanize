@@ -197,49 +197,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/RobotsError'
 components:
-  responses:
-    BadCredentials:
-      description: Bad credentials.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    Forbidden:
-      description: Forbidden.
-    MissingRobotId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_id, is missing.
   schemas:
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     CreateRobotScriptVersionRequest:
       type: object
       description: The data associated with the resource.
@@ -254,13 +219,6 @@ components:
         raw:
           type: object
           description: "Configuration object of the flow of a highbond robots or workflow robots.  It contains user python scripts and variables set up in flow builder.  See example of the flow structure in the sample response.\n\nVersion in json is required.  Initial version of flow json is `version: '2021-02-05'`.\n\nenvironment is execution environments for user scripts. Each environment consists of a runtime (e.g. “python3.11”) and a list of packages (e.g. \"hcl==3.0.*\", \"boxsdk==3.9.2\")\n\nenvironment for a robot should have `runtime: \"python3.11\"` and `requirements` should include `hcl==3.0.*`. For HighBond Robot, additional packages can be included, however they should match the versions as given below:\n\n- Workflow Robot\n\n```\nenvironment: {\n  runtime: \"python3.11\",\n  requirements: [\n    \"hcl==3.0.*\"\n  ]\n}\n```\n\n- HighBond Robot\n\n```\nenvironment: {\n  runtime: \"python3.11\", \n  requirements: [\n    \"hcl==3.0.*\",\n    \"boxsdk==3.9.2\",\n    \"openpyxl==3.1.2\",\n    \"Jinja2==3.1.3\",\n    \"simple-salesforce==1.12.5\",\n    \"jira==3.8.0\"\n   ]\n }\n```\n\n>In case `environment` is missing or the packages (e.g `boxsdk` and others mentioned above) does not match the specified versions, API will throw an error.\n\n`id` in flow json needs to be unique.  Example shown are using uuidv4.\n\nNote: For the `hcl` requirement, specify a version that is a valid HCL library version number using this format: `major.minor.*` (For example, `hcl==3.0.*`) Use an asterisk (`*`) rather than a specific patch number. \n\n```\n{\n  version: '2021-02-05',\n  environment: {\n    runtime: \"python3.11\",\n    requirements: [\n      \"hcl==3.0.*\", \n      \"boxsdk==3.9.2\",\n      \"openpyxl==3.1.2\",\n      \"Jinja2==3.1.3\",\n      \"simple-salesforce==1.12.5\",\n      \"jira==3.8.0\"\n    ]\n  },\n  edges: []\n  nodes: [{\n    id: '7759ae53-a921-46b1-bc2f-49ac799e4882'\n    kind: 'script',\n    libraryNodeId: 'script-id',\n    name: 'Script',\n    config: {\n      cells: [\n        {\n          id: '41e1aa1b-ab74-43bc-8d07-8f5f76590ab1',\n          input: \"print('demo')↵↵print('second line of demo')\"\n        },\n        {\n          id: 'f3d4eaae-45e4-499e-833e-fb0ae77abf59',\n          input: \"print('cell #2')↵↵print('another new line')\"\n        }\n      ]\n    }\n  }]\n  variables: [\n    {\n      id: 'a9e0bc9d-6dcc-4d2d-943c-fd1c795667c5',\n      name: 'v_hb_token',\n      type: 'system_user_id',\n      value: '{the system user UID}'\n    },\n    {\n      id: 'c41c0c69-bec7-464e-a7c9-effd0a321706',\n      isTaskInput: false,\n      name: 'v_character',\n      type: 'character',\n      value: My variable value\n    },\n    {\n      id: '93674454-6a16-41a2-9e05-6f1f962d9a10',\n      isTaskInput: true,\n      name: 'v_password',\n      taskInputLabel: 'My Password Task Param Label',\n      type: 'password',\n      value: ''\n    }\n  ]\n}\n```\n"
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     RobotScriptVersion:
       type: object
       description: The data associated with the resource.
@@ -310,37 +268,6 @@ components:
                       type:
                         type: string
                         description: The classification of the object (`"analytic"`).
-    GetRobotScriptVersionResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/RobotScriptVersion'
-        included:
-          type: array
-          description: All analytics related to the resource
-          items:
-            type: object
-            properties:
-              id:
-                type: string
-                description: The ID of the flow.
-              type:
-                type: string
-                description: The classification of the object (`"analytics"`).
-              attributes:
-                type: object
-                description: The attributes associated with the flow.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the flow
-                    example: Example Flow
-                  raw:
-                    type: object
-                    description: Configuration object of the flow of a highbond robots or workflow robots.
     RobotsError:
       type: object
       required:
@@ -402,7 +329,54 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    GetRobotScriptVersionResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RobotScriptVersion'
+        included:
+          type: array
+          description: All analytics related to the resource
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                description: The ID of the flow.
+              type:
+                type: string
+                description: The classification of the object (`"analytics"`).
+              attributes:
+                type: object
+                description: The attributes associated with the flow.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the flow
+                    example: Example Flow
+                  raw:
+                    type: object
+                    description: Configuration object of the flow of a highbond robots or workflow robots.
   parameters:
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
+      required: true
+      schema:
+        type: string
+        example: 2
+    versionIdParam:
+      in: path
+      name: version_id
+      description: The ID of the version.
+      required: true
+      schema:
+        type: string
+        example: 2
     analyticsIncludeParam:
       in: query
       name: include
@@ -413,14 +387,6 @@ components:
         enum:
         - analytics
       example: analytics
-    versionIdParam:
-      in: path
-      name: version_id
-      description: The ID of the version.
-      required: true
-      schema:
-        type: string
-        example: 2
     orgIdParam:
       in: path
       name: org_id
@@ -429,14 +395,48 @@ components:
       schema:
         type: string
         example: 1
-    robotIdParam:
-      in: path
-      name: robot_id
-      description: The ID of the robot.
-      required: true
-      schema:
-        type: string
-        example: 2
+  responses:
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingRobotId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_id, is missing.
+    BadCredentials:
+      description: Bad credentials.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
