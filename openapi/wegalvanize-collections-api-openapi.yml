@@ -331,14 +331,70 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    collectionIdParam:
+      in: path
+      name: collection_id
+      description: The ID of the collection.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    collectionMemberIdParam:
+      in: path
+      name: collection_member_id
+      description: The ID of the collection member.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   schemas:
-    Errors:
+    Error:
       type: object
+      required:
+      - status
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     MultiCollectionsResponse:
       type: object
       description: The data associated with the resource.
@@ -409,6 +465,91 @@ components:
                     - ReferenceProject
                     - AssessmentProject
                     example: RegularProject
+    CreateCollectionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"collections"`).
+              example: collections
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the collection.
+                  maxLength: 255
+                  example: My first Collection
+                description:
+                  type: string
+                  description: The description of the collection.
+                  example: Description of My first Collection
+                workflow_id:
+                  type: integer
+                  description: The ID of the workflow associated with the collection.
+                  example: 42
+                collection_type:
+                  type: string
+                  description: The type of a collection
+                  enum:
+                  - RegularProject
+                  - AssessmentProject
+                  example: RegularProject
+                  default: RegularProject
+    UpdateCollectionPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The classification of the object (`"collections"`).
+              example: collections
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              properties:
+                name:
+                  type: string
+                  description: The name of the collection.
+                  maxLength: 255
+                  example: My first Collection
+                description:
+                  type: string
+                  description: The description of the collection.
+                  example: Description of My first Collection
+                workflow_id:
+                  type: integer
+                  description: The ID of the workflow associated with the collection.
+                  example: 42
     CollectionMemberRequest:
       type: object
       description: The data required to add a member to a collection.
@@ -458,77 +599,13 @@ components:
               example:
                 user_id: 123
                 role: Professional Manager
-    UpdateCollectionPayload:
+    Errors:
       type: object
-      description: The data associated with the resource.
-      required:
-      - data
       properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The classification of the object (`"collections"`).
-              example: collections
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the collection.
-                  maxLength: 255
-                  example: My first Collection
-                description:
-                  type: string
-                  description: The description of the collection.
-                  example: Description of My first Collection
-                workflow_id:
-                  type: integer
-                  description: The ID of the workflow associated with the collection.
-                  example: 42
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     CreateCollectionResponse:
       type: object
       description: The data associated with the resource.
@@ -594,50 +671,6 @@ components:
                   description: The date the collection was updated.
                   example: '2019-03-18T22:02:05Z'
                   format: date-time
-    CreateCollectionPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"collections"`).
-              example: collections
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the collection.
-                  maxLength: 255
-                  example: My first Collection
-                description:
-                  type: string
-                  description: The description of the collection.
-                  example: Description of My first Collection
-                workflow_id:
-                  type: integer
-                  description: The ID of the workflow associated with the collection.
-                  example: 42
-                collection_type:
-                  type: string
-                  description: The type of a collection
-                  enum:
-                  - RegularProject
-                  - AssessmentProject
-                  example: RegularProject
-                  default: RegularProject
     SingleCollectionResponse:
       type: object
       description: The data associated with the resource.
@@ -718,65 +751,6 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
-    ResourceTypeMismatch:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    ResourceIdConflict:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: resource_id_conflict
-              title: Resource ID conflict
-              detail: 'The id specified in the request body, 1, conflicts with
-
-                the id specified in the path, 101.
-
-                '
-    NoContent:
-      description: No content.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    Forbidden:
-      description: Forbidden.
     MissingCollectionId:
       description: Bad request.
       content:
@@ -801,41 +775,67 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    NoContent:
+      description: No content.
     BadCredentials:
       description: Bad credentials.
-  parameters:
-    collectionMemberIdParam:
-      in: path
-      name: collection_member_id
-      description: The ID of the collection member.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    collectionIdParam:
-      in: path
-      name: collection_id
-      description: The ID of the collection.
-      required: true
-      schema:
-        type: integer
-        example: 1
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
+    ResourceIdConflict:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_id_conflict
+              title: Resource ID conflict
+              detail: 'The id specified in the request body, 1, conflicts with
+
+                the id specified in the path, 101.
+
+                '
+    ResourceTypeMismatch:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

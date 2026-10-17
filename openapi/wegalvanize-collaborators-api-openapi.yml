@@ -455,14 +455,7 @@ paths:
                   detail: Failed to assign System Admin Group to project role.
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    GetCollaboratorResponse:
+    UpdateCollaboratorGroupRequest:
       type: object
       description: The data associated with the resource.
       required:
@@ -475,151 +468,20 @@ components:
           - id
           - type
           - attributes
-          - relationships
           properties:
             id:
               type: string
-              description: 'The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.
+              description: 'The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.
 
 
-                For example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which is the `id`.
+                For example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which is the `id`.
 
                 '
               example: MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=
             type:
               type: string
-              description: The classification of the object (`"collaborators"`).
-              example: collaborators
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - title
-              - reference
-              properties:
-                project_role:
-                  type: string
-                  description: "Roles apply within an individual project or framework. A single user may have a different role for each project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
-                  example: professional_manager
-                effective_role:
-                  type: string
-                  description: 'A user may be assigned to a project as an individual with a specific role, and also as a member of a group with a different role.
-
-                    If those roles conflict with each other, HighBond uses the effective_role.
-
-                    '
-                  example: client_manager
-                organization_role:
-                  type: string
-                  description: "Organization roles are user privileges that allow users to perform actions in projects and frameworks. <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-roles-privilege-types\" target=\"_blank\">Learn more about privileges in projects and frameworks</a>.\n\nAvailable account roles are:\n  `\"sys_admin\"`, `\"project_creator\"`, `\"admin\"`, `\"project_type_admin\"`, `\"archivist\"`, `\"timesheets_admin\"`,\n  `\"compliance_maps_read\"`, `\"compliance_maps_write\"`, `\"compliance_maps_no_access\"`, `\"assurance_plan_admin\"`\n"
-                  example: project_creator
-                created_at:
-                  type: string
-                  description: The timestamp identifying when the collaborator was created.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The timestamp identifying when the collaborator was last updated.
-                  example: '2019-02-09T13:17:26Z'
-                  format: date-time
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - project or framework
-              properties:
-                project:
-                  type: object
-                  description: 'Each collaborator has an associated project or framework. Project/framework is a management system that allows you to define and compile information
-
-                    for reporting purposes.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the project.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"projects"`).
-                          example: projects
-                framework:
-                  type: object
-                  description: 'Each collaborator has an associated project or framework. Project/framework is a management system that allows you to define and compile information
-
-                    for reporting purposes.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the framework.
-                          example: '1'
-                        type:
-                          type: string
-                          description: The classification of the object (`"frameworks"`).
-                          example: frameworks
-                user:
-                  type: object
-                  description: 'Details of the user nested in that endpoint.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The unique identifier (UID) of the assigned user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
-                          example: yvqdNCtv8TeM47WQtzau
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
-    CreateCollaboratorRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          - relationships
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"collaborators"`).
-              example: collaborators
+              description: The classification of the object (`"collaborator_groups"`).
+              example: collaborator_groups
             attributes:
               type: object
               description: The attributes associated with the resource.
@@ -628,38 +490,8 @@ components:
               properties:
                 project_role:
                   type: string
-                  description: "Roles apply within an individual project or framework. A single user may have a different role for each project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
+                  description: "Assigned role for group within project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
                   example: professional_manager
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - user
-              - data
-              properties:
-                user:
-                  type: object
-                  description: 'Details of the user nested in that endpoint.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The unique identifier (UID) of the assigned user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
-                          example: yvqdNCtv8TeM47WQtzau
-                        type:
-                          type: string
-                          description: The classification of the object (`"users"`).
-                          example: users
     Error:
       type: object
       required:
@@ -861,63 +693,6 @@ components:
                           type: string
                           description: The classification of the object (`"groups"`).
                           example: groups
-    CreateCollaboratorGroupRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          - relationships
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"collaborator_groups"`).
-              example: collaborator_groups
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - project_role
-              properties:
-                project_role:
-                  type: string
-                  description: "Assigned role for group within project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
-                  example: professional_manager
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              required:
-              - group
-              properties:
-                group:
-                  type: object
-                  description: 'Groups are a security feature in Launchpad that allow you to assign the same level of access to multiple users simultaneously.
-
-                    '
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      description: The data associated with the resource.
-                      required:
-                      - id
-                      - type
-                      properties:
-                        id:
-                          type: string
-                          description: The identifier of the assigned group.
-                          example: 1
-                        type:
-                          type: string
-                          description: The classification of the object (`"groups"`).
-                          example: groups
     GetCollaboratorsResponse:
       type: object
       description: The data associated with the resource.
@@ -1061,6 +836,70 @@ components:
                             type: string
                             description: The classification of the object (`"users"`).
                             example: users
+    CreateCollaboratorGroupRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          - relationships
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"collaborator_groups"`).
+              example: collaborator_groups
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - project_role
+              properties:
+                project_role:
+                  type: string
+                  description: "Assigned role for group within project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
+                  example: professional_manager
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - group
+              properties:
+                group:
+                  type: object
+                  description: 'Groups are a security feature in Launchpad that allow you to assign the same level of access to multiple users simultaneously.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The identifier of the assigned group.
+                          example: 1
+                        type:
+                          type: string
+                          description: The classification of the object (`"groups"`).
+                          example: groups
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     UpdateCollaboratorRequest:
       type: object
       description: The data associated with the resource.
@@ -1097,43 +936,6 @@ components:
                 project_role:
                   type: string
                   description: "Roles apply within an individual project or framework. A single user may have a different role for each project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
-                  example: professional_manager
-    UpdateCollaboratorGroupRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: 'The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.
-
-
-                For example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which is the `id`.
-
-                '
-              example: MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=
-            type:
-              type: string
-              description: The classification of the object (`"collaborator_groups"`).
-              example: collaborator_groups
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - project_role
-              properties:
-                project_role:
-                  type: string
-                  description: "Assigned role for group within project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
                   example: professional_manager
     GetCollaboratorGroupsResponse:
       type: object
@@ -1309,92 +1111,204 @@ components:
                               type: string
                               description: The classification of the object (`"users"`).
                               example: users
-  parameters:
-    collaboratorGroupSparseFieldsetParams:
-      in: query
-      name: fields[collaborators_groups]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: project,framework,group_members,group,project_role,disabled,default,admin,created_at,updated_at
-    collaboratorIncludeParam:
-      in: query
-      name: include
-      required: false
-      schema:
-        type: string
-        example: project,framework,user
-      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
-    collaboratorGroupIncludeParam:
-      in: query
-      name: include
-      required: false
-      schema:
-        type: string
-        example: group,group_members,project,framework
-      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
-    parentResourceTypeParam:
-      in: path
-      name: parent_resource_type
-      description: The type of the parent resource.
-      required: true
-      schema:
-        type: string
-        enum:
-        - projects
-        - frameworks
-        default: projects
-    EncodedUid:
-      in: path
-      name: encoded_uid
-      description: 'The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.
+    GetCollaboratorResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: 'The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.
 
 
-        For example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which you would use as the `encoded_uid`.
+                For example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which is the `id`.
 
-        '
-      required: true
-      schema:
-        type: string
-        example: MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=
-    collaboratorGroupEncodedUid:
-      in: path
-      name: encoded_uid
-      description: 'The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.
+                '
+              example: MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=
+            type:
+              type: string
+              description: The classification of the object (`"collaborators"`).
+              example: collaborators
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - title
+              - reference
+              properties:
+                project_role:
+                  type: string
+                  description: "Roles apply within an individual project or framework. A single user may have a different role for each project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
+                  example: professional_manager
+                effective_role:
+                  type: string
+                  description: 'A user may be assigned to a project as an individual with a specific role, and also as a member of a group with a different role.
 
+                    If those roles conflict with each other, HighBond uses the effective_role.
 
-        For example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `1337`, you would encode `11955:1337` into Base64. The result is `MTE5NTU6MTMzNw==`, which is the `id`.
+                    '
+                  example: client_manager
+                organization_role:
+                  type: string
+                  description: "Organization roles are user privileges that allow users to perform actions in projects and frameworks. <a href=\"https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=pm-roles-privilege-types\" target=\"_blank\">Learn more about privileges in projects and frameworks</a>.\n\nAvailable account roles are:\n  `\"sys_admin\"`, `\"project_creator\"`, `\"admin\"`, `\"project_type_admin\"`, `\"archivist\"`, `\"timesheets_admin\"`,\n  `\"compliance_maps_read\"`, `\"compliance_maps_write\"`, `\"compliance_maps_no_access\"`, `\"assurance_plan_admin\"`\n"
+                  example: project_creator
+                created_at:
+                  type: string
+                  description: The timestamp identifying when the collaborator was created.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The timestamp identifying when the collaborator was last updated.
+                  example: '2019-02-09T13:17:26Z'
+                  format: date-time
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - project or framework
+              properties:
+                project:
+                  type: object
+                  description: 'Each collaborator has an associated project or framework. Project/framework is a management system that allows you to define and compile information
 
-        '
-      required: true
-      schema:
-        type: string
-        example: MTE5NTU6MTMzNw==
-    collaboratorSparseFieldsetParams:
-      in: query
-      name: fields[collaborators]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: project,framework,user,project_role,effective_role,organization_role,created_at,updated_at
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
-    parentResourceIdParam:
-      in: path
-      name: parent_resource_id
-      description: The ID of the parent resource.
-      required: true
-      schema:
-        type: integer
-        example: 1
+                    for reporting purposes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the project.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"projects"`).
+                          example: projects
+                framework:
+                  type: object
+                  description: 'Each collaborator has an associated project or framework. Project/framework is a management system that allows you to define and compile information
+
+                    for reporting purposes.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the framework.
+                          example: '1'
+                        type:
+                          type: string
+                          description: The classification of the object (`"frameworks"`).
+                          example: frameworks
+                user:
+                  type: object
+                  description: 'Details of the user nested in that endpoint.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier (UID) of the assigned user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
+                          example: yvqdNCtv8TeM47WQtzau
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
+    CreateCollaboratorRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          - relationships
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"collaborators"`).
+              example: collaborators
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - project_role
+              properties:
+                project_role:
+                  type: string
+                  description: "Roles apply within an individual project or framework. A single user may have a different role for each project or framework.\n\nAvailable project roles are:\n  `\"professional_manager\"`, `\"professional_user\"`, `\"oversight_executive\"`, `\"oversight_reviewer\"`,\n  `\"contributor_user\"`, `\"contributor_manager\"`, `\"contributor_tester\"`\n"
+                  example: professional_manager
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              required:
+              - user
+              - data
+              properties:
+                user:
+                  type: object
+                  description: 'Details of the user nested in that endpoint.
+
+                    '
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      description: The data associated with the resource.
+                      required:
+                      - id
+                      - type
+                      properties:
+                        id:
+                          type: string
+                          description: The unique identifier (UID) of the assigned user. For more information on obtaining this value, see <a href="#section/Making-requests">Making requests</a>.
+                          example: yvqdNCtv8TeM47WQtzau
+                        type:
+                          type: string
+                          description: The classification of the object (`"users"`).
+                          example: users
   responses:
     MissingResourceId:
       description: Bad request.
@@ -1408,17 +1322,22 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
-    NotFound:
-      description: Not found.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    BadCredentials:
+      description: Bad credentials.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -1435,24 +1354,105 @@ components:
                 '
     Accepted:
       description: Accepted.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+  parameters:
+    collaboratorGroupIncludeParam:
+      in: query
+      name: include
+      required: false
+      schema:
+        type: string
+        example: group,group_members,project,framework
+      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
+    collaboratorGroupEncodedUid:
+      in: path
+      name: encoded_uid
+      description: 'The IDs of the parent resource (project or framework) and Launchpad ID of the group, in the `parent_resource_id:group_lp_id` format, which then must be encoded into Base64.
 
-                '
-    Forbidden:
-      description: Forbidden.
-    BadCredentials:
-      description: Bad credentials.
+
+        For example, if the `parent_resource_id` is `11955` and the `group_lp_id` is `1337`, you would encode `11955:1337` into Base64. The result is `MTE5NTU6MTMzNw==`, which is the `id`.
+
+        '
+      required: true
+      schema:
+        type: string
+        example: MTE5NTU6MTMzNw==
+    collaboratorIncludeParam:
+      in: query
+      name: include
+      required: false
+      schema:
+        type: string
+        example: project,framework,user
+      description: Requesting the API to return related resources. For more information, see <a href="#section/Making-requests">Making requests</a>
+    parentResourceTypeParam:
+      in: path
+      name: parent_resource_type
+      description: The type of the parent resource.
+      required: true
+      schema:
+        type: string
+        enum:
+        - projects
+        - frameworks
+        default: projects
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    EncodedUid:
+      in: path
+      name: encoded_uid
+      description: 'The IDs of the parent resource (project or framework) and user, in the `parent_resource_id:user_uid` format, which then must be encoded into Base64.
+
+
+        For example, if the `parent_resource_id` is `11955` and the `user_uid` is `yvqdNCtv8TeM47WQtzau`, you would encode `11955:yvqdNCtv8TeM47WQtzau` into Base64. The result is `MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=`, which you would use as the `encoded_uid`.
+
+        '
+      required: true
+      schema:
+        type: string
+        example: MTE5NTU6eXZxZE5DdHY4VGVNNDdXUXR6YXU=
+    parentResourceIdParam:
+      in: path
+      name: parent_resource_id
+      description: The ID of the parent resource.
+      required: true
+      schema:
+        type: integer
+        example: 1
+    collaboratorSparseFieldsetParams:
+      in: query
+      name: fields[collaborators]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: project,framework,user,project_role,effective_role,organization_role,created_at,updated_at
+    collaboratorGroupSparseFieldsetParams:
+      in: query
+      name: fields[collaborators_groups]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: project,framework,group_members,group,project_role,disabled,default,admin,created_at,updated_at
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -71,13 +71,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       required:
@@ -145,21 +138,25 @@ components:
                     type: boolean
                     description: If the agent is unicode or non-unicode.
                     example: cloud
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   responses:
-    NotJsonapiMediaType:
-      description: Unsupported media type.
+    NotFound:
+      description: Not found.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
     MissingResourceId:
       description: Bad request.
       content:
@@ -174,17 +171,20 @@ components:
               detail: The required parameter, id, is missing.
     Forbidden:
       description: Forbidden.
-    NotFound:
-      description: Not found.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
     BadCredentials:
       description: Bad credentials.
   parameters:

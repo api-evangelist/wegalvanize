@@ -555,13 +555,74 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Errors:
+    Error:
       type: object
+      required:
+      - status
       properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    SingleStatusEventMappingResponse:
+      type: object
+      description: The data associated with the resource.
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource
+          properties:
+            id:
+              type: string
+              description: The ID of the status event mapping.
+              example: 317dc769-3e09-4501-a2fd-80908bea7a66
+            type:
+              type: string
+              description: The classification of the object (`"status_event_mappings"`).
+              example: status_event_mappings
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                status_id:
+                  type: string
+                  description: The ID of the status.
+                  example: 48943a00-43ae-4ea3-9824-09fbfb0574f3
+                event_id:
+                  type: string
+                  description: The ID of the event.
+                  example: d728af99-e55f-47fa-a47d-cc8dc2f74f46
+                created_at:
+                  type: string
+                  description: The date the status was created.
+                  example: '2020-08-11T07:42:42Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the status was updated.
+                  example: '2020-08-11T07:42:42Z'
+                  format: date-time
     EventPlainJson:
       type: object
       description: The plain JSON representation of an Event.
@@ -686,6 +747,93 @@ components:
                 type: string
               - key: object_container_id
                 type: string
+    UpdateWorkflowStatusPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the workflow status.
+              example: 317dc769-3e09-4501-a2fd-80908bea7a66
+            type:
+              type: string
+              description: The classification of the object (`"statuses"`).
+              example: statuses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the status. Names are case-insensitive and must be unique.
+                  example: My first Status
+                description:
+                  type: string
+                  description: The description of the status.
+                  example: Description of My first Status
+                position:
+                  type: integer
+                  format: int64
+                  description: Determines the visual order of statuses inside the workflow.
+                  example: 8
+                default:
+                  type: boolean
+                  description: Specifies that this status is the default for items in the workflow. Every workflow must have exactly one default status.
+                  example: false
+                  default: false
+                locked:
+                  type: boolean
+                  description: Indicates that this status cannot be deleted by the user.
+                  example: false
+                  default: false
+                color:
+                  type:
+                  - string
+                  - 'null'
+                  description: Hexadecimal value to capture a color for the field, used in display and reporting
+                  example: '#7D00FF'
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                events:
+                  type: object
+                  description: The data associated with the resource.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the event.
+                            example: b125726f-ee4f-4ec9-9488-b6efa4ee1270
+                          type:
+                            type: string
+                            description: The classification of the object (`"events"`).
+                            example: events
+                      example:
+                      - id: 2b8d8374-43a8-4124-b29e-bcfafd899cc5
+                        type: events
+                      - id: a5b5896c-0724-4460-9361-c2ea0bce92c9
+                        type: events
     UpdateStatusEventMappingPayload:
       type: object
       description: The data associated with the resource.
@@ -720,6 +868,201 @@ components:
                   type: string
                   description: The ID of the event.
                   example: d728af99-e55f-47fa-a47d-cc8dc2f74f46
+    UpdateWorkflowPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the workflow.
+              example: 768cd1bc-d8af-4429-9aa0-8a4b477de42b
+            type:
+              type: string
+              description: The classification of the object (`"workflows"`).
+              example: workflows
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the workflow. Names are case-insensitive and must be unique.
+                  example: My first Workflow
+                description:
+                  type: string
+                  description: The description of the workflow.
+                  example: Description of My first Workflow
+                locked:
+                  type: boolean
+                  description: Indicates that this workflow cannot be deleted by the user.
+                  example: false
+                  default: false
+    CreateStatusEventMappingPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource
+          required:
+          - type
+          - attribute
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"status_event_mappings"`).
+              example: status_event_mappings
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - status_id
+              - event_id
+              properties:
+                status_id:
+                  type: string
+                  description: The ID of the status.
+                  example: 48943a00-43ae-4ea3-9824-09fbfb0574f3
+                event_id:
+                  type: string
+                  description: The ID of the event.
+                  example: d728af99-e55f-47fa-a47d-cc8dc2f74f46
+    SingleWorkflowStatusResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          - relationships
+          properties:
+            id:
+              type: string
+              description: The ID of the workflow.
+              example: 9af02c4a-3c98-4283-8c5d-8dc47e3bf663
+            type:
+              type: string
+              description: The classification of the object (`"statuses"`).
+              example: statuses
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                name:
+                  type: string
+                  description: The name of the status. Names are case-insensitive and must be unique.
+                  example: My first Status
+                description:
+                  type: string
+                  description: The description of the status.
+                  example: Description of My first Status
+                position:
+                  type: integer
+                  format: int64
+                  description: Determines the visual order of statuses inside the workflow.
+                  example: 8
+                default:
+                  type: boolean
+                  description: Specifies that this status is the default for items in the workflow. Every workflow must have exactly one default status.
+                  example: false
+                  default: false
+                locked:
+                  type: boolean
+                  description: Indicates that this status cannot be deleted by the user.
+                  example: false
+                  default: false
+                color:
+                  type:
+                  - string
+                  - 'null'
+                  description: Hexadecimal value to capture a color for the field, used in display and reporting
+                  example: '#7D00FF'
+                created_at:
+                  type: string
+                  description: The date the status was created.
+                  example: '2020-08-11T07:42:42Z'
+                  format: date-time
+                updated_at:
+                  type: string
+                  description: The date the status was updated.
+                  example: '2020-08-11T07:42:42Z'
+                  format: date-time
+                system:
+                  type: boolean
+                  description: Indicates that this status cannot be modified by the user.
+                  example: false
+                  default: false
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                workflow:
+                  type: object
+                  description: The data associated with the resource.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: The ID of the workflow.
+                          example: 5ca23d96-8c07-4c74-b7fd-1240e46a74ab
+                        type:
+                          type: string
+                          description: The classification of the object (`"workflows"`)
+                          example: workflows
+                  example:
+                    data:
+                      id: 5ca23d96-8c07-4c74-b7fd-1240e46a74ab
+                      type: workflows
+                events:
+                  type: object
+                  description: The data associated with the resource.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the event.
+                            example: b125726f-ee4f-4ec9-9488-b6efa4ee1270
+                          type:
+                            type: string
+                            description: The classification of the object (`"events"`).
+                            example: events
+                      example:
+                      - id: 2b8d8374-43a8-4124-b29e-bcfafd899cc5
+                        type: events
+                      - id: a5b5896c-0724-4460-9361-c2ea0bce92c9
+                        type: events
     SingleWorkflowResponseWithIncludes:
       type: object
       description: The data associated with the resource.
@@ -890,136 +1233,54 @@ components:
                 scopes:
                 - self
                 show_success_message: false
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-    MultipleWorkflowsResponse:
+    CreateWorkflowPayload:
       type: object
       description: The data associated with the resource.
       required:
       - data
       properties:
         data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            required:
-            - id
-            - type
-            - attributes
-            properties:
-              id:
-                type: string
-                description: The ID of the workflow.
-                example: 768cd1bc-d8af-4429-9aa0-8a4b477de42b
-              type:
-                type: string
-                description: The classification of the object (`"workflows"`).
-                example: workflows
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the workflow. Names are case-insensitive and must be unique.
-                    example: My first Workflow
-                  description:
-                    type: string
-                    description: The description of the workflow.
-                    example: Description of My first Workflow
-                  locked:
-                    type: boolean
-                    description: Indicates that this workflow cannot be deleted by the user.
-                    example: false
-                    default: false
-                  api_name:
-                    type: string
-                    description: "The API name of the workflow that is unique within the org, uneditable after creation, and must satisfy the following restrictions:\n- No uppercase letters\n- No whitespace (use `\"_\"` to separate words)\n- No special characters\n\nNote: upon successful workflow creation a `\"__c\"` is appended to the provided api_name \nEx: my_api_name  -->  my_api_name__c\n"
-                    example: my_workflow_api_name__c
-                    default: null
-                  created_at:
-                    type: string
-                    description: The date the workflow was created.
-                    example: '2019-02-09T13:17:26Z'
-                    format: date-time
-                  updated_at:
-                    type: string
-                    description: The date the workflow was updated.
-                    example: '2019-03-18T22:02:05Z'
-                    format: date-time
-                  system:
-                    type: boolean
-                    description: Indicates that this workflow cannot be modified by the user.
-                    example: false
-                    default: false
-    SingleStatusEventMappingResponse:
-      type: object
-      description: The data associated with the resource.
-      properties:
-        data:
           type: object
-          description: The data associated with the resource
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
           properties:
-            id:
-              type: string
-              description: The ID of the status event mapping.
-              example: 317dc769-3e09-4501-a2fd-80908bea7a66
             type:
               type: string
-              description: The classification of the object (`"status_event_mappings"`).
-              example: status_event_mappings
+              description: The classification of the object (`"workflows"`).
+              example: workflows
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - name
               properties:
-                status_id:
+                name:
                   type: string
-                  description: The ID of the status.
-                  example: 48943a00-43ae-4ea3-9824-09fbfb0574f3
-                event_id:
+                  description: The name of the workflow. Names are case-insensitive and must be unique.
+                  example: My first Workflow
+                description:
                   type: string
-                  description: The ID of the event.
-                  example: d728af99-e55f-47fa-a47d-cc8dc2f74f46
-                created_at:
+                  description: The description of the workflow.
+                  example: Description of My first Workflow
+                locked:
+                  type: boolean
+                  description: Indicates that this workflow cannot be deleted by the user.
+                  example: false
+                  default: false
+                api_name:
                   type: string
-                  description: The date the status was created.
-                  example: '2020-08-11T07:42:42Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The date the status was updated.
-                  example: '2020-08-11T07:42:42Z'
-                  format: date-time
+                  description: "The API name of the workflow that is unique within the org, uneditable after creation, and must satisfy the following restrictions:\n- No uppercase letters\n- No whitespace (use `\"_\"` to separate words)\n- No special characters\n\nNote: upon successful workflow creation a `\"__c\"` is appended to the provided api_name \nEx: my_api_name  -->  my_api_name__c\n"
+                  example: my_workflow_api_name__c
+                  default: null
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     SingleWorkflowResponse:
       type: object
       description: The data associated with the resource.
@@ -1079,290 +1340,6 @@ components:
                   description: Indicates that this workflow cannot be modified by the user.
                   example: false
                   default: false
-    CreateWorkflowPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"workflows"`).
-              example: workflows
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              properties:
-                name:
-                  type: string
-                  description: The name of the workflow. Names are case-insensitive and must be unique.
-                  example: My first Workflow
-                description:
-                  type: string
-                  description: The description of the workflow.
-                  example: Description of My first Workflow
-                locked:
-                  type: boolean
-                  description: Indicates that this workflow cannot be deleted by the user.
-                  example: false
-                  default: false
-                api_name:
-                  type: string
-                  description: "The API name of the workflow that is unique within the org, uneditable after creation, and must satisfy the following restrictions:\n- No uppercase letters\n- No whitespace (use `\"_\"` to separate words)\n- No special characters\n\nNote: upon successful workflow creation a `\"__c\"` is appended to the provided api_name \nEx: my_api_name  -->  my_api_name__c\n"
-                  example: my_workflow_api_name__c
-                  default: null
-    CreateWorkflowStatusPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"statuses"`).
-              example: statuses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              - position
-              properties:
-                name:
-                  type: string
-                  description: The name of the status. Names are case-insensitive and must be unique.
-                  example: My first Status
-                description:
-                  type: string
-                  description: The description of the status.
-                  example: Description of My first Status
-                position:
-                  type: integer
-                  format: int64
-                  description: Determines the visual order of statuses inside the workflow.
-                  example: 8
-                default:
-                  type: boolean
-                  description: Specifies that this status is the default for items in the workflow. Every workflow must have exactly one default status.
-                  example: false
-                  default: false
-                locked:
-                  type: boolean
-                  description: Indicates that this status cannot be deleted by the user.
-                  example: false
-                  default: false
-                color:
-                  type:
-                  - string
-                  - 'null'
-                  description: Hexadecimal value to capture a color for the field, used in display and reporting
-                  example: '#7D00FF'
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                events:
-                  type: object
-                  description: The data associated with the resource.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the event.
-                            example: b125726f-ee4f-4ec9-9488-b6efa4ee1270
-                          type:
-                            type: string
-                            description: The classification of the object (`"events"`).
-                            example: events
-                      example:
-                      - id: 2b8d8374-43a8-4124-b29e-bcfafd899cc5
-                        type: events
-                      - id: a5b5896c-0724-4460-9361-c2ea0bce92c9
-                        type: events
-    UpdateWorkflowPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the workflow.
-              example: 768cd1bc-d8af-4429-9aa0-8a4b477de42b
-            type:
-              type: string
-              description: The classification of the object (`"workflows"`).
-              example: workflows
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the workflow. Names are case-insensitive and must be unique.
-                  example: My first Workflow
-                description:
-                  type: string
-                  description: The description of the workflow.
-                  example: Description of My first Workflow
-                locked:
-                  type: boolean
-                  description: Indicates that this workflow cannot be deleted by the user.
-                  example: false
-                  default: false
-    UpdateWorkflowStatusPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the workflow status.
-              example: 317dc769-3e09-4501-a2fd-80908bea7a66
-            type:
-              type: string
-              description: The classification of the object (`"statuses"`).
-              example: statuses
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                name:
-                  type: string
-                  description: The name of the status. Names are case-insensitive and must be unique.
-                  example: My first Status
-                description:
-                  type: string
-                  description: The description of the status.
-                  example: Description of My first Status
-                position:
-                  type: integer
-                  format: int64
-                  description: Determines the visual order of statuses inside the workflow.
-                  example: 8
-                default:
-                  type: boolean
-                  description: Specifies that this status is the default for items in the workflow. Every workflow must have exactly one default status.
-                  example: false
-                  default: false
-                locked:
-                  type: boolean
-                  description: Indicates that this status cannot be deleted by the user.
-                  example: false
-                  default: false
-                color:
-                  type:
-                  - string
-                  - 'null'
-                  description: Hexadecimal value to capture a color for the field, used in display and reporting
-                  example: '#7D00FF'
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                events:
-                  type: object
-                  description: The data associated with the resource.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the event.
-                            example: b125726f-ee4f-4ec9-9488-b6efa4ee1270
-                          type:
-                            type: string
-                            description: The classification of the object (`"events"`).
-                            example: events
-                      example:
-                      - id: 2b8d8374-43a8-4124-b29e-bcfafd899cc5
-                        type: events
-                      - id: a5b5896c-0724-4460-9361-c2ea0bce92c9
-                        type: events
-    CreateStatusEventMappingPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource
-          required:
-          - type
-          - attribute
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"status_event_mappings"`).
-              example: status_event_mappings
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - status_id
-              - event_id
-              properties:
-                status_id:
-                  type: string
-                  description: The ID of the status.
-                  example: 48943a00-43ae-4ea3-9824-09fbfb0574f3
-                event_id:
-                  type: string
-                  description: The ID of the event.
-                  example: d728af99-e55f-47fa-a47d-cc8dc2f74f46
     SingleWorkflowStatusResponseWithIncluded:
       type: object
       description: The data associated with the resource.
@@ -1504,7 +1481,69 @@ components:
                 example: events
               attributes:
                 $ref: '#/components/schemas/EventPlainJson'
-    SingleWorkflowStatusResponse:
+    MultipleWorkflowsResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            type: object
+            description: The data associated with the resource.
+            required:
+            - id
+            - type
+            - attributes
+            properties:
+              id:
+                type: string
+                description: The ID of the workflow.
+                example: 768cd1bc-d8af-4429-9aa0-8a4b477de42b
+              type:
+                type: string
+                description: The classification of the object (`"workflows"`).
+                example: workflows
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the workflow. Names are case-insensitive and must be unique.
+                    example: My first Workflow
+                  description:
+                    type: string
+                    description: The description of the workflow.
+                    example: Description of My first Workflow
+                  locked:
+                    type: boolean
+                    description: Indicates that this workflow cannot be deleted by the user.
+                    example: false
+                    default: false
+                  api_name:
+                    type: string
+                    description: "The API name of the workflow that is unique within the org, uneditable after creation, and must satisfy the following restrictions:\n- No uppercase letters\n- No whitespace (use `\"_\"` to separate words)\n- No special characters\n\nNote: upon successful workflow creation a `\"__c\"` is appended to the provided api_name \nEx: my_api_name  -->  my_api_name__c\n"
+                    example: my_workflow_api_name__c
+                    default: null
+                  created_at:
+                    type: string
+                    description: The date the workflow was created.
+                    example: '2019-02-09T13:17:26Z'
+                    format: date-time
+                  updated_at:
+                    type: string
+                    description: The date the workflow was updated.
+                    example: '2019-03-18T22:02:05Z'
+                    format: date-time
+                  system:
+                    type: boolean
+                    description: Indicates that this workflow cannot be modified by the user.
+                    example: false
+                    default: false
+    CreateWorkflowStatusPayload:
       type: object
       description: The data associated with the resource.
       required:
@@ -1514,15 +1553,9 @@ components:
           type: object
           description: The data associated with the resource.
           required:
-          - id
           - type
           - attributes
-          - relationships
           properties:
-            id:
-              type: string
-              description: The ID of the workflow.
-              example: 9af02c4a-3c98-4283-8c5d-8dc47e3bf663
             type:
               type: string
               description: The classification of the object (`"statuses"`).
@@ -1530,6 +1563,9 @@ components:
             attributes:
               type: object
               description: The attributes associated with the resource.
+              required:
+              - name
+              - position
               properties:
                 name:
                   type: string
@@ -1560,46 +1596,10 @@ components:
                   - 'null'
                   description: Hexadecimal value to capture a color for the field, used in display and reporting
                   example: '#7D00FF'
-                created_at:
-                  type: string
-                  description: The date the status was created.
-                  example: '2020-08-11T07:42:42Z'
-                  format: date-time
-                updated_at:
-                  type: string
-                  description: The date the status was updated.
-                  example: '2020-08-11T07:42:42Z'
-                  format: date-time
-                system:
-                  type: boolean
-                  description: Indicates that this status cannot be modified by the user.
-                  example: false
-                  default: false
             relationships:
               type: object
               description: The relationships associated with the resource.
               properties:
-                workflow:
-                  type: object
-                  description: The data associated with the resource.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          description: The ID of the workflow.
-                          example: 5ca23d96-8c07-4c74-b7fd-1240e46a74ab
-                        type:
-                          type: string
-                          description: The classification of the object (`"workflows"`)
-                          example: workflows
-                  example:
-                    data:
-                      id: 5ca23d96-8c07-4c74-b7fd-1240e46a74ab
-                      type: workflows
                 events:
                   type: object
                   description: The data associated with the resource.
@@ -1641,18 +1641,7 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    ResourceTypeMismatch:
+    MissingOrgId:
       description: Bad request.
       content:
         application/vnd.api+json:
@@ -1661,13 +1650,9 @@ components:
           example:
             errors:
             - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
-    NoContent:
-      description: No content.
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -1682,9 +1667,11 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    Forbidden:
-      description: Forbidden.
-    MissingOrgId:
+    NoContent:
+      description: No content.
+    BadCredentials:
+      description: Bad credentials.
+    ResourceTypeMismatch:
       description: Bad request.
       content:
         application/vnd.api+json:
@@ -1693,32 +1680,35 @@ components:
           example:
             errors:
             - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
   parameters:
-    includeWithWorkflowParam:
+    statusIncludeParam:
       in: query
       name: include
-      description: Include information about the associated resources.
+      description: If specified, the status's associated events will be included in the `included` object
       required: false
       schema:
         type: string
-        example: statuses.events.handlers
+        example: events
         enum:
-        - statuses.events.handlers
-        - statuses.events
-        - statuses
-    forceDeleteStatusParam:
-      in: query
-      name: force_delete
-      description: If set to true, the status will be deleted regardless of default, locked, or linked items conditions. System statuses cannot be deleted, even with this set to true.
-      required: false
-      schema:
-        type: boolean
-        default: false
+        - events
     resourceUuidParam:
       in: path
       name: id
@@ -1743,16 +1733,6 @@ components:
       schema:
         type: string
         example: 296f9069-4e4a-42bf-ba8a-e372e8f9e724
-    statusIncludeParam:
-      in: query
-      name: include
-      description: If specified, the status's associated events will be included in the `included` object
-      required: false
-      schema:
-        type: string
-        example: events
-        enum:
-        - events
     orgIdParam:
       in: path
       name: org_id
@@ -1761,6 +1741,26 @@ components:
       schema:
         type: string
         example: 1
+    forceDeleteStatusParam:
+      in: query
+      name: force_delete
+      description: If set to true, the status will be deleted regardless of default, locked, or linked items conditions. System statuses cannot be deleted, even with this set to true.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    includeWithWorkflowParam:
+      in: query
+      name: include
+      description: Include information about the associated resources.
+      required: false
+      schema:
+        type: string
+        example: statuses.events.handlers
+        enum:
+        - statuses.events.handlers
+        - statuses.events
+        - statuses
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

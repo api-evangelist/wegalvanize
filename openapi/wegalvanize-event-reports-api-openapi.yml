@@ -58,34 +58,36 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Errors:
+    Error:
       type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    RelationshipObject:
-      type: object
-      description: The object related to the resource.
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the related object.
+          description: Indicates which part of the request document caused the error.
           required:
-          - id
-          - type
+          - pointer
           properties:
-            id:
+            pointer:
               type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     SingleEventReportResponse:
       type: object
       description: The data associated with the resource.
@@ -161,54 +163,46 @@ components:
                   data:
                     id: '29'
                     type: questionnaires
-    Error:
+    Errors:
       type: object
-      required:
-      - status
       properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    RelationshipObject:
+      type: object
+      description: The object related to the resource.
+      required:
+      - data
+      properties:
+        data:
           type: object
-          description: Indicates which part of the request document caused the error.
+          description: The data associated with the related object.
           required:
-          - pointer
+          - id
+          - type
           properties:
-            pointer:
+            id:
               type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-  parameters:
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
+              description: The ID of the related object.
+              example: 1
+            type:
+              type: string
+              description: The classification of the related object.
+              example: collection
   responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
     MissingResourceId:
       description: Bad request.
       content:
@@ -223,19 +217,25 @@ components:
               detail: The required parameter, id, is missing.
     Forbidden:
       description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
     BadCredentials:
       description: Bad credentials.
+  parameters:
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

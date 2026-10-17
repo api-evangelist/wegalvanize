@@ -73,13 +73,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       required:
@@ -110,6 +103,13 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     SingleRecordColumnResponse:
       type: object
       required:
@@ -142,54 +142,18 @@ components:
             q4123324:
             - https://drive-api-us2-main-s3.s3.us-west-2.amazonaws.com/fiels/1/700b6b7c-7b6a-4f2d-a1e1-f9ca62727492
             - https://drive-api-us2-main-s3.s3.us-west-2.amazonaws.com/fiels/2/43454b22-7f4a-4dsd-a431-f9sdvr727492
-  parameters:
-    tableIdParam:
-      in: path
-      name: table_id
-      description: The ID of the table.
-      required: true
-      schema:
-        type: integer
-        example: 300
-    tableRecordIdParam:
-      in: path
-      name: record_id
-      description: The ID of the "metadata.record_id".
-      required: true
-      schema:
-        type: string
-        example: 2171909125478738
-    columnIdParam:
-      in: path
-      name: field_name
-      description: Field name.
-      required: true
-      schema:
-        type: string
-        example: q1234567
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   responses:
-    NotJsonapiMediaType:
-      description: Unsupported media type.
+    NotFound:
+      description: Not found.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
     MissingResourceId:
       description: Bad request.
       content:
@@ -204,19 +168,55 @@ components:
               detail: The required parameter, id, is missing.
     Forbidden:
       description: Forbidden.
-    NotFound:
-      description: Not found.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
     BadCredentials:
       description: Bad credentials.
+  parameters:
+    tableIdParam:
+      in: path
+      name: table_id
+      description: The ID of the table.
+      required: true
+      schema:
+        type: integer
+        example: 300
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    columnIdParam:
+      in: path
+      name: field_name
+      description: Field name.
+      required: true
+      schema:
+        type: string
+        example: q1234567
+    tableRecordIdParam:
+      in: path
+      name: record_id
+      description: The ID of the "metadata.record_id".
+      required: true
+      schema:
+        type: string
+        example: 2171909125478738
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

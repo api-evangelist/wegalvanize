@@ -218,185 +218,36 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Errors:
+    Error:
       type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    UpdateEventPayload:
-      type: object
-      description: The data associated with the resource.
       required:
-      - data
+      - status
       properties:
-        data:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
           type: object
-          description: The data associated with the resource.
+          description: Indicates which part of the request document caused the error.
           required:
-          - id
-          - type
+          - pointer
           properties:
-            id:
+            pointer:
               type: string
-              description: The ID of the requested resource.
-              example: 415dc769-3e49-4501-a2fd-80908bea7a32
-            type:
-              type: string
-              description: The classification of the object (`"events"`).
-              example: events
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              properties:
-                admin_name:
-                  type: string
-                  description: The name of the event. This field is case-insensitive unique.
-                  example: 'VRM: submit request review'
-                display_name:
-                  type: string
-                  description: 'The display name of the event.
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
 
+                in the request document.
 
-                    > **Note —**
-
-                    If not provided, display_name will default to the admin_name of this event.
-
-                    '
-                  example: Submit request for review
-                description:
-                  type: string
-                  description: The description of the event.
-                  example: Description of the event.
-                type:
-                  type: string
-                  description: Configures the type of the event. It controls the appearance of interactable UI element for this event.
-                  enum:
-                  - button
-                  - overflow
-                  - hidden
-                  example: button
-                position:
-                  type: integer
-                  format: int64
-                  description: 'Each event is shown as a button in UI; this attribute determines the order of the button displayed among other events for statuses.
-
-
-                    > **Note —**
-
-                    This ordering is global. Same order will be applied to Events used across all workflows for displaying of Event buttons on Statuses only.
-
-                    '
-                  example: 4
-                shared:
-                  type: boolean
-                  description: Events can be marked as "shared". Only shared events can be reused across multiple workflows.
-                  default: false
-                  example: false
-                triggers:
-                  type: array
-                  description: An array of triggers
-                  items:
-                    type: object
-                    properties:
-                      name:
-                        type: string
-                        description: The name of the event trigger
-                      trigger_type:
-                        type: string
-                        description: The trigger type of the event. Only one instance of a given triggerType is allowed in the triggers array.
-                        enum:
-                        - fieldUpdated
-                        - questionnaireResponded
-                      configuration:
-                        type: object
-                        description: Each trigger type requires its own set of configurations.
-                        properties:
-                          field_names:
-                            type: array
-                            description: 'The field names of an attribute that, when updated, will trigger the event. Required by the `fieldUpdated` trigger_type.
-
-                              '
-                            items:
-                              type: string
-                          questionnaire_ids:
-                            type: array
-                            description: 'The questionnaire ids that trigger the handler. Required by the `questionnaireResponded` trigger_type.
-
-                              '
-                            items:
-                              type: string
-                          trigger_conjunction:
-                            type: string
-                            description: 'The conjunction used when performing the trigger check. Required by the `fieldUpdated` trigger_type, which supports both `anyOf` and `allOf`. For other trigger types, `anyOf` is implicitly used.
-
-                              '
-                            enum:
-                            - anyOf
-                            - allOf
-                  example:
-                  - name: My Event Trigger
-                    trigger_type: questionnaireResponded
-                    configuration:
-                      questionnaire_ids:
-                      - '1'
-                      - '2'
-                      trigger_conjunction: anyOf
-            relationships:
-              type: object
-              description: The relationships associated with the resource.
-              properties:
-                handlers:
-                  type: object
-                  description: The data associated with the resource.
-                  required:
-                  - data
-                  properties:
-                    data:
-                      type: array
-                      items:
-                        type: object
-                        description: The data associated with the resource.
-                        required:
-                        - id
-                        - type
-                        properties:
-                          id:
-                            type: string
-                            description: The ID of the handler.
-                            example: e5079e91-3aed-40f0-b3d1-96b83a0bc159
-                          type:
-                            type: string
-                            description: The classification of the object (`"handlers"`).
-                            example: handlers
-                          meta:
-                            type: object
-                            description: The metadata for the event<->handler relationship
-                            properties:
-                              scopes:
-                                type: array
-                                description: The relationship of the handler to the scope of the event
-                                items:
-                                  type: string
-                                example:
-                                - self
-                              position:
-                                type: integer
-                                format: int64
-                                description: The order in which the handler will be executed when an event is invoked
-                                example: 1
-                      example:
-                      - id: 67880347-a683-4933-9b77-59a6997a9da6
-                        type: handlers
-                        meta:
-                          scopes:
-                          - self
-                      - id: 757ad0be-556b-434c-9abc-f4b39b5d7b57
-                        type: handlers
-                        meta:
-                          scopes:
-                          - self
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
     SingleEventCreateUpdateResponse:
       type: object
       description: The data associated with the resource.
@@ -715,36 +566,280 @@ components:
         - not equals
         - is blank
         - is not blank
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
+    HandlerConditionsConfigurationOptions:
+      oneOf:
+      - title: specificFieldsAreRequired
+        type: object
+        required:
+        - field_names
+        properties:
+          field_names:
+            type: array
+            description: list of attributes that need to be checked.
+            items:
               type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+      - title: fieldValueComparison
+        type: object
+        required:
+        - left_operand_field_name
+        - operator
+        properties:
+          left_operand_field_name:
+            type: string
+            description: The field of whom's value will be operated on (will be used to compare against right_operand_value). To reference a workflow status' name, use `metadata.workflow_status`.
+            example: risk_score
+          right_operand_value:
+            type: array
+            description: A list of values that `left_operand_field_name` will be compared against. The values can be number-like, boolean-like, or text. At this time, we only support one value passed in this list. This value is ignored when operators `is_blank` or `is_not_blank` is used, in all other cases this value is required.
+            items:
+              type: string
+              example: '50'
+          operator:
+            description: Operator represents an action to be performed on the values. Depending on the type of `right_operand_value` (can be `numeric`, `boolean`, or `text`), the set of allowed operators will change. Currently, we only support `numeric` type.
+            $ref: '#/components/schemas/HandlerConditionsConfigurationOperatorOptions'
+    UpdateEventPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: 415dc769-3e49-4501-a2fd-80908bea7a32
+            type:
+              type: string
+              description: The classification of the object (`"events"`).
+              example: events
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              properties:
+                admin_name:
+                  type: string
+                  description: The name of the event. This field is case-insensitive unique.
+                  example: 'VRM: submit request review'
+                display_name:
+                  type: string
+                  description: 'The display name of the event.
 
-                in the request document.
 
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
+                    > **Note —**
+
+                    If not provided, display_name will default to the admin_name of this event.
+
+                    '
+                  example: Submit request for review
+                description:
+                  type: string
+                  description: The description of the event.
+                  example: Description of the event.
+                type:
+                  type: string
+                  description: Configures the type of the event. It controls the appearance of interactable UI element for this event.
+                  enum:
+                  - button
+                  - overflow
+                  - hidden
+                  example: button
+                position:
+                  type: integer
+                  format: int64
+                  description: 'Each event is shown as a button in UI; this attribute determines the order of the button displayed among other events for statuses.
+
+
+                    > **Note —**
+
+                    This ordering is global. Same order will be applied to Events used across all workflows for displaying of Event buttons on Statuses only.
+
+                    '
+                  example: 4
+                shared:
+                  type: boolean
+                  description: Events can be marked as "shared". Only shared events can be reused across multiple workflows.
+                  default: false
+                  example: false
+                triggers:
+                  type: array
+                  description: An array of triggers
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        description: The name of the event trigger
+                      trigger_type:
+                        type: string
+                        description: The trigger type of the event. Only one instance of a given triggerType is allowed in the triggers array.
+                        enum:
+                        - fieldUpdated
+                        - questionnaireResponded
+                      configuration:
+                        type: object
+                        description: Each trigger type requires its own set of configurations.
+                        properties:
+                          field_names:
+                            type: array
+                            description: 'The field names of an attribute that, when updated, will trigger the event. Required by the `fieldUpdated` trigger_type.
+
+                              '
+                            items:
+                              type: string
+                          questionnaire_ids:
+                            type: array
+                            description: 'The questionnaire ids that trigger the handler. Required by the `questionnaireResponded` trigger_type.
+
+                              '
+                            items:
+                              type: string
+                          trigger_conjunction:
+                            type: string
+                            description: 'The conjunction used when performing the trigger check. Required by the `fieldUpdated` trigger_type, which supports both `anyOf` and `allOf`. For other trigger types, `anyOf` is implicitly used.
+
+                              '
+                            enum:
+                            - anyOf
+                            - allOf
+                  example:
+                  - name: My Event Trigger
+                    trigger_type: questionnaireResponded
+                    configuration:
+                      questionnaire_ids:
+                      - '1'
+                      - '2'
+                      trigger_conjunction: anyOf
+            relationships:
+              type: object
+              description: The relationships associated with the resource.
+              properties:
+                handlers:
+                  type: object
+                  description: The data associated with the resource.
+                  required:
+                  - data
+                  properties:
+                    data:
+                      type: array
+                      items:
+                        type: object
+                        description: The data associated with the resource.
+                        required:
+                        - id
+                        - type
+                        properties:
+                          id:
+                            type: string
+                            description: The ID of the handler.
+                            example: e5079e91-3aed-40f0-b3d1-96b83a0bc159
+                          type:
+                            type: string
+                            description: The classification of the object (`"handlers"`).
+                            example: handlers
+                          meta:
+                            type: object
+                            description: The metadata for the event<->handler relationship
+                            properties:
+                              scopes:
+                                type: array
+                                description: The relationship of the handler to the scope of the event
+                                items:
+                                  type: string
+                                example:
+                                - self
+                              position:
+                                type: integer
+                                format: int64
+                                description: The order in which the handler will be executed when an event is invoked
+                                example: 1
+                      example:
+                      - id: 67880347-a683-4933-9b77-59a6997a9da6
+                        type: handlers
+                        meta:
+                          scopes:
+                          - self
+                      - id: 757ad0be-556b-434c-9abc-f4b39b5d7b57
+                        type: handlers
+                        meta:
+                          scopes:
+                          - self
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    HandlerActionsConfigurationOptions:
+      oneOf:
+      - title: notify
+        type: object
+        required:
+        - emails
+        - email_subject
+        - email_body
+        properties:
+          emails:
+            type: array
+            description: The list of email addresses that the email notification will be sent to.
+            items:
+              type: string
+          email_subject:
+            type: string
+            description: The email subject of the email notification.
+          email_body:
+            type: string
+            description: The email body of the email notification.
+      - title: transitionStatus
+        type: object
+        required:
+        - status_id
+        properties:
+          status_id:
+            type: string
+            description: The ID of the Workflow Status to transition an Item to by this Handler Action.
+      - title: runRobot
+        type: object
+        required:
+        - task_id
+        properties:
+          task_id:
+            type: string
+            description: The ID of the Workflow Robot task to run.
+      - title: sendQuestionnaire
+        type: object
+        properties:
+          distribution_type:
+            type: string
+            default: manual
+            description: Distribution type. When set to `manual`, this implies that the event is being invoked manually (i.e. through APIs or the UI). When set to `automated`, this implies that the event is being invoked asynchronously through triggers (currently, is only supported using the fieldUpdated trigger type).
+            example: manual
+            enum:
+            - manual
+            - automated
+          allowed_questionnaire_ids:
+            type: array
+            description: The list of questionnaires that are going to be displayed in the UI dropdown, for the user to choose from. Used and required for the `manual` distribution_type.
+            items:
+              type: string
+          email_attribute_field_name:
+            type: string
+            description: A field name that references a field containing an email address (which represents the questionnaire recipient). Text and user lookup fields can be used - at this time, only one email is supported (if there are multiple, only the first email in the field will be used). Used and required for the `automated` distribution_type.
+          sent_questionnaire_id:
+            type: string
+            description: The id of the questionnaire to be sent. Used and required for the `automated` distribution_type.
+          questionnaire_context_fields:
+            type: array
+            maxItems: 15
+            description: A list of field names that the display name and value will be shown up in questionnaire responding page.
+            items:
+              type: string
     CreateEventPayload:
       type: object
       description: The data associated with the resource.
@@ -917,37 +1012,6 @@ components:
                         meta:
                           scopes:
                           - self
-    HandlerConditionsConfigurationOptions:
-      oneOf:
-      - title: specificFieldsAreRequired
-        type: object
-        required:
-        - field_names
-        properties:
-          field_names:
-            type: array
-            description: list of attributes that need to be checked.
-            items:
-              type: string
-      - title: fieldValueComparison
-        type: object
-        required:
-        - left_operand_field_name
-        - operator
-        properties:
-          left_operand_field_name:
-            type: string
-            description: The field of whom's value will be operated on (will be used to compare against right_operand_value). To reference a workflow status' name, use `metadata.workflow_status`.
-            example: risk_score
-          right_operand_value:
-            type: array
-            description: A list of values that `left_operand_field_name` will be compared against. The values can be number-like, boolean-like, or text. At this time, we only support one value passed in this list. This value is ignored when operators `is_blank` or `is_not_blank` is used, in all other cases this value is required.
-            items:
-              type: string
-              example: '50'
-          operator:
-            description: Operator represents an action to be performed on the values. Depending on the type of `right_operand_value` (can be `numeric`, `boolean`, or `text`), the set of allowed operators will change. Currently, we only support `numeric` type.
-            $ref: '#/components/schemas/HandlerConditionsConfigurationOperatorOptions'
     HandlerPlainJson:
       type: object
       description: The plain JSON representation of a Handler.
@@ -1200,70 +1264,6 @@ components:
           description: The date the handler was updated.
           example: '2019-03-18T22:02:05Z'
           format: date-time
-    HandlerActionsConfigurationOptions:
-      oneOf:
-      - title: notify
-        type: object
-        required:
-        - emails
-        - email_subject
-        - email_body
-        properties:
-          emails:
-            type: array
-            description: The list of email addresses that the email notification will be sent to.
-            items:
-              type: string
-          email_subject:
-            type: string
-            description: The email subject of the email notification.
-          email_body:
-            type: string
-            description: The email body of the email notification.
-      - title: transitionStatus
-        type: object
-        required:
-        - status_id
-        properties:
-          status_id:
-            type: string
-            description: The ID of the Workflow Status to transition an Item to by this Handler Action.
-      - title: runRobot
-        type: object
-        required:
-        - task_id
-        properties:
-          task_id:
-            type: string
-            description: The ID of the Workflow Robot task to run.
-      - title: sendQuestionnaire
-        type: object
-        properties:
-          distribution_type:
-            type: string
-            default: manual
-            description: Distribution type. When set to `manual`, this implies that the event is being invoked manually (i.e. through APIs or the UI). When set to `automated`, this implies that the event is being invoked asynchronously through triggers (currently, is only supported using the fieldUpdated trigger type).
-            example: manual
-            enum:
-            - manual
-            - automated
-          allowed_questionnaire_ids:
-            type: array
-            description: The list of questionnaires that are going to be displayed in the UI dropdown, for the user to choose from. Used and required for the `manual` distribution_type.
-            items:
-              type: string
-          email_attribute_field_name:
-            type: string
-            description: A field name that references a field containing an email address (which represents the questionnaire recipient). Text and user lookup fields can be used - at this time, only one email is supported (if there are multiple, only the first email in the field will be used). Used and required for the `automated` distribution_type.
-          sent_questionnaire_id:
-            type: string
-            description: The id of the questionnaire to be sent. Used and required for the `automated` distribution_type.
-          questionnaire_context_fields:
-            type: array
-            maxItems: 15
-            description: A list of field names that the display name and value will be shown up in questionnaire responding page.
-            items:
-              type: string
     MultipleEventsResponse:
       type: object
       description: The data associated with the resource.
@@ -1653,7 +1653,7 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
-    ResourceTypeMismatch:
+    MissingOrgId:
       description: Bad request.
       content:
         application/vnd.api+json:
@@ -1662,24 +1662,9 @@ components:
           example:
             errors:
             - status: 400
-              code: resource_type_mismatch
-              title: Resource type mismatch
-              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
-
-                '
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    NoContent:
-      description: No content.
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -1694,9 +1679,11 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    Forbidden:
-      description: Forbidden.
-    MissingOrgId:
+    NoContent:
+      description: No content.
+    BadCredentials:
+      description: Bad credentials.
+    ResourceTypeMismatch:
       description: Bad request.
       content:
         application/vnd.api+json:
@@ -1705,11 +1692,24 @@ components:
           example:
             errors:
             - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    BadCredentials:
-      description: Bad credentials.
+              code: resource_type_mismatch
+              title: Resource type mismatch
+              detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
+
+                '
+    Forbidden:
+      description: Forbidden.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
   parameters:
     resourceUuidParam:
       in: path
@@ -1719,6 +1719,14 @@ components:
       schema:
         type: string
         example: 296f9069-4e4a-42bf-ba8a-e372e8f9e724
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
     eventIncludeParam:
       in: query
       name: include
@@ -1730,14 +1738,6 @@ components:
         - statuses
         - handlers
       example: statuses,handlers
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

@@ -67,43 +67,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
     GetScheduledHoursResponse:
       type: object
       description: The data associated with the resource.
@@ -197,23 +160,44 @@ components:
               - 'null'
               description: Previous page url
               example: null
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   parameters:
-    schedulerTypeFilterParams:
-      in: query
-      name: filter[schedule_type]
-      description: "Requesting the API to filter results by schedule type.\nFor more information, see <a href=\"#section/Making-requests\">Making requests</a>\nValues can be:\n  * `project` - for getting project schedules\n  * `non_project` - for getting non project schedules\n"
-      required: false
-      schema:
-        type: string
-        example: project
-    uidPathParam:
-      name: uid
-      description: The UID of the user.
-      schema:
-        type: string
-        example: yvqdNCtv8TeM47WQtzau
-      in: path
-      required: true
     schedulerEndDateFilterParams:
       in: query
       name: filter[date][end]
@@ -226,34 +210,14 @@ components:
       schema:
         type: string
         example: '2021-04-30'
-    pageNumberEncodedParam:
-      in: query
-      name: page[number]
-      description: The Base64-encoded page number of records to return.
-      required: false
+    uidPathParam:
+      name: uid
+      description: The UID of the user.
       schema:
         type: string
-        example: Mg==
-    schedulerScheduledProjectFilterParams:
-      in: query
-      name: filter[scheduled_project_id]
-      description: 'Requesting the API to filter results by scheduled project IDs.
-
-        For more information, see <a href="#section/Making-requests">Making requests</a>
-
-        '
-      required: false
-      schema:
-        type: string
-        example: 1,2,3
-    schedulerHoursSparseFieldsetParams:
-      in: query
-      name: fields[scheduled_hours]
-      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: schedule_type,time_category,hours_per_day,start_date,end_date,scheduled_project
+        example: yvqdNCtv8TeM47WQtzau
+      in: path
+      required: true
     schedulerStartDateFilterParams:
       in: query
       name: filter[date][start]
@@ -266,6 +230,18 @@ components:
       schema:
         type: string
         example: '2021-04-28'
+    schedulerScheduledProjectFilterParams:
+      in: query
+      name: filter[scheduled_project_id]
+      description: 'Requesting the API to filter results by scheduled project IDs.
+
+        For more information, see <a href="#section/Making-requests">Making requests</a>
+
+        '
+      required: false
+      schema:
+        type: string
+        example: 1,2,3
     pageSizeParam:
       in: query
       name: page[size]
@@ -282,7 +258,58 @@ components:
       schema:
         type: string
         example: 1
+    schedulerTypeFilterParams:
+      in: query
+      name: filter[schedule_type]
+      description: "Requesting the API to filter results by schedule type.\nFor more information, see <a href=\"#section/Making-requests\">Making requests</a>\nValues can be:\n  * `project` - for getting project schedules\n  * `non_project` - for getting non project schedules\n"
+      required: false
+      schema:
+        type: string
+        example: project
+    schedulerHoursSparseFieldsetParams:
+      in: query
+      name: fields[scheduled_hours]
+      description: Requesting the API to return only the specified fields. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: schedule_type,time_category,hours_per_day,start_date,end_date,scheduled_project
+    pageNumberEncodedParam:
+      in: query
+      name: page[number]
+      description: The Base64-encoded page number of records to return.
+      required: false
+      schema:
+        type: string
+        example: Mg==
   responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    BadCredentials:
+      description: Bad credentials.
+    Forbidden:
+      description: Forbidden.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -297,33 +324,6 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    BadCredentials:
-      description: Bad credentials.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    Forbidden:
-      description: Forbidden.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

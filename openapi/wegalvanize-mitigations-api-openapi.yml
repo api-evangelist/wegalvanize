@@ -211,13 +211,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     Error:
       type: object
       required:
@@ -248,6 +241,47 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
+    UpdateMitigationRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the requested resource.
+              example: '1'
+            type:
+              type: string
+              description: The type of mitigation (`"mitigations"`).
+              example: mitigations
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - weight
+              properties:
+                weight:
+                  type: integer
+                  description: the weight of mitigation. Must be > 0 and less than 100.
+                  minimum: 0
+                  maximum: 100
+                  example: 99
     CreateMitigationRequest:
       type: object
       description: The data associated with the resource.
@@ -331,40 +365,6 @@ components:
                           type: string
                           description: The classification of the object (`"risks"`).
                           example: risks
-    UpdateMitigationRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the requested resource.
-              example: '1'
-            type:
-              type: string
-              description: The type of mitigation (`"mitigations"`).
-              example: mitigations
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - weight
-              properties:
-                weight:
-                  type: integer
-                  description: the weight of mitigation. Must be > 0 and less than 100.
-                  minimum: 0
-                  maximum: 100
-                  example: 99
     GetMitigationResponse:
       type: object
       required:
@@ -463,32 +463,17 @@ components:
                           description: The classification of the object (`"risks"`).
                           example: risks
   responses:
-    MissingOrgId:
-      description: Bad request.
+    NotFound:
+      description: Not found.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
     MissingResourceId:
       description: Bad request.
       content:
@@ -501,21 +486,18 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, id, is missing.
-    NotFound:
-      description: Not found.
+    MissingOrgId:
+      description: Bad request.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    Forbidden:
-      description: Forbidden.
-    NoContent:
-      description: No content.
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -530,17 +512,27 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
+    Forbidden:
+      description: Forbidden.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    NoContent:
+      description: No content.
     BadCredentials:
       description: Bad credentials.
   parameters:
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
     orgIdParam:
       in: path
       name: org_id
@@ -549,6 +541,14 @@ components:
       schema:
         type: string
         example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

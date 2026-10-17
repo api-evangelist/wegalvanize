@@ -204,134 +204,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    RelationshipObject:
-      type: object
-      description: The object related to the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the related object.
-          required:
-          - id
-          - type
-          properties:
-            id:
-              type: string
-              description: The ID of the related object.
-              example: 1
-            type:
-              type: string
-              description: The classification of the related object.
-              example: collection
-    UpdateMetricPayload:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          required:
-          - id
-          - type
-          - attributes
-          properties:
-            id:
-              type: string
-              description: The ID of the metric.
-              example: '5001'
-            type:
-              type: string
-              description: The classification of the object (`"metrics"`).
-              example: metrics
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - name
-              - field_name
-              - time_field_name
-              - func
-              - interval
-              properties:
-                name:
-                  type: string
-                  description: The name of the metric.
-                  maxLength: 255
-                  example: My first Metric
-                base_color:
-                  type: string
-                  description: Sets the color of the metric when the calculation does not exceed the threshold.
-                  example: '#3F3D3C'
-                func:
-                  type: string
-                  description: 'Defines the aggregate function to use in the metric calculation.
-
-
-                    Valid functions: `count`, `positives`, `negatives`, `zeros`, `total`, `average`, `lowest`, `highest`, `standard_deviation`, `uniques`, `blanks`, `percent-of`
-
-                    '
-                  example: percent-of
-                interval:
-                  type: string
-                  description: 'Summarizes the metric into a period.
-
-
-                    Valid periods: `day`, `month`, `quarter`, `year`
-
-                    '
-                  example: month
-                metric_type:
-                  type: string
-                  description: Tags the metric as an indicator type, such as a key performance indicator or key risk indicator.
-                  maxLength: 255
-                  example: kpi
-                show_sparkline:
-                  type: boolean
-                  description: Shows (`true`) or hides (`false`) the trend of key indicator performance from the earliest calculation period to the current period for users that view the metric.
-                  example: true
-                view_thresholds:
-                  type: boolean
-                  description: Shows (`true`) or hides (`false`) active trigger thresholds on the sparkline.
-                  example: false
-                field_name:
-                  type: string
-                  description: The underlying name of the column in the table used for the metric calculation. `field_name` must be unique within a table and follow the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rm-import-export-results" target="_blank">column naming requirements</a>.
-                  example: balance
-                time_field_name:
-                  type: string
-                  description: A column in the table with a `date`, `datetime` or `time` data type.
-                  example: created_at
-                config:
-                  type: string
-                  description: A JSON string storing the metric format configuration.
-                  example: "{\n  \"field_format_map\": { },\n  \"conditional_formats_map\": { }\n}\n"
-                filter_config:
-                  type: string
-                  description: A JSON string storing the metric filter configuration.
-                  example: "{\n  \"filtersOpen\": true,\n  \"params\": { }\n}\n"
-                func_argument:
-                  type: string
-                  description: 'A JSON string storing the arguments of the Metric function.
-
-
-                    Valid operators:
-
-
-                    `>`, `<`, `>=`, `<=`, `==`, `!=`, `between`, `not-between`, `begins-with`, `contains`, `does-not-contain`, `is-blank`, `is-not-blank`
-
-                    '
-                  example: "{\n  \"operator\": \"is-blank\"\n}\n"
     CreateMetricPayload:
       type: object
       description: The data associated with the resource.
@@ -457,6 +329,13 @@ components:
         detail:
           type: string
           description: A human-readable explanation specific to this occurrence of the problem.
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     SingleMetricResponse:
       type: object
       description: The data associated with the resource.
@@ -573,32 +452,163 @@ components:
                   data:
                     id: '300'
                     type: tables
-  parameters:
-    tableIdParam:
-      in: path
-      name: table_id
-      description: The ID of the table.
-      required: true
-      schema:
-        type: integer
-        example: 300
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
+    RelationshipObject:
+      type: object
+      description: The object related to the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the related object.
+          required:
+          - id
+          - type
+          properties:
+            id:
+              type: string
+              description: The ID of the related object.
+              example: 1
+            type:
+              type: string
+              description: The classification of the related object.
+              example: collection
+    UpdateMetricPayload:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - id
+          - type
+          - attributes
+          properties:
+            id:
+              type: string
+              description: The ID of the metric.
+              example: '5001'
+            type:
+              type: string
+              description: The classification of the object (`"metrics"`).
+              example: metrics
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - name
+              - field_name
+              - time_field_name
+              - func
+              - interval
+              properties:
+                name:
+                  type: string
+                  description: The name of the metric.
+                  maxLength: 255
+                  example: My first Metric
+                base_color:
+                  type: string
+                  description: Sets the color of the metric when the calculation does not exceed the threshold.
+                  example: '#3F3D3C'
+                func:
+                  type: string
+                  description: 'Defines the aggregate function to use in the metric calculation.
+
+
+                    Valid functions: `count`, `positives`, `negatives`, `zeros`, `total`, `average`, `lowest`, `highest`, `standard_deviation`, `uniques`, `blanks`, `percent-of`
+
+                    '
+                  example: percent-of
+                interval:
+                  type: string
+                  description: 'Summarizes the metric into a period.
+
+
+                    Valid periods: `day`, `month`, `quarter`, `year`
+
+                    '
+                  example: month
+                metric_type:
+                  type: string
+                  description: Tags the metric as an indicator type, such as a key performance indicator or key risk indicator.
+                  maxLength: 255
+                  example: kpi
+                show_sparkline:
+                  type: boolean
+                  description: Shows (`true`) or hides (`false`) the trend of key indicator performance from the earliest calculation period to the current period for users that view the metric.
+                  example: true
+                view_thresholds:
+                  type: boolean
+                  description: Shows (`true`) or hides (`false`) active trigger thresholds on the sparkline.
+                  example: false
+                field_name:
+                  type: string
+                  description: The underlying name of the column in the table used for the metric calculation. `field_name` must be unique within a table and follow the <a href="https://help.highbond.com/helpdocs/highbond/en-us/Default.htm#cshid=rm-import-export-results" target="_blank">column naming requirements</a>.
+                  example: balance
+                time_field_name:
+                  type: string
+                  description: A column in the table with a `date`, `datetime` or `time` data type.
+                  example: created_at
+                config:
+                  type: string
+                  description: A JSON string storing the metric format configuration.
+                  example: "{\n  \"field_format_map\": { },\n  \"conditional_formats_map\": { }\n}\n"
+                filter_config:
+                  type: string
+                  description: A JSON string storing the metric filter configuration.
+                  example: "{\n  \"filtersOpen\": true,\n  \"params\": { }\n}\n"
+                func_argument:
+                  type: string
+                  description: 'A JSON string storing the arguments of the Metric function.
+
+
+                    Valid operators:
+
+
+                    `>`, `<`, `>=`, `<=`, `==`, `!=`, `between`, `not-between`, `begins-with`, `contains`, `does-not-contain`, `is-blank`, `is-not-blank`
+
+                    '
+                  example: "{\n  \"operator\": \"is-blank\"\n}\n"
   responses:
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    MissingOrgId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, org_id, is missing.
     ResourceIdConflict:
       description: Bad request.
       content:
@@ -615,47 +625,6 @@ components:
                 the id specified in the path, 101.
 
                 '
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    Forbidden:
-      description: Forbidden.
-    NoContent:
-      description: No content.
     ResourceTypeMismatch:
       description: Bad request.
       content:
@@ -670,20 +639,51 @@ components:
               detail: 'The requested data type, a-bad-type, is incompatible with the endpoint.
 
                 '
-    MissingOrgId:
-      description: Bad request.
+    Forbidden:
+      description: Forbidden.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
       content:
         application/vnd.api+json:
           schema:
             $ref: '#/components/schemas/Errors'
           example:
             errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, org_id, is missing.
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    NoContent:
+      description: No content.
     BadCredentials:
       description: Bad credentials.
+  parameters:
+    tableIdParam:
+      in: path
+      name: table_id
+      description: The ID of the table.
+      required: true
+      schema:
+        type: integer
+        example: 300
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

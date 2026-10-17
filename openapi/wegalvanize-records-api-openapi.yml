@@ -195,13 +195,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
     CreateRecordsPayload:
       type: object
       description: The data associated with the resource.
@@ -321,48 +314,49 @@ components:
           example:
             field_one: X
             field_two: '2'
-  parameters:
-    tableIdParam:
-      in: path
-      name: table_id
-      description: The ID of the table.
-      required: true
-      schema:
-        type: integer
-        example: 300
-    resourceIdParam:
-      in: path
-      name: id
-      description: The ID of the requested resource.
-      required: true
-      schema:
-        type: string
-        example: 9999
-    recordAssigneeFilterParam:
-      in: query
-      name: filter[metadata.assignee]
-      description: Requesting the API to return records with the specified assignees only. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: Bob%20Marley
-    recordStatusFilterParam:
-      in: query
-      name: filter[metadata.status][]
-      description: Requesting the API to return records with the specified statuses only. To filter the records for multiple values, add the filter string multiple times. For example, if you need to get records that have either "New" or "Open" status, pass the filters as follows `?filter[metadata.status][]=New&filter[metadata.status][]=Open`. For more information, see <a href="#section/Making-requests">Making requests</a>
-      required: false
-      schema:
-        type: string
-        example: New
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
   responses:
+    MissingTableId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, table_id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
     NotJsonapiMediaType:
       description: Unsupported media type.
       content:
@@ -377,45 +371,51 @@ components:
               detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
 
                 '
-    MissingTableId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, table_id, is missing.
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
     Forbidden:
       description: Forbidden.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
     BadCredentials:
       description: Bad credentials.
+  parameters:
+    recordStatusFilterParam:
+      in: query
+      name: filter[metadata.status][]
+      description: Requesting the API to return records with the specified statuses only. To filter the records for multiple values, add the filter string multiple times. For example, if you need to get records that have either "New" or "Open" status, pass the filters as follows `?filter[metadata.status][]=New&filter[metadata.status][]=Open`. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: New
+    tableIdParam:
+      in: path
+      name: table_id
+      description: The ID of the table.
+      required: true
+      schema:
+        type: integer
+        example: 300
+    recordAssigneeFilterParam:
+      in: query
+      name: filter[metadata.assignee]
+      description: Requesting the API to return records with the specified assignees only. For more information, see <a href="#section/Making-requests">Making requests</a>
+      required: false
+      schema:
+        type: string
+        example: Bob%20Marley
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    resourceIdParam:
+      in: path
+      name: id
+      description: The ID of the requested resource.
+      required: true
+      schema:
+        type: string
+        example: 9999
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a

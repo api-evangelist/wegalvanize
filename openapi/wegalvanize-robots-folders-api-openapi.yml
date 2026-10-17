@@ -192,7 +192,89 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    robotCategoryParam:
+      in: query
+      name: category
+      description: The Robots category for the Folder.
+      required: false
+      schema:
+        type: string
+        enum:
+        - acl
+        - highbond
+        - workflow
+    folderIdParam:
+      in: path
+      name: folder_id
+      description: The ID of the folder.
+      required: true
+      schema:
+        type: number
+        example: 2
+    orgIdParam:
+      in: path
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
   schemas:
+    Error:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          description: The HTTP status code.
+        source:
+          type: object
+          description: Indicates which part of the request document caused the error.
+          required:
+          - pointer
+          properties:
+            pointer:
+              type: string
+              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
+
+                in the request document.
+
+                '
+        code:
+          type: string
+          description: Application-specific error code, expressed as a string value.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem.
+    UpdateRobotsFolderRequest:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          type: object
+          description: The data associated with the resource.
+          required:
+          - type
+          - attributes
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"robots_folders"`).
+              example: robots_folders
+            attributes:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the Robots Folder.
+                  example: updated test folder
     Errors:
       type: object
       properties:
@@ -200,91 +282,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Error'
-    RobotsFolderResponse:
-      type: object
-      properties:
-        id:
-          type: number
-          description: The Folder ID.
-          example: 1
-        type:
-          type: string
-          description: The classification of the object (`"robots_folders"`).
-          example: robots_folders
-        attributes:
-          type: object
-          description: The attributes associated with the resource.
-          properties:
-            name:
-              type: string
-              description: The name of the Robots Folder.
-              example: test folder
-            category:
-              type: string
-              description: Category of the Robots Folder.
-              example: highbond
-            created_at:
-              type: string
-              description: The date the Robots Folder was created.
-              example: '2019-02-09T13:17:26Z'
-            created_by:
-              type: string
-              description: User who created the Folder.
-              example: xyz
-            discarded_at:
-              type: string
-              description: Date when the Robots Folder was discarded.
-              example: '2019-02-09T13:17:26Z'
-            delete_failed:
-              type: string
-              description: Specifies if the Robots Folder deletion failed.
-              example: false
-    ListRobotsFoldersResponse:
-      type: object
-      description: The data associated with the resource.
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            properties:
-              id:
-                type: number
-                description: The Folder ID.
-                example: 1
-              type:
-                type: string
-                description: The classification of the object (`"robots_folders"`).
-                example: robots_folders
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                properties:
-                  name:
-                    type: string
-                    description: The name of the Robots Folder.
-                    example: test folder
-                  category:
-                    type: string
-                    description: Category of the Robots Folder.
-                    example: highbond
-                  created_at:
-                    type: string
-                    description: The date the Robots Folder was created.
-                    example: '2019-02-09T13:17:26Z'
-                  created_by:
-                    type: string
-                    description: User who created the Folder.
-                    example: xyz
-                  discarded_at:
-                    type: string
-                    description: Date when the Robots Folder was discarded.
-                    example: '2019-02-09T13:17:26Z'
-                  delete_failed:
-                    type: string
-                    description: Specifies if the Robots Folder deletion failed.
-                    example: false
     ListRobotsInFolderResponse:
       type: object
       description: The data associated with the resource.
@@ -395,30 +392,91 @@ components:
                             type: string
                             description: The classification of the object (`"folder"`).
                             example: folder
-    UpdateRobotsFolderRequest:
+    RobotsFolderResponse:
+      type: object
+      properties:
+        id:
+          type: number
+          description: The Folder ID.
+          example: 1
+        type:
+          type: string
+          description: The classification of the object (`"robots_folders"`).
+          example: robots_folders
+        attributes:
+          type: object
+          description: The attributes associated with the resource.
+          properties:
+            name:
+              type: string
+              description: The name of the Robots Folder.
+              example: test folder
+            category:
+              type: string
+              description: Category of the Robots Folder.
+              example: highbond
+            created_at:
+              type: string
+              description: The date the Robots Folder was created.
+              example: '2019-02-09T13:17:26Z'
+            created_by:
+              type: string
+              description: User who created the Folder.
+              example: xyz
+            discarded_at:
+              type: string
+              description: Date when the Robots Folder was discarded.
+              example: '2019-02-09T13:17:26Z'
+            delete_failed:
+              type: string
+              description: Specifies if the Robots Folder deletion failed.
+              example: false
+    ListRobotsFoldersResponse:
       type: object
       description: The data associated with the resource.
-      required:
-      - data
       properties:
         data:
-          type: object
+          type: array
           description: The data associated with the resource.
-          required:
-          - type
-          - attributes
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"robots_folders"`).
-              example: robots_folders
-            attributes:
-              type: object
-              properties:
-                name:
-                  type: string
-                  description: The name of the Robots Folder.
-                  example: updated test folder
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                description: The Folder ID.
+                example: 1
+              type:
+                type: string
+                description: The classification of the object (`"robots_folders"`).
+                example: robots_folders
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                properties:
+                  name:
+                    type: string
+                    description: The name of the Robots Folder.
+                    example: test folder
+                  category:
+                    type: string
+                    description: Category of the Robots Folder.
+                    example: highbond
+                  created_at:
+                    type: string
+                    description: The date the Robots Folder was created.
+                    example: '2019-02-09T13:17:26Z'
+                  created_by:
+                    type: string
+                    description: User who created the Folder.
+                    example: xyz
+                  discarded_at:
+                    type: string
+                    description: Date when the Robots Folder was discarded.
+                    example: '2019-02-09T13:17:26Z'
+                  delete_failed:
+                    type: string
+                    description: Specifies if the Robots Folder deletion failed.
+                    example: false
     CreateRobotsFolderRequest:
       type: object
       description: The data associated with the resource.
@@ -447,79 +505,7 @@ components:
                   type: string
                   description: Category of the Robots Folder.
                   example: highbond
-    Error:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-          description: The HTTP status code.
-        source:
-          type: object
-          description: Indicates which part of the request document caused the error.
-          required:
-          - pointer
-          properties:
-            pointer:
-              type: string
-              description: 'A JSON Pointer <a href="https://tools.ietf.org/html/rfc6901" target="_blank">(RFC6901)</a> to the associated entity
-
-                in the request document.
-
-                '
-        code:
-          type: string
-          description: Application-specific error code, expressed as a string value.
-        title:
-          type: string
-          description: A short, human-readable summary of the problem.
-        detail:
-          type: string
-          description: A human-readable explanation specific to this occurrence of the problem.
-  parameters:
-    folderIdParam:
-      in: path
-      name: folder_id
-      description: The ID of the folder.
-      required: true
-      schema:
-        type: number
-        example: 2
-    robotCategoryParam:
-      in: query
-      name: category
-      description: The Robots category for the Folder.
-      required: false
-      schema:
-        type: string
-        enum:
-        - acl
-        - highbond
-        - workflow
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
   responses:
-    MissingFolderId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, folder_id, is missing.
-    Forbidden:
-      description: Forbidden.
     NotFound:
       description: Not found.
       content:
@@ -543,6 +529,20 @@ components:
               code: parameter_missing
               title: Parameter missing
               detail: The required parameter, org_id, is missing.
+    MissingFolderId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, folder_id, is missing.
+    Forbidden:
+      description: Forbidden.
     BadCredentials:
       description: Bad credentials.
   securitySchemes:

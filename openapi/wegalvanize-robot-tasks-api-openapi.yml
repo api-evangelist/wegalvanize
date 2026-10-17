@@ -518,205 +518,6 @@ paths:
           $ref: '#/components/responses/NotJsonapiMediaType'
 components:
   schemas:
-    Errors:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Error'
-    GetRobotTaskScheduleResponse:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/RobotTaskSchedule'
-    RobotTaskSchedule:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - id
-      - type
-      - attributes
-      properties:
-        id:
-          type: string
-          description: The ID of the task.
-          example: 1
-        type:
-          type: string
-          description: The classification of the object (`"schedule"`).
-          example: schedule
-        attributes:
-          type: object
-          description: The attributes associated with the resource.
-          required:
-          - settings
-          properties:
-            frequency:
-              type: string
-              description: The interval at which the task is repeatedly run.
-              enum:
-              - once
-              - hourly
-              - daily
-              - weekly
-              - monthly
-              example: weekly
-            interval:
-              type: integer
-              description: The interval in minutes between runs. To safeguard the HighBond API against bursts of usage, there is a minimum interval of 10 minutes between runs.
-            starts_at:
-              type: string
-              description: The time of day to start running the task.
-              example: '2019-03-21T16:25:00.478Z'
-            starts_at_timezone:
-              type: string
-              description: The <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">timezone</a> used to start running the task.
-              example: America/Los_Angeles
-            last_run_at:
-              type:
-              - string
-              - 'null'
-              description: The time when robot task was last run at.
-            next_run_at:
-              type: string
-              description: The time when robot task will next run at.
-            settings:
-              type: object
-              description: The settings associated with the resource.
-              properties:
-                days:
-                  description: The days that the task is scheduled to run. If the task is scheduled to run on a weekly frequency, `days` are represented from `0` to `6`, where `0` represents Sunday and `6` represents Saturday. If the task is scheduled to run on a monthly frequency, `days` is represented as a number between `1` and `28` or specified as `last_day`. `days` does not return anything for once, hourly, and daily frequencies.
-                  type: array
-                  items:
-                    type: integer
-                  example:
-                  - 0
-                  - 1
-                  - 2
-    RobotTaskRequestValue:
-      description: A user-facing input parameter, which lets a user specify script input values in advance. This allows an analytic script to run unattended, either immediately, or at a scheduled time.
-      anyOf:
-      - $ref: '#/components/schemas/StringValue'
-      - $ref: '#/components/schemas/StringValues'
-    CreateRobotTaskScheduleRequest:
-      type: object
-      description: The data associated with the resource.
-      required:
-      - data
-      properties:
-        data:
-          type: object
-          description: The data associated with the resource.
-          properties:
-            type:
-              type: string
-              description: The classification of the object (`"schedule"`).
-              example: schedule
-            attributes:
-              type: object
-              description: The attributes associated with the resource.
-              required:
-              - frequency
-              - interval
-              - starts_at
-              - starts_at_timezone
-              - settings
-              properties:
-                frequency:
-                  type: string
-                  description: The interval at which the task is repeatedly run.
-                  enum:
-                  - once
-                  - hourly
-                  - daily
-                  - weekly
-                  - monthly
-                  example: weekly
-                interval:
-                  type: integer
-                  description: The interval in minutes between runs. To safeguard the HighBond API against bursts of usage, there is a minimum interval of 10 minutes between runs.
-                starts_at:
-                  type: string
-                  description: The time of day to start running the task.
-                  example: '2019-03-21T16:25:00.478Z'
-                starts_at_timezone:
-                  type: string
-                  description: The <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">timezone</a> used to start running the task.
-                  example: America/Los_Angeles
-                settings:
-                  type: object
-                  description: The settings associated with the resource.
-                  properties:
-                    days:
-                      description: The days that the task is scheduled to run. If the task is scheduled to run on a weekly frequency, `days` are represented from `0` to `6`, where `0` represents Sunday and `6` represents Saturday. If the task is scheduled to run on a monthly frequency, `days` is represented as a number between `1` and `28` or specified as `last_day`. `days` does not return anything for once, hourly, and daily frequencies.
-                      type: array
-                      items:
-                        type: integer
-                      example:
-                      - 0
-                      - 1
-                      - 2
-    UpdateRobotTaskValuesRequest:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          description: The data associated with the resource.
-          items:
-            type: object
-            description: The data associated with the resource.
-            properties:
-              type:
-                type: string
-                description: The classification of the object (`"values"`).
-                example: values
-              attributes:
-                type: object
-                description: The attributes associated with the resource.
-                required:
-                - analytic_name
-                - parameter_id
-                - encrypted
-                - data
-                properties:
-                  analytic_name:
-                    type: string
-                    description: The name of the script, which is used as a parameter value.
-                    example: Extended foreground project
-                  parameter_id:
-                    type: string
-                    description: The identifier of the parameter.
-                    example: v_time
-                  encrypted:
-                    type: boolean
-                    description: If `true`, the script contains a `PASSWORD` analytic tag, which prompts the user for a password before running the analytic, and encrypts the entered value. The `PASSWORD` parameter is required in any command that imports from or exports to HighBond.
-                  data:
-                    type: object
-                    description: The data associated with the resource.
-                    required:
-                    - value
-                    - type
-                    properties:
-                      value:
-                        $ref: '#/components/schemas/RobotTaskRequestValue'
-                      type:
-                        type: string
-                        description: The data type of the value.
-                        enum:
-                        - character
-                        - date
-                        - datetime
-                        - file
-                        - logical
-                        - number
-                        - table
-                        - time
     Error:
       type: object
       required:
@@ -834,25 +635,64 @@ components:
               items:
                 type: string
                 example: '2019-03-21T20:22:48.282Z'
-    GetRobotTaskResponse:
+    CreateRobotTaskScheduleRequest:
       type: object
+      description: The data associated with the resource.
       required:
       - data
       properties:
         data:
-          $ref: '#/components/schemas/RobotTask'
-    GetRobotTasksResponse:
-      type: object
-      properties:
-        data:
-          type: array
+          type: object
           description: The data associated with the resource.
-          items:
-            $ref: '#/components/schemas/RobotTask'
-    StringValues:
-      type: array
-      items:
-        type: string
+          properties:
+            type:
+              type: string
+              description: The classification of the object (`"schedule"`).
+              example: schedule
+            attributes:
+              type: object
+              description: The attributes associated with the resource.
+              required:
+              - frequency
+              - interval
+              - starts_at
+              - starts_at_timezone
+              - settings
+              properties:
+                frequency:
+                  type: string
+                  description: The interval at which the task is repeatedly run.
+                  enum:
+                  - once
+                  - hourly
+                  - daily
+                  - weekly
+                  - monthly
+                  example: weekly
+                interval:
+                  type: integer
+                  description: The interval in minutes between runs. To safeguard the HighBond API against bursts of usage, there is a minimum interval of 10 minutes between runs.
+                starts_at:
+                  type: string
+                  description: The time of day to start running the task.
+                  example: '2019-03-21T16:25:00.478Z'
+                starts_at_timezone:
+                  type: string
+                  description: The <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">timezone</a> used to start running the task.
+                  example: America/Los_Angeles
+                settings:
+                  type: object
+                  description: The settings associated with the resource.
+                  properties:
+                    days:
+                      description: The days that the task is scheduled to run. If the task is scheduled to run on a weekly frequency, `days` are represented from `0` to `6`, where `0` represents Sunday and `6` represents Saturday. If the task is scheduled to run on a monthly frequency, `days` is represented as a number between `1` and `28` or specified as `last_day`. `days` does not return anything for once, hourly, and daily frequencies.
+                      type: array
+                      items:
+                        type: integer
+                      example:
+                      - 0
+                      - 1
+                      - 2
     CreateRobotTaskRequest:
       type: object
       required:
@@ -907,7 +747,15 @@ components:
                   items:
                     type: string
                     example: Analyze
-    GetRobotTaskValuesResponse:
+    GetRobotTasksResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: The data associated with the resource.
+          items:
+            $ref: '#/components/schemas/RobotTask'
+    UpdateRobotTaskValuesRequest:
       type: object
       required:
       - data
@@ -916,7 +764,94 @@ components:
           type: array
           description: The data associated with the resource.
           items:
-            $ref: '#/components/schemas/RobotTaskValue'
+            type: object
+            description: The data associated with the resource.
+            properties:
+              type:
+                type: string
+                description: The classification of the object (`"values"`).
+                example: values
+              attributes:
+                type: object
+                description: The attributes associated with the resource.
+                required:
+                - analytic_name
+                - parameter_id
+                - encrypted
+                - data
+                properties:
+                  analytic_name:
+                    type: string
+                    description: The name of the script, which is used as a parameter value.
+                    example: Extended foreground project
+                  parameter_id:
+                    type: string
+                    description: The identifier of the parameter.
+                    example: v_time
+                  encrypted:
+                    type: boolean
+                    description: If `true`, the script contains a `PASSWORD` analytic tag, which prompts the user for a password before running the analytic, and encrypts the entered value. The `PASSWORD` parameter is required in any command that imports from or exports to HighBond.
+                  data:
+                    type: object
+                    description: The data associated with the resource.
+                    required:
+                    - value
+                    - type
+                    properties:
+                      value:
+                        $ref: '#/components/schemas/RobotTaskRequestValue'
+                      type:
+                        type: string
+                        description: The data type of the value.
+                        enum:
+                        - character
+                        - date
+                        - datetime
+                        - file
+                        - logical
+                        - number
+                        - table
+                        - time
+    StringValue:
+      type: string
+    RobotsError:
+      type: object
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                description: A HTTP response status code indicating an unprocessable entity.
+                enum:
+                - '422'
+                example: '422'
+              source:
+                type: object
+                properties:
+                  pointer:
+                    type: string
+                    description: Indicates the specific source of the error.
+                    example: /data/attributes/name
+              title:
+                type: string
+                description: A title of the error.
+                example: can't be blank
+              detail:
+                type: string
+                description: A descriptive statement of the error.
+                example: Name can't be blank
+    Errors:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Error'
     GetRunRobotTaskResponse:
       type: object
       properties:
@@ -1046,8 +981,13 @@ components:
                         type:
                           type: string
                           description: The classification of the object (`"user"`).
-    StringValue:
-      type: string
+    GetRobotTaskResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RobotTask'
     RobotTaskValue:
       type: object
       description: The data associated with the resource.
@@ -1105,108 +1045,102 @@ components:
                   - number
                   - table
                   - time
-    RobotsError:
+    RobotTaskRequestValue:
+      description: A user-facing input parameter, which lets a user specify script input values in advance. This allows an analytic script to run unattended, either immediately, or at a scheduled time.
+      anyOf:
+      - $ref: '#/components/schemas/StringValue'
+      - $ref: '#/components/schemas/StringValues'
+    RobotTaskSchedule:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - id
+      - type
+      - attributes
+      properties:
+        id:
+          type: string
+          description: The ID of the task.
+          example: 1
+        type:
+          type: string
+          description: The classification of the object (`"schedule"`).
+          example: schedule
+        attributes:
+          type: object
+          description: The attributes associated with the resource.
+          required:
+          - settings
+          properties:
+            frequency:
+              type: string
+              description: The interval at which the task is repeatedly run.
+              enum:
+              - once
+              - hourly
+              - daily
+              - weekly
+              - monthly
+              example: weekly
+            interval:
+              type: integer
+              description: The interval in minutes between runs. To safeguard the HighBond API against bursts of usage, there is a minimum interval of 10 minutes between runs.
+            starts_at:
+              type: string
+              description: The time of day to start running the task.
+              example: '2019-03-21T16:25:00.478Z'
+            starts_at_timezone:
+              type: string
+              description: The <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">timezone</a> used to start running the task.
+              example: America/Los_Angeles
+            last_run_at:
+              type:
+              - string
+              - 'null'
+              description: The time when robot task was last run at.
+            next_run_at:
+              type: string
+              description: The time when robot task will next run at.
+            settings:
+              type: object
+              description: The settings associated with the resource.
+              properties:
+                days:
+                  description: The days that the task is scheduled to run. If the task is scheduled to run on a weekly frequency, `days` are represented from `0` to `6`, where `0` represents Sunday and `6` represents Saturday. If the task is scheduled to run on a monthly frequency, `days` is represented as a number between `1` and `28` or specified as `last_day`. `days` does not return anything for once, hourly, and daily frequencies.
+                  type: array
+                  items:
+                    type: integer
+                  example:
+                  - 0
+                  - 1
+                  - 2
+    StringValues:
+      type: array
+      items:
+        type: string
+    GetRobotTaskValuesResponse:
       type: object
       required:
-      - errors
+      - data
       properties:
-        errors:
+        data:
           type: array
+          description: The data associated with the resource.
           items:
-            type: object
-            properties:
-              status:
-                type: string
-                description: A HTTP response status code indicating an unprocessable entity.
-                enum:
-                - '422'
-                example: '422'
-              source:
-                type: object
-                properties:
-                  pointer:
-                    type: string
-                    description: Indicates the specific source of the error.
-                    example: /data/attributes/name
-              title:
-                type: string
-                description: A title of the error.
-                example: can't be blank
-              detail:
-                type: string
-                description: A descriptive statement of the error.
-                example: Name can't be blank
-  responses:
-    MissingResourceId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, id, is missing.
-    NotFound:
-      description: Not found.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: '404'
-              title: Not Found
-              detail: The requested resource does not exist.
-    MissingRobotTaskId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_task_id, is missing.
-    MissingRobotId:
-      description: Bad request.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 400
-              code: parameter_missing
-              title: Parameter missing
-              detail: The required parameter, robot_id, is missing.
-    NotJsonapiMediaType:
-      description: Unsupported media type.
-      content:
-        application/vnd.api+json:
-          schema:
-            $ref: '#/components/schemas/Errors'
-          example:
-            errors:
-            - status: 415
-              code: unsupported_media_type
-              title: Unsupported media type
-              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
-
-                '
-    Forbidden:
-      description: Forbidden.
-    BadCredentials:
-      description: Bad credentials.
+            $ref: '#/components/schemas/RobotTaskValue'
+    GetRobotTaskScheduleResponse:
+      type: object
+      description: The data associated with the resource.
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/RobotTaskSchedule'
   parameters:
-    robotIdParam:
+    robotTaskIdParam:
       in: path
-      name: robot_id
-      description: The ID of the robot.
+      name: robot_task_id
+      description: The ID of the robot task.
       required: true
       schema:
         type: string
@@ -1223,10 +1157,18 @@ components:
         - production
         default: development
       example: production
-    robotTaskIdParam:
+    orgIdParam:
       in: path
-      name: robot_task_id
-      description: The ID of the robot task.
+      name: org_id
+      description: The ID of the HighBond instance.
+      required: true
+      schema:
+        type: string
+        example: 1
+    robotIdParam:
+      in: path
+      name: robot_id
+      description: The ID of the robot.
       required: true
       schema:
         type: string
@@ -1239,14 +1181,72 @@ components:
       schema:
         type: string
         example: 9999
-    orgIdParam:
-      in: path
-      name: org_id
-      description: The ID of the HighBond instance.
-      required: true
-      schema:
-        type: string
-        example: 1
+  responses:
+    MissingRobotTaskId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_task_id, is missing.
+    MissingResourceId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, id, is missing.
+    NotJsonapiMediaType:
+      description: Unsupported media type.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 415
+              code: unsupported_media_type
+              title: Unsupported media type
+              detail: 'The endpoint supports only the application/vnd.api+json Content-Type. This request specified application/json.
+
+                '
+    BadCredentials:
+      description: Bad credentials.
+    Forbidden:
+      description: Forbidden.
+    MissingRobotId:
+      description: Bad request.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: 400
+              code: parameter_missing
+              title: Parameter missing
+              detail: The required parameter, robot_id, is missing.
+    NotFound:
+      description: Not found.
+      content:
+        application/vnd.api+json:
+          schema:
+            $ref: '#/components/schemas/Errors'
+          example:
+            errors:
+            - status: '404'
+              title: Not Found
+              detail: The requested resource does not exist.
   securitySchemes:
     bearerToken:
       description: 'HighBond offers the industry-standard OAuth 2.0 flow for connecting to the HighBond platform. OAuth 2.0 provides a
